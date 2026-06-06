@@ -5,6 +5,7 @@ import { dirname, join, relative } from 'node:path';
 import { spawnSync } from 'node:child_process';
 
 const owner = 'benson';
+const root = process.cwd();
 const releaseSha = process.env.VELLUM_UI_SHA || git(['rev-parse', 'HEAD']).trim();
 const shortSha = releaseSha.slice(0, 12);
 const packageSpec = `git+https://github.com/benson/vellum-ui.git#${releaseSha}`;
@@ -17,7 +18,6 @@ if (!process.env.GH_TOKEN) {
 git(['rev-parse', '--verify', releaseSha]);
 run('npm', ['run', 'build']);
 
-const root = process.cwd();
 const dist = join(root, 'dist');
 const workspace = await mkdtemp(join(tmpdir(), `vellum-release-${shortSha}-`));
 
