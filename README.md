@@ -6,6 +6,14 @@ The npm package name is `@benson/vellum-ui`. The public design-system surface li
 
 https://bensonperry.com/vellum-ui/design-system/
 
+Experimental component workbenches live under:
+
+https://bensonperry.com/vellum-ui/labs/
+
+Current labs:
+
+- Modal Lab: `/vellum-ui/labs/modal/`
+
 ## Development
 
 ```sh

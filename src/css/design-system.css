@@ -40,10 +40,17 @@ body.vui-design-system-page {
   color: var(--color-text-muted);
 }
 
-.ds-page-back {
+.ds-page-actions {
   position: absolute;
   top: 14px;
   right: 18px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.ds-page-back {
   font-family: var(--font-mono);
   font-weight: var(--font-weight-title);
   font-size: var(--font-size-sm);
@@ -364,6 +371,12 @@ body.vui-design-system-page {
 }
 
 @media (max-width: 900px) {
+  .ds-page-actions {
+    position: static;
+    justify-content: flex-start;
+    margin-top: 8px;
+  }
+
   .ds-page-layout {
     grid-template-columns: 1fr;
   }

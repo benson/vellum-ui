@@ -1,0 +1,240 @@
+body.vui-lab-page {
+  overflow: auto;
+  background: var(--color-bg);
+}
+
+.vui-lab-wrap {
+  width: min(1180px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 28px 0 64px;
+}
+
+.lab-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: start;
+  padding: 18px 20px;
+  border: var(--border-width) solid var(--color-text-strong);
+  border-radius: var(--radius-soft);
+  background: var(--color-surface-sunken);
+  box-shadow: var(--shadow-hard);
+}
+
+.lab-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--font-size-jumbo);
+  font-weight: var(--font-weight-title);
+  letter-spacing: 0;
+}
+
+.lab-sub {
+  margin: 6px 0 0;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-md);
+  max-width: 680px;
+}
+
+.lab-head-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.lab-shell {
+  display: grid;
+  grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+  margin-top: 28px;
+}
+
+.lab-controls {
+  position: sticky;
+  top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-height: calc(100vh - 32px);
+  overflow: auto;
+}
+
+.lab-panel {
+  border: var(--border-width) solid var(--color-line);
+  border-radius: var(--radius-soft);
+  background: var(--color-surface-raised);
+  padding: 14px;
+}
+
+.lab-panel-title {
+  margin: 0 0 10px;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-title);
+  letter-spacing: var(--label-tracking);
+  text-transform: uppercase;
+}
+
+.lab-control-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.lab-control {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px 10px;
+  align-items: center;
+}
+
+.lab-control span {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  letter-spacing: var(--label-tracking);
+  text-transform: uppercase;
+}
+
+.lab-control output {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xxs);
+  color: var(--color-text-muted);
+}
+
+.lab-control input[type='range'] {
+  grid-column: 1 / -1;
+  width: 100%;
+  accent-color: var(--color-accent);
+}
+
+.lab-control input[type='color'] {
+  width: 42px;
+  height: 28px;
+  padding: 0;
+  border: 2px solid var(--color-line-strong);
+  border-radius: var(--radius-sharp);
+  background: var(--color-surface-raised);
+  box-shadow: none;
+}
+
+.lab-control select {
+  grid-column: 1 / -1;
+  width: 100%;
+}
+
+.lab-stage {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.modal-lab-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 18px;
+}
+
+.modal-lab-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.modal-lab-preview-label {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-title);
+  letter-spacing: var(--label-tracking);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.modal-lab-preview .ui-modal-card {
+  width: 100%;
+}
+
+.modal-lab-copy {
+  width: 100%;
+  min-height: 180px;
+  resize: vertical;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  line-height: 1.45;
+}
+
+.modal-lab-live {
+  padding: 20px;
+}
+
+.modal-lab-live .ui-modal-card {
+  width: min(560px, calc(100vw - 32px));
+}
+
+.modal-lab-scroll-body {
+  max-height: 220px;
+}
+
+.modal-lab-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 10px;
+}
+
+.modal-lab-page[data-close-style='quiet'] .modal-lab-preview .rune-close,
+.modal-lab-page[data-close-style='quiet'] .modal-lab-live .rune-close {
+  top: 8px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: var(--radius-sharp);
+  background: transparent;
+  box-shadow: none;
+  color: var(--color-text-muted);
+}
+
+.modal-lab-page[data-close-style='quiet'] .modal-lab-preview .rune-close:hover,
+.modal-lab-page[data-close-style='quiet'] .modal-lab-live .rune-close:hover {
+  transform: none;
+  background: var(--color-surface-hover);
+  box-shadow: none;
+  color: var(--color-text-strong);
+}
+
+.modal-lab-page[data-close-style='tab'] .modal-lab-preview .rune-close,
+.modal-lab-page[data-close-style='tab'] .modal-lab-live .rune-close {
+  top: -3px;
+  right: -3px;
+  width: 34px;
+  height: 30px;
+  border-radius: 0;
+  background: var(--color-surface-raised);
+  color: var(--color-text-strong);
+  box-shadow: 3px 3px 0 var(--color-shadow);
+}
+
+.modal-lab-page[data-close-style='tab'] .modal-lab-preview .rune-close:hover,
+.modal-lab-page[data-close-style='tab'] .modal-lab-live .rune-close:hover {
+  transform: translate(1px, 1px);
+  background: var(--color-warn);
+  box-shadow: 2px 2px 0 var(--color-shadow);
+}
+
+@media (max-width: 860px) {
+  .lab-head,
+  .lab-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .lab-controls {
+    position: static;
+    max-height: none;
+  }
+
+  .lab-head-actions {
+    justify-content: flex-start;
+  }
+}
