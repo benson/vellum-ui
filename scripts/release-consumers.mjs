@@ -230,7 +230,7 @@ function waitForPrChecks(repo, prUrl) {
   const timeoutMs = Number(process.env.VELLUM_RELEASE_CHECK_TIMEOUT_MS || 30 * 60 * 1000);
   const start = Date.now();
   while (Date.now() - start < timeoutMs) {
-    const result = spawnSync('gh', ['pr', 'checks', prUrl, '--repo', repo, '--json', 'name,state,conclusion'], {
+    const result = spawnSync('gh', ['pr', 'checks', prUrl, '--repo', repo, '--json', 'name,state,bucket'], {
       encoding: 'utf8',
       stdio: ['ignore', 'pipe', 'pipe'],
     });
@@ -245,9 +245,17 @@ function waitForPrChecks(repo, prUrl) {
       sleep(15000);
       continue;
     }
-    const failing = checks.filter((check) => ['FAILURE', 'CANCELLED', 'TIMED_OUT', 'ACTION_REQUIRED'].includes(check.conclusion));
+    const failing = checks.filter((check) => {
+      const bucket = String(check.bucket || '').toLowerCase();
+      const state = String(check.state || '').toUpperCase();
+      return ['fail', 'cancel'].includes(bucket) || ['FAILURE', 'CANCELLED', 'TIMED_OUT', 'ACTION_REQUIRED'].includes(state);
+    });
     if (failing.length) throw new Error(`${repo}: failing checks: ${failing.map((check) => check.name).join(', ')}`);
-    const pending = checks.filter((check) => check.state !== 'COMPLETED');
+    const pending = checks.filter((check) => {
+      const bucket = String(check.bucket || '').toLowerCase();
+      const state = String(check.state || '').toUpperCase();
+      return !['pass', 'skipping'].includes(bucket) && !['SUCCESS', 'SKIPPED'].includes(state);
+    });
     if (!pending.length) return;
     console.log(`${repo}: waiting on ${pending.map((check) => check.name).join(', ')}`);
     sleep(15000);
