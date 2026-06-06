@@ -97,6 +97,7 @@ async function releaseConsumer(consumer) {
 }
 
 async function updateHomepage(path) {
+  run('npm', ['ci'], { cwd: path });
   await rm(join(path, 'vellum-ui'), { recursive: true, force: true });
   await mkdir(join(path, 'vellum-ui'), { recursive: true });
   await cp(dist, join(path, 'vellum-ui'), { recursive: true, force: true });
