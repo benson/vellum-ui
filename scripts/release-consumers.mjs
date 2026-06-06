@@ -7,7 +7,7 @@ import { spawnSync } from 'node:child_process';
 const owner = 'benson';
 const releaseSha = process.env.VELLUM_UI_SHA || git(['rev-parse', 'HEAD']).trim();
 const shortSha = releaseSha.slice(0, 12);
-const packageSpec = `github:benson/vellum-ui#${releaseSha}`;
+const packageSpec = `git+https://github.com/benson/vellum-ui.git#${releaseSha}`;
 const shouldMerge = process.env.VELLUM_RELEASE_MERGE !== '0';
 
 if (!process.env.GH_TOKEN) {
