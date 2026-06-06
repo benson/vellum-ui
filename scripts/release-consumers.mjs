@@ -27,6 +27,7 @@ const consumers = [
     base: 'master',
     name: 'homepage',
     checkCommand: ['npm', ['test']],
+    waitForChecks: false,
     update: updateHomepage,
   },
   {
@@ -91,7 +92,7 @@ async function releaseConsumer(consumer) {
 
   if (!shouldMerge) return;
   if (consumer.checkCommand) run(consumer.checkCommand[0], consumer.checkCommand[1], { cwd: path });
-  waitForPrChecks(consumer.repo, prUrl);
+  if (consumer.waitForChecks !== false) waitForPrChecks(consumer.repo, prUrl);
   gh(['pr', 'merge', prUrl, '--squash', '--delete-branch']);
   if (consumer.afterMerge) consumer.afterMerge();
 }
