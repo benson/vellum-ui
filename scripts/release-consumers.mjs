@@ -180,6 +180,7 @@ async function updatePoolBuilder(path) {
   ]);
   await rm(join(path, 'vendor', 'benson-ui'), { recursive: true, force: true });
   run('npm', ['install'], { cwd: path });
+  await sanitizePackageLock(path);
   run('npm', ['run', 'sync:ui'], { cwd: path });
 }
 
@@ -196,6 +197,7 @@ async function updateBiblioplex(path) {
   ]);
   await replaceInFile(join(path, 'apps', 'web', 'app', 'styles.css'), [['--bui-', '--vui-']]);
   run('npm', ['install'], { cwd: path });
+  await sanitizePackageLock(path);
 }
 
 async function setPackageDependency(path) {
@@ -213,6 +215,13 @@ async function replaceInFile(path, replacements) {
   let next = source;
   for (const [from, to] of replacements) next = next.replaceAll(from, to);
   if (next !== source) await writeFile(path, next);
+}
+
+async function sanitizePackageLock(path) {
+  await replaceInFile(join(path, 'package-lock.json'), [
+    ['git+ssh://git@github.com/benson/vellum-ui.git', 'git+https://github.com/benson/vellum-ui.git'],
+    ['ssh://git@github.com/benson/vellum-ui.git', 'https://github.com/benson/vellum-ui.git'],
+  ]);
 }
 
 function waitForPrChecks(repo, prUrl) {
