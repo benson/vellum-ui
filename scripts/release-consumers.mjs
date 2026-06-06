@@ -55,7 +55,7 @@ async function releaseConsumer(consumer) {
   const path = join(workspace, consumer.name);
   gh(['repo', 'clone', consumer.repo, path, '--', '--depth', '1']);
   run('git', ['checkout', '-b', branch], { cwd: path });
-  configureGit(path);
+  configureGit(path, consumer.repo);
 
   await consumer.update(path);
 
@@ -253,9 +253,14 @@ function waitForPrChecks(repo, prUrl) {
   throw new Error(`${repo}: timed out waiting for PR checks`);
 }
 
-function configureGit(cwd) {
+function configureGit(cwd, repo) {
   run('git', ['config', 'user.name', 'github-actions[bot]'], { cwd });
   run('git', ['config', 'user.email', '41898282+github-actions[bot]@users.noreply.github.com'], { cwd });
+  run(
+    'git',
+    ['remote', 'set-url', 'origin', `https://x-access-token:${encodeURIComponent(process.env.GH_TOKEN)}@github.com/${repo}.git`],
+    { cwd, sensitive: true },
+  );
 }
 
 function hasChanges(cwd) {
@@ -279,7 +284,8 @@ function run(command, args, options = {}) {
   });
   if (result.status !== 0) {
     const detail = [result.stdout, result.stderr].filter(Boolean).join('\n');
-    throw new Error(`${command} ${args.join(' ')} failed${detail ? `\n${detail}` : ''}`);
+    const commandText = options.sensitive ? `${command} [redacted]` : `${command} ${args.join(' ')}`;
+    throw new Error(`${commandText} failed${detail ? `\n${detail}` : ''}`);
   }
   return result.stdout || '';
 }
