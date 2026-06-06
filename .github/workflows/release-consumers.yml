@@ -1,0 +1,43 @@
+name: Release Consumers
+
+on:
+  workflow_run:
+    workflows: [Check]
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      vellum_sha:
+        description: Vellum UI commit SHA to release.
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-consumers-${{ github.event.workflow_run.head_sha || inputs.vellum_sha || github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.head_branch == 'main' &&
+       github.event.workflow_run.event == 'push')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ inputs.vellum_sha || github.event.workflow_run.head_sha || github.sha }}
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - name: Release downstream consumers
+        env:
+          GH_TOKEN: ${{ secrets.BENSON_RELEASE_TOKEN }}
+          VELLUM_UI_SHA: ${{ inputs.vellum_sha || github.event.workflow_run.head_sha || github.sha }}
+        run: npm run release:consumers

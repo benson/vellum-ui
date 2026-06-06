@@ -1,0 +1,29 @@
+{
+  "name": "@benson/vellum-ui",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Shared UI primitives for Benson Perry apps.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/benson/vellum-ui.git"
+  },
+  "exports": {
+    ".": "./dist/index.js",
+    "./css": "./dist/vellum-ui.css",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "src",
+    "scripts",
+    "test"
+  ],
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "prepare": "npm run build",
+    "release:consumers": "node scripts/release-consumers.mjs",
+    "test": "node --test test/*.test.js",
+    "check": "npm run build && npm test"
+  }
+}

@@ -1,0 +1,67 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+}
+
+body.vui-app {
+  min-height: 100vh;
+  margin: 0;
+  background: var(--vui-color-bg);
+  color: var(--vui-color-text);
+  font-family: var(--vui-font-body);
+  font-size: var(--vui-font-size-base);
+  line-height: var(--vui-line-height-body);
+  letter-spacing: var(--vui-letter-spacing-ui);
+}
+
+.vui-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.vui-hidden,
+.hidden {
+  display: none !important;
+}
+
+.vui-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--vui-space-3);
+}
+
+.vui-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--vui-space-2);
+}
+
+.vui-card {
+  border: 2px solid var(--vui-color-line-strong);
+  border-radius: var(--vui-radius-soft);
+  background: var(--vui-color-surface-raised);
+  box-shadow: var(--vui-shadow-hard);
+}
+
+.vui-label {
+  color: var(--vui-color-text-muted);
+  font-size: var(--vui-font-size-xs);
+  letter-spacing: var(--vui-label-tracking);
+  text-transform: uppercase;
+}
+
+:focus-visible {
+  outline: var(--vui-focus-ring);
+  outline-offset: var(--vui-focus-ring-offset);
+}
