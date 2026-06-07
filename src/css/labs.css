@@ -124,6 +124,67 @@ body.vui-lab-page {
   width: 100%;
 }
 
+.lab-swatch-control {
+  align-items: start;
+}
+
+.lab-swatch-control output {
+  max-width: 130px;
+  overflow: hidden;
+  text-align: right;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lab-swatch-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  grid-column: 1 / -1;
+}
+
+.lab-swatch {
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--color-line);
+  border-radius: var(--radius-sharp);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.22), rgba(0, 0, 0, 0.12)),
+    var(--lab-swatch-color);
+  box-shadow: none;
+  color: var(--color-text-strong);
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-title);
+  line-height: 1;
+  padding: 0;
+}
+
+.lab-swatch:hover,
+.lab-swatch.active,
+.lab-swatch[aria-pressed='true'] {
+  border-color: var(--color-text-strong);
+  box-shadow: 2px 2px 0 var(--color-shadow);
+}
+
+.lab-swatch:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.lab-swatch-custom {
+  background:
+    radial-gradient(rgba(21, 16, 13, 0.1) 1px, transparent 1px),
+    var(--color-surface-raised);
+  background-size: 5px 5px, auto;
+}
+
+.lab-swatch-custom-input {
+  grid-column: 1 / -1;
+}
+
 .lab-stage {
   display: flex;
   flex-direction: column;
@@ -185,23 +246,54 @@ body.vui-lab-page {
 
 .modal-lab-page[data-close-style='quiet'] .modal-lab-preview .rune-close,
 .modal-lab-page[data-close-style='quiet'] .modal-lab-live .rune-close {
-  top: 8px;
-  right: 8px;
-  width: 28px;
-  height: 28px;
-  border: 0;
-  border-radius: var(--radius-sharp);
-  background: transparent;
-  box-shadow: none;
-  color: var(--color-text-muted);
+  top: var(--modal-close-offset);
+  right: var(--modal-close-offset);
+  width: var(--modal-close-size);
+  height: var(--modal-close-size);
+  border: var(--modal-close-border);
+  border-radius: var(--modal-close-radius);
+  background: var(--modal-close-bg);
+  box-shadow: var(--modal-close-shadow);
+  color: var(--modal-close-color);
 }
 
 .modal-lab-page[data-close-style='quiet'] .modal-lab-preview .rune-close:hover,
 .modal-lab-page[data-close-style='quiet'] .modal-lab-live .rune-close:hover {
   transform: none;
-  background: var(--color-surface-hover);
-  box-shadow: none;
-  color: var(--color-text-strong);
+  background: var(--modal-close-hover-bg);
+  box-shadow: var(--modal-close-hover-shadow);
+  color: var(--modal-close-hover-color);
+}
+
+.modal-lab-page[data-close-style='rune'] .modal-lab-preview .rune-close,
+.modal-lab-page[data-close-style='rune'] .modal-lab-live .rune-close {
+  top: -15px;
+  right: -15px;
+  width: 30px;
+  height: 30px;
+  border: var(--border-width) solid var(--color-text-strong);
+  border-radius: 50%;
+  background:
+    radial-gradient(rgba(242, 196, 82, 0.18) 0 22%, transparent 23%),
+    var(--color-rune-close-bg);
+  box-shadow: var(--shadow-hard-small);
+  color: var(--color-warn);
+}
+
+.modal-lab-page[data-close-style='rune'] .modal-lab-preview .rune-close:hover,
+.modal-lab-page[data-close-style='rune'] .modal-lab-live .rune-close:hover {
+  transform: translate(1px, 1px) rotate(8deg);
+  background:
+    radial-gradient(rgba(242, 196, 82, 0.28) 0 24%, transparent 25%),
+    var(--color-accent);
+  box-shadow: 2px 2px 0 var(--color-text-strong);
+  color: var(--color-warn);
+}
+
+.modal-lab-page[data-close-style='rune'] .modal-lab-preview .rune-close:active,
+.modal-lab-page[data-close-style='rune'] .modal-lab-live .rune-close:active {
+  transform: translate(3px, 3px);
+  box-shadow: 0 0 0 var(--color-text-strong);
 }
 
 .modal-lab-page[data-close-style='tab'] .modal-lab-preview .rune-close,
