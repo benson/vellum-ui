@@ -4,7 +4,7 @@
   gap: var(--vui-space-1);
   min-height: 22px;
   border: 1px solid var(--vui-color-line);
-  border-radius: var(--vui-radius-round);
+  border-radius: var(--vui-radius-pill);
   background: var(--vui-color-surface-raised);
   color: var(--vui-color-text);
   font-size: var(--vui-font-size-xs);
@@ -31,7 +31,7 @@
   gap: var(--vui-space-1);
   min-height: 22px;
   border: 1px solid var(--vui-status-neutral-border);
-  border-radius: var(--vui-radius-round);
+  border-radius: var(--vui-radius-pill);
   background: var(--vui-status-neutral-bg);
   color: var(--vui-status-neutral-text);
   font-size: var(--vui-font-size-xs);
@@ -64,6 +64,50 @@
   border-color: var(--vui-status-danger-border);
   background: var(--vui-status-danger-bg);
   color: var(--vui-status-danger-text);
+}
+
+.status-state-empty,
+.status-state-loading,
+.status-state-compact {
+  border-color: var(--vui-status-neutral-border);
+  background: var(--vui-status-neutral-bg);
+  color: var(--vui-status-neutral-text);
+}
+
+.status-state-inline-error,
+.status-state-blocking-error,
+.status-state-retryable-error {
+  border-color: var(--vui-status-danger-border);
+  background: var(--vui-status-danger-bg);
+  color: var(--vui-status-danger-text);
+}
+
+.status-state-message,
+.status-state-detail {
+  min-width: 0;
+}
+
+.status-state-detail {
+  color: var(--vui-color-text-muted);
+}
+
+.status-state-retry {
+  margin-left: var(--vui-space-1);
+}
+
+.loading-spinner {
+  width: 0.8em;
+  height: 0.8em;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: var(--vui-radius-pill);
+  animation: vui-spin var(--vui-motion-slow) linear infinite;
+}
+
+@keyframes vui-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .banner {

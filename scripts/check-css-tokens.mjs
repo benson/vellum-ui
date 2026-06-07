@@ -1,0 +1,39 @@
+import { readdir, readFile } from 'node:fs/promises';
+import { join } from 'node:path';
+
+const cssRoot = join(process.cwd(), 'src', 'css');
+const runtimeTokens = new Set([
+  '--lab-swatch-color',
+  '--vui-modal-x',
+  '--vui-modal-y',
+]);
+
+const files = (await readdir(cssRoot))
+  .filter((file) => file.endsWith('.css'))
+  .map((file) => join(cssRoot, file));
+
+const definitions = new Set();
+const references = [];
+
+for (const file of files) {
+  const lines = (await readFile(file, 'utf8')).split(/\r?\n/);
+  for (const [index, line] of lines.entries()) {
+    for (const match of line.matchAll(/(--[A-Za-z0-9_-]+)\s*:/g)) {
+      definitions.add(match[1]);
+    }
+    for (const match of line.matchAll(/var\(\s*(--[A-Za-z0-9_-]+)/g)) {
+      references.push({ name: match[1], file, line: index + 1 });
+    }
+  }
+}
+
+const missing = references.filter(({ name }) => !definitions.has(name) && !runtimeTokens.has(name));
+
+if (missing.length) {
+  const details = missing
+    .map(({ name, file, line }) => `- ${name} at ${file}:${line}`)
+    .join('\n');
+  throw new Error(`CSS references undefined custom properties:\n${details}`);
+}
+
+console.log(`checked ${definitions.size} CSS custom properties`);

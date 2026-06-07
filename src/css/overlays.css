@@ -31,18 +31,42 @@
   display: flex;
   flex-direction: column;
   max-height: var(--modal-card-max-height);
+  min-height: var(--modal-card-min-height);
+  min-width: var(--modal-card-min-width);
   position: relative;
   overflow: visible;
+  transform: translate(var(--vui-modal-x, 0), var(--vui-modal-y, 0));
+  will-change: transform, width, height;
+}
+
+.ui-modal-card[data-vui-modal-interactive='true'] .ui-modal-head {
+  cursor: grab;
+  touch-action: none;
+}
+
+.ui-modal-card.is-vui-modal-dragging,
+.ui-modal-card.is-vui-modal-resizing {
+  user-select: none;
+  z-index: 2;
+}
+
+.ui-modal-card.is-vui-modal-dragging .ui-modal-head {
+  cursor: grabbing;
 }
 
 .ui-modal-body {
+  flex: 1 1 auto;
   min-height: 0;
   overflow-y: auto;
   padding: var(--modal-body-padding);
 }
 
 .ui-modal-head {
+  background-color: var(--modal-head-bg);
+  background-image: var(--modal-head-texture);
+  background-size: var(--modal-head-texture-size);
   border-bottom: var(--border-width) solid var(--color-line);
+  flex: 0 0 auto;
   padding: var(--modal-head-padding);
 }
 
@@ -52,34 +76,81 @@
 }
 
 .ui-modal-actions {
+  align-items: center;
   border-top: var(--border-width) solid var(--color-line);
   display: flex;
+  flex: 0 0 auto;
   gap: var(--modal-actions-gap);
   justify-content: flex-end;
   padding: var(--modal-actions-padding);
 }
 
+.vui-modal-resize-handle {
+  position: absolute;
+  z-index: 4;
+  touch-action: none;
+}
+
+.vui-modal-resize-left {
+  bottom: var(--modal-resize-corner-size);
+  cursor: ew-resize;
+  left: calc(-1 * var(--modal-resize-edge-size) / 2);
+  top: 0;
+  width: var(--modal-resize-edge-size);
+}
+
+.vui-modal-resize-bottom {
+  bottom: calc(-1 * var(--modal-resize-edge-size) / 2);
+  cursor: ns-resize;
+  height: var(--modal-resize-edge-size);
+  left: var(--modal-resize-corner-size);
+  right: 0;
+}
+
+.vui-modal-resize-bottom-left {
+  bottom: calc(-1 * var(--modal-resize-edge-size) / 2);
+  cursor: nesw-resize;
+  height: var(--modal-resize-corner-size);
+  left: calc(-1 * var(--modal-resize-edge-size) / 2);
+  width: var(--modal-resize-corner-size);
+}
+
+.vui-modal-resize-bottom-left::after {
+  background: repeating-linear-gradient(45deg, var(--color-line-strong) 0 1px, transparent 1px 4px);
+  bottom: 4px;
+  content: '';
+  height: 11px;
+  left: 4px;
+  opacity: 0.45;
+  pointer-events: none;
+  position: absolute;
+  width: 11px;
+}
+
+.vui-modal-resize-handle:hover::after,
+.ui-modal-card.is-vui-modal-resizing .vui-modal-resize-bottom-left::after {
+  opacity: 0.7;
+}
+
 .rune-close {
   appearance: none;
   position: absolute;
-  top: -15px;
-  right: -15px;
+  top: var(--modal-close-offset);
+  right: var(--modal-close-offset);
   z-index: 5;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   text-align: center;
   flex: 0 0 auto;
-  width: 30px;
-  height: 30px;
+  width: var(--modal-close-size);
+  height: var(--modal-close-size);
   padding: 1px 0 0;
-  border: var(--border-width) solid var(--color-text-strong);
-  border-radius: 50%;
-  background:
-    radial-gradient(rgba(242, 196, 82, 0.18) 0 22%, transparent 23%),
-    var(--color-rune-close-bg);
-  color: var(--color-warn);
-  box-shadow: var(--shadow-hard-small);
+  border: var(--modal-close-border);
+  border-radius: var(--modal-close-radius);
+  background: var(--modal-close-bg);
+  color: var(--modal-close-color);
+  box-shadow: var(--modal-close-shadow);
   font-family: var(--font-mono);
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-title);
@@ -88,25 +159,24 @@
   transition:
     transform var(--motion-fast) steps(2, end),
     box-shadow var(--motion-fast) steps(2, end),
-    background-color var(--motion-fast);
+    background-color var(--motion-fast),
+    color var(--motion-fast);
 }
 
 .rune-close:hover {
-  transform: translate(1px, 1px) rotate(8deg);
-  box-shadow: 2px 2px 0 var(--color-text-strong);
-  background:
-    radial-gradient(rgba(242, 196, 82, 0.28) 0 24%, transparent 25%),
-    var(--color-accent);
+  transform: none;
+  box-shadow: var(--modal-close-hover-shadow);
+  background: var(--modal-close-hover-bg);
+  color: var(--modal-close-hover-color);
 }
 
 .rune-close:active {
-  transform: translate(3px, 3px);
-  box-shadow: 0 0 0 var(--color-text-strong);
+  filter: brightness(0.96);
 }
 
 .rune-close:focus-visible {
-  outline: var(--border-width) solid var(--color-warn);
-  outline-offset: 2px;
+  outline: var(--focus-ring);
+  outline-offset: var(--focus-ring-offset);
 }
 
 .ui-popover {

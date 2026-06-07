@@ -23,7 +23,9 @@
     "build": "node scripts/build.mjs",
     "prepare": "npm run build",
     "release:consumers": "node scripts/release-consumers.mjs",
+    "lint:css-tokens": "node scripts/check-css-tokens.mjs",
+    "test:package": "node scripts/package-smoke.mjs",
     "test": "node --test test/*.test.js",
-    "check": "npm run build && npm test"
+    "check": "npm run build && npm run lint:css-tokens && npm run test:package && npm test"
   }
 }

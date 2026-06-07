@@ -32,6 +32,18 @@ test('statusStateHtml falls back to neutral for unknown tones', () => {
   );
 });
 
+test('statusStateHtml renders app status panels with retry affordances', () => {
+  assert.equal(
+    statusStateHtml({
+      kind: 'retryable-error',
+      message: 'Could not load',
+      detail: 'Network offline',
+      retryAction: 'reload',
+    }),
+    '<div class="status-state status-state-retryable-error" role="alert" aria-live="assertive"><span class="status-state-message">Could not load</span><span class="status-state-detail">Network offline</span><button class="btn btn-secondary status-state-retry" type="button" data-status-action="reload">retry</button></div>',
+  );
+});
+
 test('cardPreviewDatasetAttrs emits dashed data attributes', () => {
   assert.equal(
     cardPreviewDatasetAttrs({ name: 'Opt', imageUrl: 'front.jpg', backImageUrl: 'back.jpg' }, esc),
