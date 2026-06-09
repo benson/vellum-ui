@@ -27,12 +27,11 @@ Edit source files only. Do not hand-edit `dist/`.
 ## Token Names
 
 - Canonical package tokens use `--vui-*`.
-- Legacy app tokens such as `--color-*` remain as compatibility aliases.
-- Temporary Benson UI aliases such as `--bui-*` remain for one migration window.
+- Legacy app tokens such as `--color-*` remain as compatibility aliases while vellum's own component CSS still references them.
 
 ## Compatibility Debt
 
-The `--bui-*`, `/benson-ui/`, and `@benson/ui` migration paths are temporary. Keep them until the Vellum homepage, PoolBuilder vendor bundle, and Biblioplex package migration have each shipped from reviewed consumer PRs. After one release with no live consumer references to the old names, remove the alias tokens and the old-name rewrite/redirect branches from `scripts/release-consumers.mjs`.
+The `--bui-*` aliases and the `/benson-ui/` / `@benson/ui` rewrite branches were removed once consumers shipped with no live references to the old names. Remaining debt: migrate vellum's internal CSS off the unprefixed `--color-*` aliases, then drop that alias layer too.
 
 ## Release Model
 

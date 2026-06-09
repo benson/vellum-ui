@@ -106,20 +106,6 @@ async function updateHomepage(path) {
   await cp(dist, join(path, 'vellum-ui'), { recursive: true, force: true });
   await rm(join(path, 'vellum-ui', 'design-system.html'), { force: true });
   await writeDesignSystemPage(path);
-  await writeRedirect(path, join('benson-ui', 'design-system.html'));
-  await writeRedirect(path, join('benson-ui', 'design-system', 'index.html'));
-  await writeRedirect(path, join('BensonUI', 'design-system.html'));
-  await writeRedirect(path, join('BensonUI', 'design-system', 'index.html'));
-
-  const indexPath = join(path, 'index.html');
-  const index = await readFile(indexPath, 'utf8');
-  await writeFile(
-    indexPath,
-    index
-      .replaceAll('/benson-ui/design-system/', '/vellum-ui/design-system/')
-      .replaceAll('benson ui', 'vellum ui')
-      .replaceAll('Benson UI', 'Vellum UI'),
-  );
 }
 
 async function writeDesignSystemPage(path) {
@@ -146,43 +132,8 @@ async function writeDesignSystemPage(path) {
   );
 }
 
-async function writeRedirect(rootPath, relativePath) {
-  const pagePath = join(rootPath, relativePath);
-  await mkdir(dirname(pagePath), { recursive: true });
-  await writeFile(
-    pagePath,
-    `<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>Vellum UI Design System</title>
-    <link rel="canonical" href="/vellum-ui/design-system/" />
-    <meta http-equiv="refresh" content="0; url=/vellum-ui/design-system/" />
-  </head>
-  <body>
-    <p><a href="/vellum-ui/design-system/">Vellum UI Design System</a></p>
-  </body>
-</html>
-`,
-  );
-}
-
 async function updatePoolBuilder(path) {
   await setPackageDependency(path);
-  await replaceInFile(join(path, 'scripts', 'sync-ui.js'), [
-    ['@benson/ui', '@benson/vellum-ui'],
-    ["join('vendor', 'benson-ui')", "join('vendor', 'vellum-ui')"],
-  ]);
-  await replaceInFile(join(path, 'index.html'), [
-    ['vendor/benson-ui/benson-ui.css', 'vendor/vellum-ui/vellum-ui.css'],
-    ['bui-app', 'vui-app'],
-  ]);
-  await replaceInFile(join(path, 'style.css'), [
-    ['--bui-', '--vui-'],
-    ['@benson/ui', '@benson/vellum-ui'],
-    ['benson-ui', 'vellum-ui'],
-  ]);
-  await rm(join(path, 'vendor', 'benson-ui'), { recursive: true, force: true });
   run('npm', ['install'], { cwd: path });
   await sanitizePackageLock(path);
   run('npm', ['run', 'sync:ui'], { cwd: path });
@@ -190,43 +141,6 @@ async function updatePoolBuilder(path) {
 
 async function updateBiblioplex(path) {
   await setPackageDependency(path);
-  const buildWebPath = join(path, 'scripts', 'build-web.mjs');
-  await replaceInFile(buildWebPath, [
-    ['@benson/ui', '@benson/vellum-ui'],
-    ['node_modules/@benson/ui/dist', 'node_modules/@benson/vellum-ui/dist'],
-    ['bensonUiDist', 'vellumUiDist'],
-    ['vendor/benson-ui', 'vendor/vellum-ui'],
-    ['benson-ui.css', 'vellum-ui.css'],
-  ]);
-  await ensureBiblioplexVellumVendorPrune(buildWebPath);
-  await replaceInFile(join(path, 'apps', 'web', 'app', 'ui', 'controlPrimitives.js'), [
-    ['@benson/ui', '@benson/vellum-ui'],
-  ]);
-  await writeFile(
-    join(path, 'apps', 'web', 'app', 'ui', 'modal.js'),
-    [
-      "import { modal as vellumModal } from '@benson/vellum-ui';",
-      '',
-      'export function modal(modalEl, options = {}) {',
-      '  return vellumModal(modalEl, {',
-      '    ...options,',
-      "    openClass: options.openClass ?? 'visible',",
-      '  });',
-      '}',
-      '',
-    ].join('\n'),
-  );
-  await writeFile(
-    join(path, 'apps', 'web', 'app', 'ui', 'statusState.js'),
-    "export { renderStatusState, statusStateHtml } from '@benson/vellum-ui';\n",
-  );
-  await replaceInFile(join(path, 'apps', 'web', 'app', 'styles.css'), [['--bui-', '--vui-']]);
-  await replaceInFile(join(path, 'apps', 'web', 'app', 'index.html'), [
-    ['<body class="no-shared-footer app-booting">', '<body class="vui-app no-shared-footer app-booting">'],
-  ]);
-  await replaceInFile(join(path, 'apps', 'web', 'app', 'design-system.html'), [
-    ['<body class="design-system-page">', '<body class="vui-app design-system-page">'],
-  ]);
   run('npm', ['install'], { cwd: path });
   await sanitizePackageLock(path);
 }
@@ -235,23 +149,8 @@ async function setPackageDependency(path) {
   const packagePath = join(path, 'package.json');
   const packageJson = JSON.parse(await readFile(packagePath, 'utf8'));
   packageJson.dependencies ||= {};
-  delete packageJson.dependencies['@benson/ui'];
   packageJson.dependencies['@benson/vellum-ui'] = packageSpec;
   await writeFile(packagePath, `${JSON.stringify(packageJson, null, 2)}\n`);
-}
-
-async function ensureBiblioplexVellumVendorPrune(path) {
-  const marker = "vendor/vellum-ui', 'demo'";
-  const copyLine = "await cp(vellumUiDist, join(distRoot, 'vendor/vellum-ui'), { recursive: true, force: true });";
-  let source = await readFile(path, 'utf8');
-  if (source.includes(marker) || !source.includes(copyLine)) return;
-  const pruneBlock = [
-    copyLine,
-    "await rm(join(distRoot, 'vendor/vellum-ui', 'design-system.html'), { force: true });",
-    "await rm(join(distRoot, 'vendor/vellum-ui', 'demo'), { recursive: true, force: true });",
-    "await rm(join(distRoot, 'vendor/vellum-ui', 'labs'), { recursive: true, force: true });",
-  ].join('\n');
-  await writeFile(path, source.replace(copyLine, pruneBlock));
 }
 
 async function replaceInFile(path, replacements) {
