@@ -58,6 +58,15 @@ try {
     expectSelector('.status-state', 'status state');
     expectSelector('.ui-chip', 'chip');
     expectSelector('.ui-modal-card', 'modal frame');
+    expectSelector('.toast', 'toast frame');
+    expectSelector('[data-ds-fire-toast]', 'toast fire button');
+    expectSelector('.tooltip-host[data-tooltip]', 'tooltip host');
+    expectSelector('.switch .switch-track', 'switch');
+    expectSelector('input[type="range"]', 'range');
+    expectSelector('.combobox input[role="combobox"]', 'combobox input');
+    expectSelector('.vui-table tbody tr', 'table rows');
+    expectSelector('.skeleton-line', 'skeleton');
+    expectSelector('.empty-state', 'empty state');
 
     // Tokens must actually reach components.
     const rootStyle = getComputedStyle(document.documentElement);
@@ -87,6 +96,17 @@ try {
     return issues;
   });
   failures.push(...report);
+
+  // Live toast roundtrip: the fire button mounts a stack and the toast auto-dismisses.
+  await page.click('[data-ds-fire-toast]');
+  const fired = await page.waitForSelector('.toast-stack .toast', { timeout: 3000 }).catch(() => null);
+  if (!fired) failures.push('firing a toast did not mount .toast-stack .toast');
+
+  // Combobox roundtrip: typing opens the option list.
+  await page.fill('.combobox input', 'e');
+  const options = await page.waitForSelector('.combobox-list .combobox-option', { timeout: 3000 }).catch(() => null);
+  if (!options) failures.push('combobox input did not open an option list');
+  await page.keyboard.press('Escape');
 } finally {
   await browser.close();
   server.close();

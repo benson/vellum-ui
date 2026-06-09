@@ -229,6 +229,195 @@
   text-transform: lowercase;
 }
 
+.toast-stack {
+  position: fixed;
+  left: 50%;
+  bottom: var(--vui-space-4);
+  transform: translateX(-50%);
+  z-index: var(--vui-z-toast);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--vui-space-2);
+  pointer-events: none;
+}
+
+.toast {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--vui-space-3);
+  max-width: min(420px, calc(100vw - 2 * var(--vui-edge-margin)));
+  border: var(--vui-border-width) solid var(--vui-color-line-strong);
+  border-radius: var(--vui-radius-sharp);
+  background: var(--vui-color-surface-raised);
+  color: var(--vui-color-text);
+  box-shadow: var(--vui-shadow-firm);
+  font-family: var(--vui-font-mono);
+  font-size: var(--vui-font-size-sm);
+  padding: var(--vui-space-2) var(--vui-space-3);
+  transition:
+    opacity var(--vui-motion-base),
+    transform var(--vui-motion-base);
+}
+
+.toast.is-leaving {
+  opacity: 0;
+  transform: translateY(4px);
+}
+
+.toast-success {
+  border-color: var(--vui-color-success-line);
+}
+
+.toast-warn {
+  border-color: var(--vui-color-warn-line);
+}
+
+.toast-danger {
+  border-color: var(--vui-color-danger-line);
+}
+
+.toast-message {
+  min-width: 0;
+}
+
+.toast-dismiss {
+  flex: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toast {
+    transition: none;
+  }
+}
+
+/* CSS-first tooltip: put .tooltip-host + data-tooltip on any element.
+   .tooltip-term adds the dotted-underline inline-glossary treatment. */
+.tooltip-host {
+  position: relative;
+}
+
+.tooltip-host::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: 240px;
+  background: var(--vui-color-text-strong);
+  color: var(--vui-color-text-inverse);
+  font-family: var(--vui-font-mono);
+  font-size: var(--vui-font-size-xs);
+  font-weight: var(--vui-font-weight-body);
+  line-height: 1.35;
+  text-transform: lowercase;
+  padding: 4px 8px;
+  border-radius: var(--vui-radius-tight);
+  white-space: normal;
+  z-index: var(--vui-z-flyout);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity var(--vui-motion-fast);
+}
+
+.tooltip-host:hover::after,
+.tooltip-host:focus-visible::after {
+  opacity: 1;
+  visibility: visible;
+}
+
+.tooltip-term {
+  text-decoration: underline dotted;
+  text-underline-offset: 2px;
+  cursor: help;
+}
+
+.vui-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--vui-font-size-sm);
+}
+
+.vui-table th {
+  font-family: var(--vui-font-mono);
+  font-size: var(--vui-font-size-xs);
+  font-weight: var(--vui-font-weight-title);
+  letter-spacing: var(--vui-label-tracking);
+  text-transform: lowercase;
+  text-align: left;
+  color: var(--vui-color-text-muted);
+  border-bottom: var(--vui-border-width) solid var(--vui-color-line-strong);
+  padding: var(--vui-space-2) var(--vui-space-3);
+}
+
+.vui-table td {
+  border-bottom: 1px solid var(--vui-color-line);
+  padding: var(--vui-space-2) var(--vui-space-3);
+  vertical-align: middle;
+}
+
+.vui-table tbody tr:hover {
+  background: var(--vui-color-surface-hover);
+}
+
+.vui-table-compact th,
+.vui-table-compact td {
+  padding: var(--vui-space-1) var(--vui-space-2);
+}
+
+/* Loading + empty vocabulary. */
+.skeleton {
+  display: block;
+  border-radius: var(--vui-radius-tight);
+  background: var(--vui-color-surface-sunken);
+  animation: vui-skeleton-pulse 1.2s ease-in-out infinite;
+}
+
+.skeleton-line {
+  height: 0.9em;
+  margin: 0.25em 0;
+}
+
+@keyframes vui-skeleton-pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+  }
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--vui-space-2);
+  padding: var(--vui-space-5) var(--vui-space-4);
+  border: var(--vui-border-width) dashed var(--vui-color-line);
+  border-radius: var(--vui-radius-soft);
+  color: var(--vui-color-text-muted);
+  font-family: var(--vui-font-mono);
+  font-size: var(--vui-font-size-sm);
+  text-align: center;
+}
+
+.empty-state-glyph {
+  font-size: var(--vui-font-size-jumbo);
+  line-height: 1;
+  opacity: 0.6;
+}
+
 .card-preview-anchor {
   cursor: zoom-in;
 }

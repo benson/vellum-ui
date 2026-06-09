@@ -282,6 +282,14 @@ body.vui-design-system-page {
   gap: 8px;
 }
 
+.ds-inline-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+}
+
 .ds-playground {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));

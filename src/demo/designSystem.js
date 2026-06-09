@@ -2,10 +2,12 @@ import {
   buttonHtml,
   chipNode,
   clearNode,
+  combobox,
   el,
   fieldRowHtml,
   renderStatusState,
   statusStateHtml,
+  toast,
 } from '../index.js';
 
 const mount = document.getElementById('designSystemMount');
@@ -144,6 +146,7 @@ export function renderDesignSystem(target) {
     buttonsGroup(),
     formsGroup(),
     statusGroup(),
+    dataGroup(),
     overlaysGroup(),
   ];
   for (const groupNode of groups) content.append(groupNode);
@@ -425,7 +428,36 @@ function formsGroup() {
           }),
       ),
     ),
+    entry('Selection controls', ['input[type=checkbox]', 'input[type=radio]', '.switch', 'input[type=range]'], 'Checkbox, radio, switch, and range share the accent-fill checked treatment.', () =>
+      demoHtml(
+        '<label class="ds-inline-label"><input type="checkbox" checked /> foils only</label>' +
+          '<label class="ds-inline-label"><input type="checkbox" /> include lands</label>' +
+          '<label class="ds-inline-label"><input type="radio" name="ds-radio" checked /> sealed</label>' +
+          '<label class="ds-inline-label"><input type="radio" name="ds-radio" /> draft</label>' +
+          '<label class="switch"><input type="checkbox" class="switch-input" checked /><span class="switch-track"></span>dark mode</label>' +
+          '<input type="range" min="0" max="100" value="60" aria-label="sample range" />',
+      ),
+    ),
+    entry('Combobox', ['.combobox', '.combobox-list', '.combobox-option'], 'Keyboard-first autocomplete over any async item source. Arrows navigate, enter selects, escape closes.', comboboxDemo),
   );
+}
+
+function comboboxDemo() {
+  const SETS = [
+    { label: 'eternities beckon', hint: 'etb' },
+    { label: 'tarkir: dragonstorm', hint: 'tdm' },
+    { label: 'final fantasy', hint: 'fin' },
+    { label: 'edge of eternities', hint: 'eoe' },
+    { label: 'avatar: the last airbender', hint: 'tla' },
+    { label: 'lorwyn eclipsed', hint: 'ecl' },
+  ];
+  const input = el('input', { type: 'text', placeholder: 'search sets…', ariaLabel: 'search sets' });
+  const wrap = el('div', { className: 'combobox' }, input);
+  combobox(input, {
+    getItems: (query) => SETS.filter((set) => set.label.includes(query.toLowerCase()) || set.hint.includes(query.toLowerCase())),
+    toHint: (item) => item.hint,
+  });
+  return wrap;
 }
 
 function statusGroup() {
@@ -465,6 +497,54 @@ function statusGroup() {
       );
       return row;
     }),
+    entry('Toast', ['.toast-stack', '.toast', '.toast-success', '.toast-danger'], 'Bottom-center transient notices. Static frames below; fire a live one to see enter/auto-dismiss.', () => {
+      const row = demoHtml(
+        '<div class="toast"><span class="toast-message">deck saved</span></div>' +
+          '<div class="toast toast-success"><span class="toast-message">synced 312 cards</span></div>' +
+          '<div class="toast toast-warn"><span class="toast-message">2 cards unmatched</span></div>' +
+          '<div class="toast toast-danger"><span class="toast-message">save failed</span></div>',
+      );
+      const fire = el('button', { className: 'btn', type: 'button', text: 'fire toast', dataset: { dsFireToast: '' } });
+      fire.addEventListener('click', () => toast('toast fired from the catalog', { tone: 'success' }));
+      row.append(fire);
+      return row;
+    }),
+    entry('Tooltip', ['.tooltip-host', '[data-tooltip]', '.tooltip-term'], 'CSS-only tooltip on hover/focus. .tooltip-term adds the dotted-underline glossary treatment.', () =>
+      demoHtml(
+        '<button class="btn tooltip-host" type="button" data-tooltip="rebuilds the daily pool">regenerate</button>' +
+          '<span class="tooltip-host tooltip-term" tabindex="0" data-tooltip="wins under usual tournament structure">wubrg</span>',
+      ),
+    ),
+  );
+}
+
+function dataGroup() {
+  return group(
+    'data',
+    'Data',
+    entry('Table', ['.vui-table', '.vui-table-compact'], 'Mono lowercase headers over a strong rule; rows divide with hairlines and highlight on hover.', () =>
+      demoHtml(
+        '<table class="vui-table"><thead><tr><th>card</th><th>set</th><th>qty</th></tr></thead><tbody>' +
+          '<tr><td>lightning bolt</td><td>2x2</td><td>4</td></tr>' +
+          '<tr><td>counterspell</td><td>cmm</td><td>2</td></tr>' +
+          '<tr><td>llanowar elves</td><td>dom</td><td>3</td></tr>' +
+          '</tbody></table>',
+      ),
+    ),
+    entry('Skeleton', ['.skeleton', '.skeleton-line'], 'Pulsing placeholders while content loads. Honors prefers-reduced-motion.', () =>
+      demoHtml(
+        '<div style="width: 240px;">' +
+          '<div class="skeleton skeleton-line" style="width: 80%;"></div>' +
+          '<div class="skeleton skeleton-line" style="width: 100%;"></div>' +
+          '<div class="skeleton skeleton-line" style="width: 60%;"></div>' +
+          '</div>',
+      ),
+    ),
+    entry('Empty state', ['.empty-state', '.empty-state-glyph'], 'Dashed-border placeholder for zero-result views.', () =>
+      demoHtml(
+        '<div class="empty-state" style="width: 280px;"><span class="empty-state-glyph">🃏</span><span>no cards match these filters</span></div>',
+      ),
+    ),
   );
 }
 
