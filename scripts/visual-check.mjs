@@ -56,7 +56,7 @@ try {
     expectSelector('.segmented .segment-btn', 'segmented control');
     expectSelector('.field-row input', 'form field');
     expectSelector('.status-state', 'status state');
-    expectSelector('.chip', 'chip');
+    expectSelector('.ui-chip', 'chip');
     expectSelector('.ui-modal-card', 'modal frame');
 
     // Tokens must actually reach components.

@@ -453,12 +453,15 @@ function statusGroup() {
       );
       return banner;
     }),
-    entry('Chips', ['.chip'], 'Small labeled objects for filters, tags, and state markers.', () => {
+    entry('Chips', ['.ui-chip', '.ui-chip-remove', '.ui-chip-emoji'], 'Shared chip primitive for tags, roles, statuses, and filters. Apps layer domain pills on this base.', () => {
       const row = el('div', { className: 'ds-row' });
+      const emoji = el('span', { className: 'ui-chip-emoji', text: '✨' });
       row.append(
-        chipNode({ label: 'Boros', icon: 'WR' }),
-        chipNode({ label: 'submitted', icon: '*' }),
-        chipNode({ label: 'splash', removeLabel: 'remove splash' }),
+        chipNode({ text: 'filter', variant: 'filter' }),
+        chipNode({ text: 'owner', variant: 'role' }),
+        chipNode({ text: 'synced', variant: 'status' }),
+        chipNode({ text: 'sparkles', variant: 'filter', prefixNode: emoji }),
+        chipNode({ text: 'splash', variant: 'filter', remove: { enabled: true, label: 'remove splash' } }),
       );
       return row;
     }),

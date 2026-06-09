@@ -1,28 +1,74 @@
-.chip {
+/* Shared chip primitive for tag/role/status/filter surfaces. Apps layer
+   domain variants (location pills, tag chips) on top of this base. */
+.ui-chip {
   display: inline-flex;
   align-items: center;
-  gap: var(--vui-space-1);
-  min-height: 22px;
-  border: 1px solid var(--vui-color-line);
-  border-radius: var(--vui-radius-pill);
-  background: var(--vui-color-surface-raised);
-  color: var(--vui-color-text);
-  font-size: var(--vui-font-size-xs);
-  font-family: var(--vui-font-mono);
-  font-weight: var(--vui-font-weight-title);
-  line-height: 1;
-  padding: 3px 8px;
+  gap: 4px;
+  border-radius: var(--vui-radius-round);
+  line-height: 1.4;
+  font-size: var(--vui-font-size-sm);
+  white-space: nowrap;
+  vertical-align: middle;
 }
 
-.chip-remove {
-  appearance: none;
+.ui-chip-label {
+  text-transform: lowercase;
+}
+
+/* Emoji/icon prefix. A bare unicode emoji sits off the text baseline inside a
+   flex item; flex-center it on its own line box so it's optically centered
+   with the label, and never let it shrink. */
+.ui-chip-emoji {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  line-height: 1;
+  font-size: calc(var(--vui-font-size-sm) - 1px);
+}
+
+/* Segmented delete affordance: a distinct full-height "x segment" inside the
+   pill, split from the label by a divider in the pill's own border color, with
+   its own padded hit area + hover highlight. The negative vertical margins
+   bleed the segment to the pill's top/bottom border (pills use 1px vertical
+   padding) so the divider reads as full-height. */
+.ui-chip-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  margin: -2px -5px -2px 1px;
+  padding: 0 4px;
+  min-width: 15px;
   border: 0;
+  border-left: var(--vui-border-width) solid;
+  border-color: inherit;
+  border-top-right-radius: var(--vui-radius-sharp);
+  border-bottom-right-radius: var(--vui-radius-sharp);
   background: transparent;
-  color: inherit;
   cursor: pointer;
   font: inherit;
+  font-size: var(--vui-font-size-md);
   line-height: 1;
-  padding: 0;
+  color: var(--vui-color-text-muted);
+}
+
+.ui-chip-remove:hover,
+.ui-chip-remove:focus-visible {
+  color: var(--vui-color-text-strong);
+  background: var(--vui-color-surface-hover);
+  outline: none;
+}
+
+.ui-chip-role,
+.ui-chip-status,
+.ui-chip-filter {
+  border: var(--vui-border-width) solid var(--vui-color-line);
+  background: var(--vui-color-surface-sunken);
+  color: var(--vui-color-text-muted);
+  padding: 1px 8px;
 }
 
 .status-state {
