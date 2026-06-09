@@ -47,7 +47,6 @@
 .ui-modal-card.is-vui-modal-dragging,
 .ui-modal-card.is-vui-modal-resizing {
   user-select: none;
-  z-index: 2;
 }
 
 .ui-modal-card.is-vui-modal-dragging .ui-modal-head {
@@ -115,21 +114,38 @@
   width: var(--modal-resize-corner-size);
 }
 
+.vui-modal-resize-bottom-left::before,
 .vui-modal-resize-bottom-left::after {
-  background: repeating-linear-gradient(45deg, var(--color-line-strong) 0 1px, transparent 1px 4px);
-  bottom: 4px;
   content: '';
-  height: 11px;
-  left: 4px;
-  opacity: 0.45;
+  opacity: 0.55;
   pointer-events: none;
   position: absolute;
-  width: 11px;
 }
 
+.vui-modal-resize-bottom-left::before {
+  background: var(--color-line-strong);
+  height: 2px;
+  left: 4px;
+  top: 4px;
+  transform: rotate(45deg);
+  transform-origin: left center;
+  width: 28px;
+}
+
+.vui-modal-resize-bottom-left::after {
+  border-bottom: 2px solid var(--color-line-strong);
+  border-left: 2px solid var(--color-line-strong);
+  bottom: 4px;
+  height: 20px;
+  left: 4px;
+  width: 20px;
+}
+
+.vui-modal-resize-handle:hover::before,
 .vui-modal-resize-handle:hover::after,
+.ui-modal-card.is-vui-modal-resizing .vui-modal-resize-bottom-left::before,
 .ui-modal-card.is-vui-modal-resizing .vui-modal-resize-bottom-left::after {
-  opacity: 0.7;
+  opacity: 0.8;
 }
 
 .rune-close {

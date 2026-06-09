@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
   calculateModalResizeLayout,
+  calculateNextModalStackIndex,
   clampModalInteractionLayout,
 } from '../src/js/modal.js';
 
@@ -105,4 +106,9 @@ test('clampModalInteractionLayout keeps a moved modal inside the viewport margin
 
   assert.equal(next.x, 238);
   assert.equal(next.y, -188);
+});
+
+test('calculateNextModalStackIndex raises above the active modal stack', () => {
+  assert.equal(calculateNextModalStackIndex({ base: 100 }), 101);
+  assert.equal(calculateNextModalStackIndex({ current: 101, host: 110, card: 140, base: 100 }), 141);
 });
