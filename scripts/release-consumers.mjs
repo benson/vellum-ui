@@ -9,7 +9,8 @@ const root = process.cwd();
 const releaseSha = process.env.VELLUM_UI_SHA || git(['rev-parse', 'HEAD']).trim();
 const shortSha = releaseSha.slice(0, 12);
 const packageSpec = `git+https://github.com/benson/vellum-ui.git#${releaseSha}`;
-const shouldMerge = process.env.VELLUM_RELEASE_MERGE === '1';
+// Auto-merge is the default; set VELLUM_RELEASE_MERGE=0 for a review-only run.
+const shouldMerge = process.env.VELLUM_RELEASE_MERGE !== '0';
 
 if (!process.env.GH_TOKEN) {
   throw new Error('GH_TOKEN must be set to BENSON_RELEASE_TOKEN for cross-repo releases.');

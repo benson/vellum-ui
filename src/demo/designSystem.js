@@ -10,31 +10,130 @@ import {
 
 const mount = document.getElementById('designSystemMount');
 
-const COLOR_TOKENS = [
-  '--vui-color-bg',
-  '--vui-color-surface',
-  '--vui-color-surface-sunken',
-  '--vui-color-surface-raised',
-  '--vui-color-text',
-  '--vui-color-text-muted',
-  '--vui-color-accent',
-  '--vui-color-accent-soft',
-  '--vui-color-danger',
-  '--vui-color-warn',
+const PLAYGROUND_KEY = 'vellum_ds_token_overrides_v1';
+
+const PLAYGROUND_GROUPS = [
+  {
+    label: 'surfaces',
+    tokens: [
+      '--vui-color-bg',
+      '--vui-color-surface',
+      '--vui-color-surface-sunken',
+      '--vui-color-surface-raised',
+      '--vui-color-surface-hover',
+    ],
+  },
+  {
+    label: 'ink & lines',
+    tokens: [
+      '--vui-color-text',
+      '--vui-color-text-muted',
+      '--vui-color-text-strong',
+      '--vui-color-text-inverse',
+      '--vui-color-line',
+      '--vui-color-line-strong',
+    ],
+  },
+  {
+    label: 'accents & status',
+    tokens: [
+      '--vui-color-accent',
+      '--vui-color-accent-soft',
+      '--vui-color-accent-strong',
+      '--vui-color-success',
+      '--vui-color-warn',
+      '--vui-color-danger',
+      '--vui-color-info',
+    ],
+  },
+  {
+    label: 'shape & shadow',
+    tokens: [
+      '--vui-border-width',
+      '--vui-radius-sharp',
+      '--vui-radius-soft',
+      '--vui-radius-round',
+      '--vui-color-shadow',
+      '--vui-shadow-soft',
+      '--vui-shadow-firm',
+      '--vui-shadow-hard',
+      '--vui-shadow-overlay',
+    ],
+  },
+  {
+    label: 'type',
+    tokens: [
+      '--vui-font-body',
+      '--vui-font-heading',
+      '--vui-font-mono',
+      '--vui-font-size-sm',
+      '--vui-font-size-base',
+      '--vui-font-size-heading',
+      '--vui-font-weight-body',
+    ],
+  },
+  {
+    label: 'space & motion',
+    tokens: [
+      '--vui-space-2',
+      '--vui-space-3',
+      '--vui-space-4',
+      '--vui-control-height',
+      '--vui-motion-base',
+    ],
+  },
 ];
 
-const SIZE_TOKENS = [
-  '--vui-border-width',
-  '--vui-radius-sharp',
-  '--vui-radius-soft',
-  '--vui-shadow-firm',
-  '--vui-shadow-hard',
-  '--vui-font-size-sm',
-  '--vui-font-size-md',
-  '--vui-font-size-jumbo',
-];
+const PLAYGROUND_TOKENS = PLAYGROUND_GROUPS.flatMap((groupDef) => groupDef.tokens);
+
+// Defaults must be read before stored overrides are applied.
+const tokenDefaults = readTokenDefaults();
+applyOverrides(readOverrides());
 
 renderDesignSystem(mount);
+
+function readTokenDefaults() {
+  const computed = getComputedStyle(document.documentElement);
+  const defaults = {};
+  for (const token of PLAYGROUND_TOKENS) defaults[token] = computed.getPropertyValue(token).trim();
+  return defaults;
+}
+
+function overrideStyleEl() {
+  let styleEl = document.getElementById('ds-token-overrides');
+  if (!styleEl) {
+    styleEl = document.createElement('style');
+    styleEl.id = 'ds-token-overrides';
+    document.head.append(styleEl);
+  }
+  return styleEl;
+}
+
+function readOverrides() {
+  try {
+    return JSON.parse(localStorage.getItem(PLAYGROUND_KEY) || '{}') || {};
+  } catch {
+    return {};
+  }
+}
+
+function writeOverrides(overrides) {
+  try {
+    localStorage.setItem(PLAYGROUND_KEY, JSON.stringify(overrides));
+  } catch {
+    /* ignore */
+  }
+}
+
+function overridesToCss(overrides) {
+  const entries = Object.entries(overrides);
+  if (!entries.length) return '';
+  return `:root {\n${entries.map(([token, value]) => `  ${token}: ${value};`).join('\n')}\n}`;
+}
+
+function applyOverrides(overrides) {
+  overrideStyleEl().textContent = overridesToCss(overrides);
+}
 
 export function renderDesignSystem(target) {
   if (!target) return;
@@ -91,6 +190,7 @@ function toc(groups) {
         { className: 'ds-toc-state-row' },
         stateButton('rest', () => setDemoState('rest')),
         stateButton('hover', () => setDemoState('hover')),
+        stateButton('active', () => setDemoState('active')),
         stateButton('focus', () => setDemoState('focus')),
       ),
     ),
@@ -107,6 +207,7 @@ function stateButton(label, onClick) {
 function setDemoState(state) {
   document.querySelectorAll('.ds-toc-state-btn').forEach((btn) => btn.classList.toggle('active', btn.textContent === state));
   document.body.classList.toggle('ds-force-hover', state === 'hover');
+  document.body.classList.toggle('ds-force-active', state === 'active');
   document.body.classList.toggle('ds-force-focus', state === 'focus');
 }
 
@@ -171,7 +272,7 @@ function tokensGroup() {
     entry(
       'Token playground',
       [':root', '--vui-color-*', '--vui-radius-*', '--vui-shadow-*'],
-      'Tune core CSS variables live. This page updates immediately; copy the generated override back into src/css/tokens.css when a direction feels right.',
+      'Tune core CSS variables live — the whole catalog re-tints instantly. The override panel shows only what changed; copy it straight into src/css/tokens.css. Saved to this browser until reset.',
       tokenPlayground,
     ),
   );
@@ -180,40 +281,70 @@ function tokensGroup() {
 function tokenPlayground() {
   const output = el('pre', { className: 'ds-token-output' });
   const playground = el('div', { className: 'ds-playground' });
-  const colorCol = tokenColumn('color', COLOR_TOKENS, 'color');
-  const sizeCol = tokenColumn('size', SIZE_TOKENS, 'text');
-  playground.append(colorCol, sizeCol, el('div', { className: 'ds-playground-col' }, el('div', { className: 'ds-playground-col-label', text: 'override' }), output));
 
   const updateOutput = () => {
-    const overrides = [...playground.querySelectorAll('[data-token]')]
-      .map((input) => `  ${input.dataset.token}: ${input.value};`)
-      .join('\n');
-    output.textContent = `:root {\n${overrides}\n}`;
+    const css = overridesToCss(readOverrides());
+    output.textContent = css || '/* no token changes */';
   };
-  playground.querySelectorAll('[data-token]').forEach((input) => {
-    input.addEventListener('input', () => {
-      document.documentElement.style.setProperty(input.dataset.token, input.value);
-      updateOutput();
-    });
+
+  const setToken = (token, value) => {
+    const overrides = readOverrides();
+    if (value.trim() === tokenDefaults[token]) delete overrides[token];
+    else overrides[token] = value;
+    writeOverrides(overrides);
+    applyOverrides(overrides);
+    updateOutput();
+  };
+
+  const storedOverrides = readOverrides();
+  for (const groupDef of PLAYGROUND_GROUPS) {
+    const col = el('div', { className: 'ds-playground-col' }, el('div', { className: 'ds-playground-col-label', text: groupDef.label }));
+    for (const token of groupDef.tokens) {
+      const value = storedOverrides[token] ?? tokenDefaults[token];
+      const useColor = token.includes('-color-') && !value.includes('(') && !value.includes(',');
+      const input = el('input', {
+        className: useColor ? '' : 'ds-playground-text',
+        type: useColor ? 'color' : 'text',
+        value: useColor ? normalizeColor(value) : value,
+        dataset: { token },
+      });
+      input.addEventListener('input', () => setToken(token, input.value));
+      col.append(el('label', { className: 'ds-playground-row' }, el('span', { className: 'ds-playground-token', text: token.replace('--vui-', '') }), input));
+    }
+    playground.append(col);
+  }
+
+  const copyBtn = el('button', { className: 'btn', type: 'button', text: 'copy css' });
+  copyBtn.addEventListener('click', async () => {
+    const css = overridesToCss(readOverrides()) || '/* no token changes */';
+    try {
+      await navigator.clipboard.writeText(css);
+      copyBtn.textContent = 'copied!';
+    } catch {
+      copyBtn.textContent = 'copy failed';
+    }
+    setTimeout(() => {
+      copyBtn.textContent = 'copy css';
+    }, 1200);
   });
+  const resetBtn = el('button', { className: 'btn btn-secondary', type: 'button', text: 'reset' });
+  resetBtn.addEventListener('click', () => {
+    writeOverrides({});
+    applyOverrides({});
+    location.reload();
+  });
+
+  playground.append(
+    el(
+      'div',
+      { className: 'ds-playground-col' },
+      el('div', { className: 'ds-playground-col-label', text: 'override' }),
+      output,
+      el('div', { className: 'ds-row' }, copyBtn, resetBtn),
+    ),
+  );
   updateOutput();
   return playground;
-}
-
-function tokenColumn(label, tokens, type) {
-  const col = el('div', { className: 'ds-playground-col' }, el('div', { className: 'ds-playground-col-label', text: label }));
-  const computed = getComputedStyle(document.documentElement);
-  for (const token of tokens) {
-    const value = computed.getPropertyValue(token).trim();
-    const input = el('input', {
-      className: type === 'text' ? 'ds-playground-text' : '',
-      type,
-      value: type === 'color' ? normalizeColor(value) : value,
-      dataset: { token },
-    });
-    col.append(el('label', { className: 'ds-playground-row' }, el('span', { className: 'ds-playground-token', text: token }), input));
-  }
-  return col;
 }
 
 function normalizeColor(value) {

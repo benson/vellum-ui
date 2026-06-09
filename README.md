@@ -42,6 +42,6 @@ Merging to `main` runs the release workflow. It opens consumer PRs for:
 - `benson/poolbuilder`: vendors Vellum UI into the static app.
 - `benson/biblioplex`: updates the Cloudflare app package pin and build wiring.
 
-By default the release workflow opens consumer PRs and leaves them for review. Set `VELLUM_RELEASE_MERGE=1` only for an intentional auto-merge run; Biblioplex production deploys through its existing Cloudflare deploy workflow after that merge.
+By default the release workflow opens consumer PRs and auto-merges them once each consumer's own checks pass. Set `VELLUM_RELEASE_MERGE=0` for a review-only run that leaves the PRs open. Biblioplex production deploys through its existing Cloudflare deploy workflow after the merge. The safety gate is `npm run check`, which includes a headless-browser check of the design-system page (`npm run test:visual`).
 
 The release workflow requires a fine-grained repository secret named `BENSON_RELEASE_TOKEN` with write access to those consumer repositories.
