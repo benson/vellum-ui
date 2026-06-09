@@ -1,6 +1,6 @@
 .ui-modal {
   align-items: center;
-  background: var(--modal-backdrop);
+  background: var(--vui-modal-backdrop);
   display: none;
   inset: 0;
   justify-content: center;
@@ -15,24 +15,24 @@
 
 .ui-modal-backdrop {
   align-items: center;
-  background: var(--modal-backdrop);
+  background: var(--vui-modal-backdrop);
   display: flex;
   inset: 0;
   justify-content: center;
   position: fixed;
-  z-index: var(--z-modal);
+  z-index: var(--vui-z-modal);
 }
 
 .ui-modal-card {
-  background: var(--modal-card-bg);
-  border: var(--modal-card-border);
-  border-radius: var(--modal-card-radius);
-  box-shadow: var(--modal-card-shadow);
+  background: var(--vui-modal-card-bg);
+  border: var(--vui-modal-card-border);
+  border-radius: var(--vui-modal-card-radius);
+  box-shadow: var(--vui-modal-card-shadow);
   display: flex;
   flex-direction: column;
-  max-height: var(--modal-card-max-height);
-  min-height: var(--modal-card-min-height);
-  min-width: var(--modal-card-min-width);
+  max-height: var(--vui-modal-card-max-height);
+  min-height: var(--vui-modal-card-min-height);
+  min-width: var(--vui-modal-card-min-width);
   position: relative;
   overflow: visible;
   transform: translate(var(--vui-modal-x, 0), var(--vui-modal-y, 0));
@@ -57,31 +57,31 @@
   flex: 1 1 auto;
   min-height: 0;
   overflow-y: auto;
-  padding: var(--modal-body-padding);
+  padding: var(--vui-modal-body-padding);
 }
 
 .ui-modal-head {
-  background-color: var(--modal-head-bg);
-  background-image: var(--modal-head-texture);
-  background-size: var(--modal-head-texture-size);
-  border-bottom: var(--border-width) solid var(--color-line);
+  background-color: var(--vui-modal-head-bg);
+  background-image: var(--vui-modal-head-texture);
+  background-size: var(--vui-modal-head-texture-size);
+  border-bottom: var(--vui-border-width) solid var(--vui-color-line);
   flex: 0 0 auto;
-  padding: var(--modal-head-padding);
+  padding: var(--vui-modal-head-padding);
 }
 
 .ui-modal-title {
-  font-size: var(--font-size-lg);
+  font-size: var(--vui-font-size-lg);
   margin: 0;
 }
 
 .ui-modal-actions {
   align-items: center;
-  border-top: var(--border-width) solid var(--color-line);
+  border-top: var(--vui-border-width) solid var(--vui-color-line);
   display: flex;
   flex: 0 0 auto;
-  gap: var(--modal-actions-gap);
+  gap: var(--vui-modal-actions-gap);
   justify-content: flex-end;
-  padding: var(--modal-actions-padding);
+  padding: var(--vui-modal-actions-padding);
 }
 
 .vui-modal-resize-handle {
@@ -91,27 +91,27 @@
 }
 
 .vui-modal-resize-left {
-  bottom: var(--modal-resize-corner-size);
+  bottom: var(--vui-modal-resize-corner-size);
   cursor: ew-resize;
-  left: calc(-1 * var(--modal-resize-edge-size) / 2);
+  left: calc(-1 * var(--vui-modal-resize-edge-size) / 2);
   top: 0;
-  width: var(--modal-resize-edge-size);
+  width: var(--vui-modal-resize-edge-size);
 }
 
 .vui-modal-resize-bottom {
-  bottom: calc(-1 * var(--modal-resize-edge-size) / 2);
+  bottom: calc(-1 * var(--vui-modal-resize-edge-size) / 2);
   cursor: ns-resize;
-  height: var(--modal-resize-edge-size);
-  left: var(--modal-resize-corner-size);
+  height: var(--vui-modal-resize-edge-size);
+  left: var(--vui-modal-resize-corner-size);
   right: 0;
 }
 
 .vui-modal-resize-bottom-left {
-  bottom: calc(-1 * var(--modal-resize-edge-size) / 2);
+  bottom: calc(-1 * var(--vui-modal-resize-edge-size) / 2);
   cursor: nesw-resize;
-  height: var(--modal-resize-corner-size);
-  left: calc(-1 * var(--modal-resize-edge-size) / 2);
-  width: var(--modal-resize-corner-size);
+  height: var(--vui-modal-resize-corner-size);
+  left: calc(-1 * var(--vui-modal-resize-edge-size) / 2);
+  width: var(--vui-modal-resize-corner-size);
 }
 
 .vui-modal-resize-bottom-left::before,
@@ -123,7 +123,7 @@
 }
 
 .vui-modal-resize-bottom-left::before {
-  background: var(--color-line-strong);
+  background: var(--vui-color-line-strong);
   height: 2px;
   left: 4px;
   top: 4px;
@@ -133,8 +133,8 @@
 }
 
 .vui-modal-resize-bottom-left::after {
-  border-bottom: 2px solid var(--color-line-strong);
-  border-left: 2px solid var(--color-line-strong);
+  border-bottom: 2px solid var(--vui-color-line-strong);
+  border-left: 2px solid var(--vui-color-line-strong);
   bottom: 4px;
   height: 20px;
   left: 4px;
@@ -151,39 +151,39 @@
 .rune-close {
   appearance: none;
   position: absolute;
-  top: var(--modal-close-offset);
-  right: var(--modal-close-offset);
+  top: var(--vui-modal-close-offset);
+  right: var(--vui-modal-close-offset);
   z-index: 5;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   text-align: center;
   flex: 0 0 auto;
-  width: var(--modal-close-size);
-  height: var(--modal-close-size);
+  width: var(--vui-modal-close-size);
+  height: var(--vui-modal-close-size);
   padding: 1px 0 0;
-  border: var(--modal-close-border);
-  border-radius: var(--modal-close-radius);
-  background: var(--modal-close-bg);
-  color: var(--modal-close-color);
-  box-shadow: var(--modal-close-shadow);
-  font-family: var(--font-mono);
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-title);
+  border: var(--vui-modal-close-border);
+  border-radius: var(--vui-modal-close-radius);
+  background: var(--vui-modal-close-bg);
+  color: var(--vui-modal-close-color);
+  box-shadow: var(--vui-modal-close-shadow);
+  font-family: var(--vui-font-mono);
+  font-size: var(--vui-font-size-lg);
+  font-weight: var(--vui-font-weight-title);
   line-height: 1;
   cursor: pointer;
   transition:
-    transform var(--motion-fast) steps(2, end),
-    box-shadow var(--motion-fast) steps(2, end),
-    background-color var(--motion-fast),
-    color var(--motion-fast);
+    transform var(--vui-motion-fast) steps(2, end),
+    box-shadow var(--vui-motion-fast) steps(2, end),
+    background-color var(--vui-motion-fast),
+    color var(--vui-motion-fast);
 }
 
 .rune-close:hover {
   transform: none;
-  box-shadow: var(--modal-close-hover-shadow);
-  background: var(--modal-close-hover-bg);
-  color: var(--modal-close-hover-color);
+  box-shadow: var(--vui-modal-close-hover-shadow);
+  background: var(--vui-modal-close-hover-bg);
+  color: var(--vui-modal-close-hover-color);
 }
 
 .rune-close:active {
@@ -191,20 +191,20 @@
 }
 
 .rune-close:focus-visible {
-  outline: var(--focus-ring);
-  outline-offset: var(--focus-ring-offset);
+  outline: var(--vui-focus-ring);
+  outline-offset: var(--vui-focus-ring-offset);
 }
 
 .ui-popover {
   position: absolute;
-  z-index: var(--z-flyout);
+  z-index: var(--vui-z-flyout);
   min-width: 180px;
-  border: var(--border-width) solid var(--color-text-strong);
-  border-radius: var(--radius-soft);
-  background: var(--color-surface-raised);
-  color: var(--color-text);
-  box-shadow: var(--shadow-popover);
-  padding: var(--space-2);
+  border: var(--vui-border-width) solid var(--vui-color-text-strong);
+  border-radius: var(--vui-radius-soft);
+  background: var(--vui-color-surface-raised);
+  color: var(--vui-color-text);
+  box-shadow: var(--vui-shadow-popover);
+  padding: var(--vui-space-2);
 }
 
 .ui-popover[hidden] {
@@ -214,26 +214,26 @@
 .floating-menu {
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: var(--vui-space-1);
   min-width: 180px;
 }
 
 .floating-menu-item {
   appearance: none;
   border: 0;
-  border-radius: var(--radius-sharp);
+  border-radius: var(--vui-radius-sharp);
   background: transparent;
-  color: var(--color-text);
+  color: var(--vui-color-text);
   cursor: pointer;
   font: inherit;
-  padding: var(--space-2);
+  padding: var(--vui-space-2);
   text-align: left;
 }
 
 .floating-menu-item:hover,
 .floating-menu-item.is-active,
 .floating-menu-item[aria-selected='true'] {
-  background: var(--color-accent-soft);
+  background: var(--vui-color-accent-soft);
 }
 
 .combobox {
@@ -248,15 +248,15 @@
   min-width: 100%;
   max-height: 260px;
   overflow-y: auto;
-  z-index: var(--z-flyout);
+  z-index: var(--vui-z-flyout);
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
-  padding: var(--space-1);
-  border: var(--border-width) solid var(--color-text-strong);
-  border-radius: var(--radius-sharp);
-  background: var(--color-surface-raised);
-  box-shadow: var(--shadow-popover);
+  gap: var(--vui-space-1);
+  padding: var(--vui-space-1);
+  border: var(--vui-border-width) solid var(--vui-color-text-strong);
+  border-radius: var(--vui-radius-sharp);
+  background: var(--vui-color-surface-raised);
+  box-shadow: var(--vui-shadow-popover);
 }
 
 .combobox-list[hidden] {
@@ -268,26 +268,26 @@
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: var(--space-3);
+  gap: var(--vui-space-3);
   border: 0;
-  border-radius: var(--radius-tight);
+  border-radius: var(--vui-radius-tight);
   background: transparent;
-  color: var(--color-text);
+  color: var(--vui-color-text);
   cursor: pointer;
   font: inherit;
-  font-family: var(--font-mono);
-  font-size: var(--font-size-sm);
-  padding: var(--space-1) var(--space-2);
+  font-family: var(--vui-font-mono);
+  font-size: var(--vui-font-size-sm);
+  padding: var(--vui-space-1) var(--vui-space-2);
   text-align: left;
   white-space: nowrap;
 }
 
 .combobox-option:hover,
 .combobox-option.is-active {
-  background: var(--color-accent-soft);
+  background: var(--vui-color-accent-soft);
 }
 
 .combobox-option-hint {
-  color: var(--color-text-muted);
-  font-size: var(--font-size-xs);
+  color: var(--vui-color-text-muted);
+  font-size: var(--vui-font-size-xs);
 }

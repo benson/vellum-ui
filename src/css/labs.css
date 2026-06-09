@@ -1,6 +1,6 @@
 body.vui-lab-page {
   overflow: auto;
-  background: var(--color-bg);
+  background: var(--vui-color-bg);
 }
 
 .vui-lab-wrap {
@@ -15,24 +15,24 @@ body.vui-lab-page {
   gap: 16px;
   align-items: start;
   padding: 18px 20px;
-  border: var(--border-width) solid var(--color-text-strong);
-  border-radius: var(--radius-soft);
-  background: var(--color-surface-sunken);
-  box-shadow: var(--shadow-hard);
+  border: var(--vui-border-width) solid var(--vui-color-text-strong);
+  border-radius: var(--vui-radius-soft);
+  background: var(--vui-color-surface-sunken);
+  box-shadow: var(--vui-shadow-hard);
 }
 
 .lab-title {
   margin: 0;
-  font-family: var(--font-display);
-  font-size: var(--font-size-jumbo);
-  font-weight: var(--font-weight-title);
+  font-family: var(--vui-font-display);
+  font-size: var(--vui-font-size-jumbo);
+  font-weight: var(--vui-font-weight-title);
   letter-spacing: 0;
 }
 
 .lab-sub {
   margin: 6px 0 0;
-  color: var(--color-text-muted);
-  font-size: var(--font-size-md);
+  color: var(--vui-color-text-muted);
+  font-size: var(--vui-font-size-md);
   max-width: 680px;
 }
 
@@ -62,9 +62,9 @@ body.vui-lab-page {
 }
 
 .lab-panel {
-  border: var(--border-width) solid var(--color-line);
-  border-radius: var(--radius-soft);
-  background: var(--color-surface-raised);
+  border: var(--vui-border-width) solid var(--vui-color-line);
+  border-radius: var(--vui-radius-soft);
+  background: var(--vui-color-surface-raised);
   padding: 14px;
 }
 
@@ -78,22 +78,22 @@ body.vui-lab-page {
 
 .lab-panel-title {
   margin: 0;
-  font-family: var(--font-mono);
-  font-size: var(--font-size-md);
-  font-weight: var(--font-weight-title);
-  letter-spacing: var(--label-tracking);
+  font-family: var(--vui-font-mono);
+  font-size: var(--vui-font-size-md);
+  font-weight: var(--vui-font-weight-title);
+  letter-spacing: var(--vui-label-tracking);
   text-transform: uppercase;
 }
 
 .lab-reset-btn {
   appearance: none;
-  border: 1px solid var(--color-line);
-  border-radius: var(--radius-sharp);
-  background: var(--color-surface);
-  color: var(--color-text-muted);
+  border: 1px solid var(--vui-color-line);
+  border-radius: var(--vui-radius-sharp);
+  background: var(--vui-color-surface);
+  color: var(--vui-color-text-muted);
   cursor: pointer;
-  font-family: var(--font-mono);
-  font-size: var(--font-size-xxs);
+  font-family: var(--vui-font-mono);
+  font-size: var(--vui-font-size-xxs);
   line-height: 1;
   padding: 4px 6px;
   text-transform: lowercase;
@@ -101,14 +101,14 @@ body.vui-lab-page {
 
 .lab-reset-btn:hover,
 .lab-reset-btn:focus-visible {
-  border-color: var(--color-text-strong);
-  background: var(--color-surface-hover);
-  color: var(--color-text-strong);
+  border-color: var(--vui-color-text-strong);
+  background: var(--vui-color-surface-hover);
+  color: var(--vui-color-text-strong);
 }
 
 .lab-reset-btn:focus-visible {
-  outline: var(--focus-ring);
-  outline-offset: var(--focus-ring-offset);
+  outline: var(--vui-focus-ring);
+  outline-offset: var(--vui-focus-ring-offset);
 }
 
 .lab-control-list {
@@ -125,31 +125,31 @@ body.vui-lab-page {
 }
 
 .lab-control span {
-  color: var(--color-text-muted);
-  font-size: var(--font-size-xs);
-  letter-spacing: var(--label-tracking);
+  color: var(--vui-color-text-muted);
+  font-size: var(--vui-font-size-xs);
+  letter-spacing: var(--vui-label-tracking);
   text-transform: uppercase;
 }
 
 .lab-control output {
-  font-family: var(--font-mono);
-  font-size: var(--font-size-xxs);
-  color: var(--color-text-muted);
+  font-family: var(--vui-font-mono);
+  font-size: var(--vui-font-size-xxs);
+  color: var(--vui-color-text-muted);
 }
 
 .lab-control input[type='range'] {
   grid-column: 1 / -1;
   width: 100%;
-  accent-color: var(--color-accent);
+  accent-color: var(--vui-color-accent);
 }
 
 .lab-control input[type='color'] {
   width: 42px;
   height: 28px;
   padding: 0;
-  border: 2px solid var(--color-line-strong);
-  border-radius: var(--radius-sharp);
-  background: var(--color-surface-raised);
+  border: 2px solid var(--vui-color-line-strong);
+  border-radius: var(--vui-radius-sharp);
+  background: var(--vui-color-surface-raised);
   box-shadow: none;
 }
 
@@ -182,17 +182,17 @@ body.vui-lab-page {
   position: relative;
   width: 24px;
   height: 24px;
-  border: 2px solid var(--color-line);
-  border-radius: var(--radius-sharp);
+  border: 2px solid var(--vui-color-line);
+  border-radius: var(--vui-radius-sharp);
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.22), rgba(0, 0, 0, 0.12)),
     var(--lab-swatch-color);
   box-shadow: none;
-  color: var(--color-text-strong);
+  color: var(--vui-color-text-strong);
   cursor: pointer;
-  font-family: var(--font-mono);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-title);
+  font-family: var(--vui-font-mono);
+  font-size: var(--vui-font-size-sm);
+  font-weight: var(--vui-font-weight-title);
   line-height: 1;
   padding: 0;
 }
@@ -200,8 +200,8 @@ body.vui-lab-page {
 .lab-swatch:hover,
 .lab-swatch.active,
 .lab-swatch[aria-pressed='true'] {
-  border-color: var(--color-text-strong);
-  box-shadow: 2px 2px 0 var(--color-shadow);
+  border-color: var(--vui-color-text-strong);
+  box-shadow: 2px 2px 0 var(--vui-color-shadow);
 }
 
 .lab-swatch.is-default::after {
@@ -211,21 +211,21 @@ body.vui-lab-page {
   bottom: 2px;
   width: 6px;
   height: 6px;
-  border: 1px solid var(--color-surface-raised);
+  border: 1px solid var(--vui-color-surface-raised);
   border-radius: 50%;
-  background: var(--color-text-strong);
-  box-shadow: 0 0 0 1px var(--color-line-strong);
+  background: var(--vui-color-text-strong);
+  box-shadow: 0 0 0 1px var(--vui-color-line-strong);
 }
 
 .lab-swatch:focus-visible {
-  outline: var(--focus-ring);
-  outline-offset: var(--focus-ring-offset);
+  outline: var(--vui-focus-ring);
+  outline-offset: var(--vui-focus-ring-offset);
 }
 
 .lab-swatch-custom {
   background:
     radial-gradient(rgba(21, 16, 13, 0.1) 1px, transparent 1px),
-    var(--color-surface-raised);
+    var(--vui-color-surface-raised);
   background-size: 5px 5px, auto;
 }
 
@@ -253,12 +253,12 @@ body.vui-lab-page {
 }
 
 .modal-lab-preview-label {
-  font-family: var(--font-mono);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-title);
-  letter-spacing: var(--label-tracking);
+  font-family: var(--vui-font-mono);
+  font-size: var(--vui-font-size-xs);
+  font-weight: var(--vui-font-weight-title);
+  letter-spacing: var(--vui-label-tracking);
   text-transform: uppercase;
-  color: var(--color-text-muted);
+  color: var(--vui-color-text-muted);
 }
 
 .modal-lab-preview .ui-modal-card {
@@ -269,8 +269,8 @@ body.vui-lab-page {
   width: 100%;
   min-height: 180px;
   resize: vertical;
-  font-family: var(--font-mono);
-  font-size: var(--font-size-xs);
+  font-family: var(--vui-font-mono);
+  font-size: var(--vui-font-size-xs);
   line-height: 1.45;
 }
 
@@ -294,23 +294,23 @@ body.vui-lab-page {
 
 .modal-lab-page[data-close-style='quiet'] .modal-lab-preview .rune-close,
 .modal-lab-page[data-close-style='quiet'] .modal-lab-live .rune-close {
-  top: var(--modal-close-offset);
-  right: var(--modal-close-offset);
-  width: var(--modal-close-size);
-  height: var(--modal-close-size);
-  border: var(--modal-close-border);
-  border-radius: var(--modal-close-radius);
-  background: var(--modal-close-bg);
-  box-shadow: var(--modal-close-shadow);
-  color: var(--modal-close-color);
+  top: var(--vui-modal-close-offset);
+  right: var(--vui-modal-close-offset);
+  width: var(--vui-modal-close-size);
+  height: var(--vui-modal-close-size);
+  border: var(--vui-modal-close-border);
+  border-radius: var(--vui-modal-close-radius);
+  background: var(--vui-modal-close-bg);
+  box-shadow: var(--vui-modal-close-shadow);
+  color: var(--vui-modal-close-color);
 }
 
 .modal-lab-page[data-close-style='quiet'] .modal-lab-preview .rune-close:hover,
 .modal-lab-page[data-close-style='quiet'] .modal-lab-live .rune-close:hover {
   transform: none;
-  background: var(--modal-close-hover-bg);
-  box-shadow: var(--modal-close-hover-shadow);
-  color: var(--modal-close-hover-color);
+  background: var(--vui-modal-close-hover-bg);
+  box-shadow: var(--vui-modal-close-hover-shadow);
+  color: var(--vui-modal-close-hover-color);
 }
 
 .modal-lab-page[data-close-style='rune'] .modal-lab-preview .rune-close,
@@ -319,13 +319,13 @@ body.vui-lab-page {
   right: -15px;
   width: 30px;
   height: 30px;
-  border: var(--border-width) solid var(--color-text-strong);
+  border: var(--vui-border-width) solid var(--vui-color-text-strong);
   border-radius: 50%;
   background:
     radial-gradient(rgba(242, 196, 82, 0.18) 0 22%, transparent 23%),
-    var(--color-rune-close-bg);
-  box-shadow: var(--shadow-hard-small);
-  color: var(--color-warn);
+    var(--vui-color-rune-close-bg);
+  box-shadow: var(--vui-shadow-hard-small);
+  color: var(--vui-color-warn);
 }
 
 .modal-lab-page[data-close-style='rune'] .modal-lab-preview .rune-close:hover,
@@ -333,15 +333,15 @@ body.vui-lab-page {
   transform: translate(1px, 1px) rotate(8deg);
   background:
     radial-gradient(rgba(242, 196, 82, 0.28) 0 24%, transparent 25%),
-    var(--color-accent);
-  box-shadow: 2px 2px 0 var(--color-text-strong);
-  color: var(--color-warn);
+    var(--vui-color-accent);
+  box-shadow: 2px 2px 0 var(--vui-color-text-strong);
+  color: var(--vui-color-warn);
 }
 
 .modal-lab-page[data-close-style='rune'] .modal-lab-preview .rune-close:active,
 .modal-lab-page[data-close-style='rune'] .modal-lab-live .rune-close:active {
   transform: translate(3px, 3px);
-  box-shadow: 0 0 0 var(--color-text-strong);
+  box-shadow: 0 0 0 var(--vui-color-text-strong);
 }
 
 .modal-lab-page[data-close-style='tab'] .modal-lab-preview .rune-close,
@@ -351,16 +351,16 @@ body.vui-lab-page {
   width: 34px;
   height: 30px;
   border-radius: 0;
-  background: var(--color-surface-raised);
-  color: var(--color-text-strong);
-  box-shadow: 3px 3px 0 var(--color-shadow);
+  background: var(--vui-color-surface-raised);
+  color: var(--vui-color-text-strong);
+  box-shadow: 3px 3px 0 var(--vui-color-shadow);
 }
 
 .modal-lab-page[data-close-style='tab'] .modal-lab-preview .rune-close:hover,
 .modal-lab-page[data-close-style='tab'] .modal-lab-live .rune-close:hover {
   transform: translate(1px, 1px);
-  background: var(--color-warn);
-  box-shadow: 2px 2px 0 var(--color-shadow);
+  background: var(--vui-color-warn);
+  box-shadow: 2px 2px 0 var(--vui-color-shadow);
 }
 
 @media (max-width: 860px) {

@@ -1,7 +1,7 @@
 body.design-system-page,
 body.vui-design-system-page {
   overflow: auto;
-  background: var(--color-bg);
+  background: var(--vui-color-bg);
 }
 
 .vui-design-system,
@@ -20,24 +20,24 @@ body.vui-design-system-page {
   flex-direction: column;
   gap: 8px;
   padding: 22px 24px;
-  border: var(--border-width) solid var(--color-text-strong);
-  border-radius: var(--radius-soft);
-  background-image: linear-gradient(var(--color-surface-sunken), var(--color-surface-sunken));
-  box-shadow: var(--shadow-hard);
+  border: var(--vui-border-width) solid var(--vui-color-text-strong);
+  border-radius: var(--vui-radius-soft);
+  background-image: linear-gradient(var(--vui-color-surface-sunken), var(--vui-color-surface-sunken));
+  box-shadow: var(--vui-shadow-hard);
 }
 
 .ds-page-title {
   margin: 0;
-  font-family: var(--font-display);
-  font-size: var(--font-size-jumbo);
-  font-weight: var(--font-weight-title);
+  font-family: var(--vui-font-display);
+  font-size: var(--vui-font-size-jumbo);
+  font-weight: var(--vui-font-weight-title);
   letter-spacing: -0.02em;
 }
 
 .ds-page-sub {
   margin: 0;
-  font-size: var(--font-size-md);
-  color: var(--color-text-muted);
+  font-size: var(--vui-font-size-md);
+  color: var(--vui-color-text-muted);
 }
 
 .ds-page-actions {
@@ -51,23 +51,23 @@ body.vui-design-system-page {
 }
 
 .ds-page-back {
-  font-family: var(--font-mono);
-  font-weight: var(--font-weight-title);
-  font-size: var(--font-size-sm);
+  font-family: var(--vui-font-mono);
+  font-weight: var(--vui-font-weight-title);
+  font-size: var(--vui-font-size-sm);
   text-transform: uppercase;
-  letter-spacing: var(--label-tracking);
-  color: var(--color-text-strong);
+  letter-spacing: var(--vui-label-tracking);
+  color: var(--vui-color-text-strong);
   text-decoration: none;
-  border: var(--border-width) solid var(--color-text-strong);
-  border-radius: var(--radius-soft);
+  border: var(--vui-border-width) solid var(--vui-color-text-strong);
+  border-radius: var(--vui-radius-soft);
   padding: 6px 10px;
-  background: var(--color-surface-raised);
-  box-shadow: var(--shadow-hard-small);
+  background: var(--vui-color-surface-raised);
+  box-shadow: var(--vui-shadow-hard-small);
 }
 
 .ds-page-back:hover {
   transform: translate(1px, 1px);
-  box-shadow: 2px 2px 0 var(--color-text-strong);
+  box-shadow: 2px 2px 0 var(--vui-color-text-strong);
 }
 
 .ds-page-layout {
@@ -90,33 +90,33 @@ body.vui-design-system-page {
 }
 
 .ds-toc-title {
-  font-family: var(--font-mono);
-  font-size: var(--font-size-xxs);
+  font-family: var(--vui-font-mono);
+  font-size: var(--vui-font-size-xxs);
   text-transform: uppercase;
-  letter-spacing: var(--label-tracking);
-  color: var(--color-text-muted);
+  letter-spacing: var(--vui-label-tracking);
+  color: var(--vui-color-text-muted);
   margin: 10px 0 4px;
 }
 
 .ds-toc-link {
   text-decoration: none;
-  color: var(--color-text-muted);
-  font-size: var(--font-size-sm);
+  color: var(--vui-color-text-muted);
+  font-size: var(--vui-font-size-sm);
   text-transform: lowercase;
   padding: 4px 8px;
-  border-radius: var(--radius-sharp);
+  border-radius: var(--vui-radius-sharp);
   border-left: 2px solid transparent;
 }
 
 .ds-toc-link:hover {
-  color: var(--color-text-strong);
-  background: var(--color-surface-hover);
+  color: var(--vui-color-text-strong);
+  background: var(--vui-color-surface-hover);
 }
 
 .ds-toc-link.active {
-  color: var(--color-accent);
-  border-left-color: var(--color-accent);
-  background: var(--color-surface-hover);
+  color: var(--vui-color-accent);
+  border-left-color: var(--vui-color-accent);
+  background: var(--vui-color-surface-hover);
 }
 
 .ds-toc-states {
@@ -124,7 +124,7 @@ body.vui-design-system-page {
   flex-direction: column;
   gap: 4px;
   padding-bottom: 10px;
-  border-bottom: 1px solid var(--color-line);
+  border-bottom: 1px solid var(--vui-color-line);
 }
 
 .ds-toc-state-row {
@@ -134,26 +134,26 @@ body.vui-design-system-page {
 
 .ds-toc-state-btn {
   flex: 1;
-  font-family: var(--font-mono);
-  font-size: var(--font-size-xxs);
+  font-family: var(--vui-font-mono);
+  font-size: var(--vui-font-size-xxs);
   text-transform: lowercase;
   padding: 4px 0;
-  border: 1px solid var(--color-line-strong);
-  border-radius: var(--radius-sharp);
-  background: var(--color-surface);
-  color: var(--color-text-muted);
+  border: 1px solid var(--vui-color-line-strong);
+  border-radius: var(--vui-radius-sharp);
+  background: var(--vui-color-surface);
+  color: var(--vui-color-text-muted);
   cursor: pointer;
 }
 
 .ds-toc-state-btn:hover {
-  border-color: var(--color-text-strong);
-  color: var(--color-text-strong);
+  border-color: var(--vui-color-text-strong);
+  color: var(--vui-color-text-strong);
 }
 
 .ds-toc-state-btn.active {
-  background: var(--color-accent);
-  color: var(--color-text-inverse);
-  border-color: var(--color-accent);
+  background: var(--vui-color-accent);
+  color: var(--vui-color-text-inverse);
+  border-color: var(--vui-color-accent);
 }
 
 .ds-page-body {
@@ -172,12 +172,12 @@ body.vui-design-system-page {
 .ds-group-title {
   margin: 0;
   padding-bottom: 6px;
-  border-bottom: var(--border-width) solid var(--color-text-strong);
-  font-family: var(--font-mono);
-  font-size: var(--font-size-md);
-  font-weight: var(--font-weight-title);
+  border-bottom: var(--vui-border-width) solid var(--vui-color-text-strong);
+  font-family: var(--vui-font-mono);
+  font-size: var(--vui-font-size-md);
+  font-weight: var(--vui-font-weight-title);
   text-transform: uppercase;
-  letter-spacing: var(--label-tracking);
+  letter-spacing: var(--vui-label-tracking);
 }
 
 .ds-entry {
@@ -186,9 +186,9 @@ body.vui-design-system-page {
   gap: 18px;
   align-items: start;
   padding: 12px;
-  border: var(--border-width) solid var(--color-line);
-  border-radius: var(--radius-soft);
-  background: var(--color-surface-raised);
+  border: var(--vui-border-width) solid var(--vui-color-line);
+  border-radius: var(--vui-radius-soft);
+  background: var(--vui-color-surface-raised);
 }
 
 .ds-entry-head {
@@ -199,9 +199,9 @@ body.vui-design-system-page {
 
 .ds-entry-name {
   margin: 0;
-  font-family: var(--font-body);
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-title);
+  font-family: var(--vui-font-body);
+  font-size: var(--vui-font-size-xl);
+  font-weight: var(--vui-font-weight-title);
 }
 
 .ds-entry-selectors {
@@ -211,19 +211,19 @@ body.vui-design-system-page {
 }
 
 .ds-entry-selectors code {
-  font-family: var(--font-mono);
-  font-size: var(--font-size-xs);
+  font-family: var(--vui-font-mono);
+  font-size: var(--vui-font-size-xs);
   padding: 2px 5px;
-  border: 1px solid var(--color-line);
-  border-radius: var(--radius-tight);
-  background: var(--color-surface);
+  border: 1px solid var(--vui-color-line);
+  border-radius: var(--vui-radius-tight);
+  background: var(--vui-color-surface);
 }
 
 .ds-entry-desc {
   grid-column: 1 / 2;
   margin: 0;
-  font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
+  font-size: var(--vui-font-size-sm);
+  color: var(--vui-color-text-muted);
   line-height: 1.45;
 }
 
@@ -231,9 +231,9 @@ body.vui-design-system-page {
   grid-column: 2 / 3;
   grid-row: 1 / 3;
   padding: 14px;
-  border: 1px solid var(--color-line);
-  border-radius: var(--radius-soft);
-  background: var(--color-surface);
+  border: 1px solid var(--vui-color-line);
+  border-radius: var(--vui-radius-soft);
+  background: var(--vui-color-surface);
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -248,21 +248,21 @@ body.vui-design-system-page {
 
 .ds-zoom-btn {
   appearance: none;
-  border: 1px solid var(--color-line);
-  border-radius: var(--radius-tight);
-  background: var(--color-surface-raised);
-  color: var(--color-text-muted);
-  font-family: var(--font-mono);
-  font-size: var(--font-size-xxs);
+  border: 1px solid var(--vui-color-line);
+  border-radius: var(--vui-radius-tight);
+  background: var(--vui-color-surface-raised);
+  color: var(--vui-color-text-muted);
+  font-family: var(--vui-font-mono);
+  font-size: var(--vui-font-size-xxs);
   line-height: 1;
   padding: 3px 7px;
   cursor: pointer;
 }
 
 .ds-zoom-btn.active {
-  background: var(--color-text-strong);
-  color: var(--color-text-inverse);
-  border-color: var(--color-text-strong);
+  background: var(--vui-color-text-strong);
+  color: var(--vui-color-text-inverse);
+  border-color: var(--vui-color-text-strong);
 }
 
 .ds-zoom-stage {
@@ -283,9 +283,9 @@ body.vui-design-system-page {
 }
 
 .ds-theme-toggle {
-  font-size: var(--font-size-xs);
+  font-size: var(--vui-font-size-xs);
   text-transform: lowercase;
-  color: var(--color-text-muted);
+  color: var(--vui-color-text-muted);
   margin-bottom: 6px;
 }
 
@@ -293,7 +293,7 @@ body.vui-design-system-page {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: var(--font-size-sm);
+  font-size: var(--vui-font-size-sm);
   cursor: pointer;
 }
 
@@ -302,9 +302,9 @@ body.vui-design-system-page {
   grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
   gap: 16px;
   padding: 14px;
-  border: var(--border-width) solid var(--color-line);
-  border-radius: var(--radius-soft);
-  background: var(--color-surface-raised);
+  border: var(--vui-border-width) solid var(--vui-color-line);
+  border-radius: var(--vui-radius-soft);
+  background: var(--vui-color-surface-raised);
 }
 
 .ds-playground-col {
@@ -314,14 +314,14 @@ body.vui-design-system-page {
 }
 
 .ds-playground-col-label {
-  font-family: var(--font-mono);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-title);
+  font-family: var(--vui-font-mono);
+  font-size: var(--vui-font-size-xs);
+  font-weight: var(--vui-font-weight-title);
   text-transform: lowercase;
   letter-spacing: 0.04em;
-  color: var(--color-text-muted);
+  color: var(--vui-color-text-muted);
   padding-bottom: 4px;
-  border-bottom: 1px solid var(--color-line);
+  border-bottom: 1px solid var(--vui-color-line);
 }
 
 .ds-playground-row {
@@ -332,9 +332,9 @@ body.vui-design-system-page {
 }
 
 .ds-playground-token {
-  font-family: var(--font-mono);
-  font-size: var(--font-size-xxs);
-  color: var(--color-text-strong);
+  font-family: var(--vui-font-mono);
+  font-size: var(--vui-font-size-xxs);
+  color: var(--vui-color-text-strong);
 }
 
 .ds-playground-row input[type='color'] {
@@ -342,8 +342,8 @@ body.vui-design-system-page {
   height: 24px;
   flex: none;
   padding: 0;
-  border: 2px solid var(--color-line-strong);
-  border-radius: var(--radius-sharp);
+  border: 2px solid var(--vui-color-line-strong);
+  border-radius: var(--vui-radius-sharp);
   background: none;
   cursor: pointer;
   box-shadow: none;
@@ -352,16 +352,16 @@ body.vui-design-system-page {
 .ds-playground-text {
   flex: 1;
   min-width: 0;
-  font-family: var(--font-mono);
-  font-size: var(--font-size-xxs);
+  font-family: var(--vui-font-mono);
+  font-size: var(--vui-font-size-xxs);
   padding: 3px 6px;
 }
 
 .ds-static-popover {
-  border: var(--border-width) solid var(--color-text-strong);
-  border-radius: var(--radius-soft);
-  background: var(--color-surface-raised);
-  box-shadow: var(--shadow-overlay);
+  border: var(--vui-border-width) solid var(--vui-color-text-strong);
+  border-radius: var(--vui-radius-soft);
+  background: var(--vui-color-surface-raised);
+  box-shadow: var(--vui-shadow-overlay);
   overflow: hidden;
   width: 280px;
 }
@@ -375,13 +375,13 @@ body.vui-design-system-page {
 
 .ds-token-output {
   min-height: 120px;
-  border: var(--border-width) solid var(--color-line);
-  border-radius: var(--radius-soft);
-  background: var(--color-surface-raised);
+  border: var(--vui-border-width) solid var(--vui-color-line);
+  border-radius: var(--vui-radius-soft);
+  background: var(--vui-color-surface-raised);
   padding: 10px;
-  font-family: var(--font-mono);
-  font-size: var(--font-size-xxs);
-  color: var(--color-text-muted);
+  font-family: var(--vui-font-mono);
+  font-size: var(--vui-font-size-xxs);
+  color: var(--vui-color-text-muted);
   white-space: pre-wrap;
 }
 
