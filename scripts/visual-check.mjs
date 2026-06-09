@@ -92,6 +92,8 @@ try {
       if (!output.includes(`${token}: #123456;`)) issues.push('override missing from diff output');
       if ((output.match(/--vui-/g) || []).length !== 1) issues.push('diff output should list only changed tokens');
       localStorage.clear();
+      const overrideStyle = document.getElementById('ds-token-overrides');
+      if (overrideStyle) overrideStyle.textContent = '';
     }
     return issues;
   });
@@ -107,6 +109,27 @@ try {
   const options = await page.waitForSelector('.combobox-list .combobox-option', { timeout: 3000 }).catch(() => null);
   if (!options) failures.push('combobox input did not open an option list');
   await page.keyboard.press('Escape');
+
+  // Dark theme roundtrip: toggling flips --vui-* on :root, the unprefixed
+  // aliases follow, and the choice persists across reload.
+  const lightBg = await page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--vui-color-bg').trim());
+  await page.click('.ds-theme-toggle .switch-track');
+  const dark = await page.evaluate((light) => {
+    const issues = [];
+    const rootStyle = getComputedStyle(document.documentElement);
+    if (document.documentElement.dataset.theme !== 'dark') issues.push('toggle did not set data-theme="dark" on <html>');
+    const darkBg = rootStyle.getPropertyValue('--vui-color-bg').trim();
+    if (darkBg === light) issues.push('--vui-color-bg did not change in dark theme');
+    if (rootStyle.getPropertyValue('--color-bg').trim() !== darkBg) issues.push('unprefixed --color-bg alias did not follow dark theme');
+    const body = getComputedStyle(document.body).backgroundColor;
+    if (body === 'rgba(0, 0, 0, 0)') issues.push('body background did not pick up theme');
+    return issues;
+  }, lightBg);
+  failures.push(...dark);
+  await page.reload({ waitUntil: 'networkidle' });
+  const persisted = await page.evaluate(() => document.documentElement.dataset.theme === 'dark');
+  if (!persisted) failures.push('dark theme did not persist across reload');
+  await page.evaluate(() => localStorage.clear());
 } finally {
   await browser.close();
   server.close();

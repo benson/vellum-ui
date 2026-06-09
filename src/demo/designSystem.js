@@ -13,6 +13,7 @@ import {
 const mount = document.getElementById('designSystemMount');
 
 const PLAYGROUND_KEY = 'vellum_ds_token_overrides_v1';
+const THEME_KEY = 'vellum_ds_theme_v1';
 
 const PLAYGROUND_GROUPS = [
   {
@@ -88,7 +89,9 @@ const PLAYGROUND_GROUPS = [
 
 const PLAYGROUND_TOKENS = PLAYGROUND_GROUPS.flatMap((groupDef) => groupDef.tokens);
 
-// Defaults must be read before stored overrides are applied.
+// Theme first, then defaults, then stored overrides — defaults must reflect
+// the active theme but not the overrides.
+applyTheme(readTheme());
 const tokenDefaults = readTokenDefaults();
 applyOverrides(readOverrides());
 
@@ -135,6 +138,35 @@ function overridesToCss(overrides) {
 
 function applyOverrides(overrides) {
   overrideStyleEl().textContent = overridesToCss(overrides);
+}
+
+function readTheme() {
+  try {
+    return localStorage.getItem(THEME_KEY) === 'dark' ? 'dark' : 'light';
+  } catch {
+    return 'light';
+  }
+}
+
+function applyTheme(theme) {
+  if (theme === 'dark') document.documentElement.dataset.theme = 'dark';
+  else delete document.documentElement.dataset.theme;
+}
+
+function setTheme(theme) {
+  applyTheme(theme);
+  try {
+    localStorage.setItem(THEME_KEY, theme);
+  } catch {
+    /* ignore */
+  }
+  // Re-read defaults under the new theme with overrides lifted, so the
+  // playground diffs against the theme the user is actually looking at.
+  const styleEl = overrideStyleEl();
+  const overrideCss = styleEl.textContent;
+  styleEl.textContent = '';
+  Object.assign(tokenDefaults, readTokenDefaults());
+  styleEl.textContent = overrideCss;
 }
 
 export function renderDesignSystem(target) {
@@ -197,10 +229,29 @@ function toc(groups) {
         stateButton('focus', () => setDemoState('focus')),
       ),
     ),
+    el('div', { className: 'ds-toc-title', text: 'theme' }),
+    themeToggle(),
     el('div', { className: 'ds-toc-title', text: 'catalog' }),
   );
   for (const group of groups) wrap.append(el('a', { className: 'ds-toc-link', href: `#${group.id}`, text: group.title }));
   return wrap;
+}
+
+function themeToggle() {
+  const input = el('input', {
+    className: 'switch-input',
+    type: 'checkbox',
+    dataset: { dsThemeToggle: '' },
+  });
+  input.checked = readTheme() === 'dark';
+  input.addEventListener('change', () => setTheme(input.checked ? 'dark' : 'light'));
+  return el(
+    'label',
+    { className: 'switch ds-theme-toggle' },
+    input,
+    el('span', { className: 'switch-track' }),
+    'dark mode',
+  );
 }
 
 function stateButton(label, onClick) {

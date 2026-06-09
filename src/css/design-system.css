@@ -282,6 +282,13 @@ body.vui-design-system-page {
   gap: 8px;
 }
 
+.ds-theme-toggle {
+  font-size: var(--font-size-xs);
+  text-transform: lowercase;
+  color: var(--color-text-muted);
+  margin-bottom: 6px;
+}
+
 .ds-inline-label {
   display: inline-flex;
   align-items: center;

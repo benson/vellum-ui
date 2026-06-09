@@ -341,3 +341,68 @@
   --space-4: var(--vui-space-4);
   --space-5: var(--vui-space-5);
 }
+
+/* Dark vellum. Set data-theme="dark" on <html> — the unprefixed aliases above
+   resolve against :root's --vui-* values, so the attribute must live there for
+   legacy alias consumers to follow the theme. Only color-family tokens flip;
+   shape, type, space, and motion are theme-invariant. */
+[data-theme='dark'] {
+  --vui-color-bg: #1c1722;
+  --vui-color-surface: #241e2c;
+  --vui-color-surface-sunken: #161219;
+  --vui-color-surface-raised: #2e2738;
+  --vui-color-surface-hover: #2a2333;
+  --vui-color-surface-placeholder: #4a3f28;
+  --vui-color-text: #e9e2f2;
+  --vui-color-text-muted: #b8a18d;
+  --vui-color-text-strong: #f3eefa;
+  --vui-color-text-inverse: #1c1722;
+  --vui-color-line: rgba(233, 226, 242, 0.35);
+  --vui-color-line-strong: #e9e2f2;
+  --vui-color-line-faint: #332c3d;
+  --vui-color-accent: #a878e0;
+  --vui-color-accent-soft: #3a2d52;
+  --vui-color-accent-strong: #d8c8f0;
+  --vui-color-success: #93ab72;
+  --vui-color-danger: #d05546;
+  --vui-color-danger-hover: #b03c2e;
+  --vui-color-info: #62b8d8;
+  --vui-color-success-soft: rgba(147, 171, 114, 0.22);
+  --vui-color-warn-soft: #5a4a20;
+  --vui-color-warn-soft-pale: #2e2614;
+  --vui-color-danger-soft: rgba(208, 85, 70, 0.2);
+  --vui-color-info-soft: #1e3640;
+  --vui-color-success-line: #93ab72;
+  --vui-color-warn-line: #d4a830;
+  --vui-color-danger-line: #d05546;
+  --vui-color-info-line: #62b8d8;
+  --vui-color-btn-primary-hover: #c4a484;
+  --vui-color-shadow: #0a0710;
+  --vui-color-input-bg: rgba(0, 0, 0, 0.25);
+  --vui-color-input-bg-focus: rgba(0, 0, 0, 0.4);
+  --vui-color-success-bg: #1e2a1e;
+  --vui-color-success-border: #3c5a3c;
+  --vui-color-success-text: #a8d8a8;
+  --vui-color-warn-bg: #2e2614;
+  --vui-color-warn-border: #6a5a28;
+  --vui-color-warn-text: #e8cc7a;
+  --vui-color-danger-bg: #2e1818;
+  --vui-color-danger-border: #6a3434;
+  --vui-color-danger-text: #e89898;
+  --vui-color-status-neutral-bg: #242028;
+  --vui-color-status-neutral-border: #46404f;
+  --vui-color-status-neutral-text: #a298ad;
+  --vui-color-neutral-black: #f3eefa;
+  --vui-color-neutral-900: #e9e2f2;
+  --vui-color-neutral-700: #cfc6da;
+  --vui-color-neutral-600: #b8aec5;
+  --vui-color-neutral-550: #a298ad;
+  --vui-color-neutral-500: #8d8398;
+  --vui-color-neutral-400: #776e82;
+  --vui-color-neutral-350: #8d8398;
+  --vui-color-neutral-250: #564e62;
+  --vui-color-neutral-200: #46404f;
+  --vui-color-neutral-surface-warm: #262030;
+  --vui-color-neutral-surface-faint: #211b29;
+  --vui-color-neutral-border-warm: #443a52;
+}
