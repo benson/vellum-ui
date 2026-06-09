@@ -26,12 +26,12 @@ Edit source files only. Do not hand-edit `dist/`.
 
 ## Token Names
 
-- Canonical package tokens use `--vui-*`.
-- Legacy app tokens such as `--color-*` remain as compatibility aliases while vellum's own component CSS still references them.
+- Canonical package tokens use `--vui-*`. Vellum's own CSS and JS reference only these.
+- Legacy app tokens such as `--color-*` remain as compatibility aliases for consumers (biblioplex's styles.css uses them heavily).
 
 ## Compatibility Debt
 
-The `--bui-*` aliases and the `/benson-ui/` / `@benson/ui` rewrite branches were removed once consumers shipped with no live references to the old names. Remaining debt: migrate vellum's internal CSS off the unprefixed `--color-*` aliases, then drop that alias layer too.
+The `--bui-*` aliases and the `/benson-ui/` / `@benson/ui` rewrite branches were removed once consumers shipped with no live references to the old names. Vellum's internal CSS migrated off the unprefixed aliases in 2026-06. Remaining debt: migrate biblioplex's styles.css to `--vui-*`, then drop the alias layer from tokens.css.
 
 ## Release Model
 

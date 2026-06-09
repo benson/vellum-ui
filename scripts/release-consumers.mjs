@@ -137,6 +137,18 @@ async function updatePoolBuilder(path) {
   run('npm', ['install'], { cwd: path });
   await sanitizePackageLock(path);
   run('npm', ['run', 'sync:ui'], { cwd: path });
+  await bumpPoolBuilderCacheBust(path);
+}
+
+// GH Pages serves poolbuilder with max-age=600, so a pin bump that rewrites
+// the vendored vellum-ui.css needs its cache-bust param stamped too or the
+// stale sheet lingers for up to 10 minutes. Stamp the release sha.
+async function bumpPoolBuilderCacheBust(path) {
+  const indexPath = join(path, 'index.html');
+  if (!existsSync(indexPath)) return;
+  const source = await readFile(indexPath, 'utf8');
+  const next = source.replace(/(vendor\/vellum-ui\/vellum-ui\.css\?v=)[\w-]*/g, `$1${shortSha}`);
+  if (next !== source) await writeFile(indexPath, next);
 }
 
 async function updateBiblioplex(path) {
