@@ -67,6 +67,8 @@ try {
     expectSelector('.vui-table tbody tr', 'table rows');
     expectSelector('.skeleton-line', 'skeleton');
     expectSelector('.empty-state', 'empty state');
+    expectSelector('.vui-resize-divider', 'resize divider');
+    expectSelector('.vui-resize-grip', 'resize grip');
 
     // Tokens must actually reach components.
     const rootStyle = getComputedStyle(document.documentElement);
@@ -103,6 +105,40 @@ try {
   await page.click('[data-ds-fire-toast]');
   const fired = await page.waitForSelector('.toast-stack .toast', { timeout: 3000 }).catch(() => null);
   if (!fired) failures.push('firing a toast did not mount .toast-stack .toast');
+
+  // Edge-resize roundtrip: drag resizes the demo pane, dragging past the snap
+  // threshold collapses it, and a click on the collapsed edge reopens it.
+  const edgeDemo = await page.$('.ds-edge-resize-demo');
+  if (!edgeDemo) {
+    failures.push('edge resize demo missing');
+  } else {
+    // page.mouse uses viewport coordinates and does not auto-scroll.
+    await edgeDemo.scrollIntoViewIfNeeded();
+    const handleBox = await (await page.$('.ds-edge-resize-demo .vui-resize-divider')).boundingBox();
+    const startX = handleBox.x + handleBox.width / 2;
+    const startY = handleBox.y + handleBox.height / 2;
+    await page.mouse.move(startX, startY);
+    await page.mouse.down();
+    await page.mouse.move(startX + 60, startY, { steps: 4 });
+    await page.mouse.up();
+    const widened = await page.evaluate(() =>
+      document.querySelector('.ds-edge-resize-demo').style.getPropertyValue('--ds-edge-pane-w'),
+    );
+    if (widened !== '240px') failures.push(`edge resize drag expected 240px, got "${widened}"`);
+    await page.mouse.move(startX + 60, startY);
+    await page.mouse.down();
+    await page.mouse.move(startX - 200, startY, { steps: 6 });
+    await page.mouse.up();
+    const collapsed = await page.evaluate(() =>
+      document.querySelector('.ds-edge-resize-demo').classList.contains('ds-edge-resize-collapsed'),
+    );
+    if (!collapsed) failures.push('edge resize drag past threshold did not collapse');
+    await page.click('.ds-edge-resize-demo .vui-resize-divider');
+    const reopened = await page.evaluate(() =>
+      !document.querySelector('.ds-edge-resize-demo').classList.contains('ds-edge-resize-collapsed'),
+    );
+    if (!reopened) failures.push('click on collapsed edge did not reopen');
+  }
 
   // Combobox roundtrip: typing opens the option list.
   await page.fill('.combobox input', 'e');
