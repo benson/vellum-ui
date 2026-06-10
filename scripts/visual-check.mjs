@@ -69,6 +69,10 @@ try {
     expectSelector('.empty-state', 'empty state');
     expectSelector('.vui-resize-divider', 'resize divider');
     expectSelector('.vui-resize-grip', 'resize grip');
+    expectSelector('.ds-type-ramp-row', 'type size ramp');
+    expectSelector('.status-state-loading .loading-spinner', 'status matrix spinner');
+    expectSelector('.btn-link-danger', 'danger inline action');
+    expectSelector('[data-ds-open-modal]', 'live modal trigger');
 
     // Tokens must actually reach components.
     const rootStyle = getComputedStyle(document.documentElement);
@@ -148,6 +152,14 @@ try {
     );
     if (!reopened) failures.push('wiggle-click on collapsed edge did not reopen');
   }
+
+  // Live modal roundtrip: trigger opens the real modal, escape closes it.
+  await page.click('[data-ds-open-modal]');
+  const modalOpen = await page.waitForSelector('.ui-modal.open .ui-modal-card', { timeout: 3000 }).catch(() => null);
+  if (!modalOpen) failures.push('live modal trigger did not open the modal');
+  await page.keyboard.press('Escape');
+  const modalClosed = await page.waitForFunction(() => !document.querySelector('.ui-modal.open'), null, { timeout: 3000 }).catch(() => null);
+  if (!modalClosed) failures.push('escape did not close the live modal');
 
   // Combobox roundtrip: typing opens the option list.
   await page.fill('.combobox input', 'e');

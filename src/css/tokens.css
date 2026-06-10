@@ -172,6 +172,10 @@
   --vui-space-4: 16px;
   --vui-space-5: 20px;
 
+  /* Ink for text on warn/gold surfaces — fixed in BOTH themes so gold
+     buttons stay legible in dark (BEN-560). */
+  --vui-color-on-warn: #15100d;
+
   /* Vellum convenience aliases */
   --vui-control-height: 34px;
   --vui-space-6: 24px;

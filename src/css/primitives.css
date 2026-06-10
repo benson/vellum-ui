@@ -30,25 +30,25 @@
   background-size:
     6px 6px,
     auto;
-  color: var(--vui-color-text-strong);
+  color: var(--vui-color-on-warn);
 }
 
 .btn:hover:not(:disabled),
-.ds-force-hover .btn:not(:disabled) {
+.ds-force-hover .ds-zoom-stage .btn:not(:disabled) {
   transform: translate(2px, 2px);
   box-shadow: 2px 2px 0 var(--vui-color-shadow);
   filter: brightness(1.05);
 }
 
 .btn:active:not(:disabled),
-.ds-force-active .btn:not(:disabled) {
+.ds-force-active .ds-zoom-stage .btn:not(:disabled) {
   transform: translate(4px, 4px);
   box-shadow: 0 0 0 var(--vui-color-shadow);
   filter: brightness(0.94);
 }
 
 .btn:focus-visible,
-.ds-force-focus .btn {
+.ds-force-focus .ds-zoom-stage .btn:not(:disabled) {
   outline: var(--vui-focus-ring);
   outline-offset: var(--vui-focus-ring-offset);
 }
@@ -69,7 +69,7 @@
 }
 
 .btn-secondary:hover:not(:disabled),
-.ds-force-hover .btn-secondary:not(:disabled) {
+.ds-force-hover .ds-zoom-stage .btn-secondary:not(:disabled) {
   filter: brightness(1.05);
 }
 
@@ -80,7 +80,7 @@
 }
 
 .btn-danger:hover:not(:disabled),
-.ds-force-hover .btn-danger:not(:disabled) {
+.ds-force-hover .ds-zoom-stage .btn-danger:not(:disabled) {
   color: var(--vui-color-text-inverse);
 }
 
@@ -90,7 +90,7 @@
 }
 
 .btn-ink:hover:not(:disabled),
-.ds-force-hover .btn-ink:not(:disabled) {
+.ds-force-hover .ds-zoom-stage .btn-ink:not(:disabled) {
   filter: brightness(1.25);
 }
 
@@ -199,7 +199,7 @@
 }
 
 .segment-btn:hover:not(.active),
-.ds-force-hover .segment-btn:not(.active) {
+.ds-force-hover .ds-zoom-stage .segment-btn:not(.active) {
   transform: translate(2px, 2px);
   background: var(--vui-color-accent-soft);
   box-shadow:
@@ -225,7 +225,7 @@
 
 .segment-btn.active:hover,
 .segment-btn[aria-pressed='true']:hover,
-.ds-force-hover .segment-btn.active {
+.ds-force-hover .ds-zoom-stage .segment-btn.active {
   background: var(--vui-color-accent);
   filter: brightness(0.92);
 }
@@ -483,18 +483,28 @@ input[type='range']:focus-visible {
   display: inline-block;
   background: repeating-linear-gradient(
     var(--vui-grip-angle, 0deg),
-    var(--vui-color-text-muted) 0 1.5px,
+    var(--vui-grip-ink, var(--vui-color-text-strong)) 0 1.5px,
     transparent 1.5px 4px
   );
-  opacity: 0.65;
+  opacity: 0.5;
+  transition:
+    opacity var(--vui-motion-fast) ease,
+    background var(--vui-motion-fast) ease;
 }
 .vui-resize-grip-x {
   --vui-grip-angle: 90deg;
   width: 5px;
-  height: 16px;
+  height: 28px;
 }
 .vui-resize-grip-y {
   --vui-grip-angle: 0deg;
-  width: 16px;
+  width: 28px;
   height: 5px;
+}
+/* Hovering or focusing any divider lights its grip — the drag invitation. */
+.vui-resize-divider:hover .vui-resize-grip,
+.vui-resize-divider:focus-visible .vui-resize-grip,
+*:hover > .vui-resize-grip {
+  --vui-grip-ink: var(--vui-color-line-focus);
+  opacity: 0.9;
 }
