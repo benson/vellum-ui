@@ -36,7 +36,14 @@ const consumers = [
     base: 'main',
     name: 'poolbuilder',
     checkCommand: ['npm', ['test']],
-    update: updatePoolBuilder,
+    update: updateVendoredConsumer,
+  },
+  {
+    repo: `${owner}/packcracker`,
+    base: 'main',
+    name: 'packcracker',
+    waitForChecks: false,
+    update: updateVendoredConsumer,
   },
   {
     repo: `${owner}/biblioplex`,
@@ -132,18 +139,19 @@ async function writeDesignSystemPage(path) {
   );
 }
 
-async function updatePoolBuilder(path) {
+// poolbuilder and packcracker both vendor dist via their sync:ui script.
+async function updateVendoredConsumer(path) {
   await setPackageDependency(path);
   run('npm', ['install'], { cwd: path });
   await sanitizePackageLock(path);
   run('npm', ['run', 'sync:ui'], { cwd: path });
-  await bumpPoolBuilderCacheBust(path);
+  await bumpVendoredCacheBust(path);
 }
 
-// GH Pages serves poolbuilder with max-age=600, so a pin bump that rewrites
+// GH Pages serves these sites with max-age=600, so a pin bump that rewrites
 // the vendored vellum-ui.css needs its cache-bust param stamped too or the
 // stale sheet lingers for up to 10 minutes. Stamp the release sha.
-async function bumpPoolBuilderCacheBust(path) {
+async function bumpVendoredCacheBust(path) {
   const indexPath = join(path, 'index.html');
   if (!existsSync(indexPath)) return;
   const source = await readFile(indexPath, 'utf8');
