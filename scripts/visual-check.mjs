@@ -110,8 +110,8 @@ try {
   if (!options) failures.push('combobox input did not open an option list');
   await page.keyboard.press('Escape');
 
-  // Dark theme roundtrip: toggling flips --vui-* on :root, the unprefixed
-  // aliases follow, and the choice persists across reload.
+  // Dark theme roundtrip: toggling flips --vui-* on :root and the choice
+  // persists across reload.
   const lightBg = await page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--vui-color-bg').trim());
   await page.click('.ds-theme-toggle .switch-track');
   const dark = await page.evaluate((light) => {
@@ -120,7 +120,6 @@ try {
     if (document.documentElement.dataset.theme !== 'dark') issues.push('toggle did not set data-theme="dark" on <html>');
     const darkBg = rootStyle.getPropertyValue('--vui-color-bg').trim();
     if (darkBg === light) issues.push('--vui-color-bg did not change in dark theme');
-    if (rootStyle.getPropertyValue('--color-bg').trim() !== darkBg) issues.push('unprefixed --color-bg alias did not follow dark theme');
     const body = getComputedStyle(document.body).backgroundColor;
     if (body === 'rgba(0, 0, 0, 0)') issues.push('body background did not pick up theme');
     return issues;
