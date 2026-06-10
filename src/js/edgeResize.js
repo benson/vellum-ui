@@ -86,7 +86,11 @@ export function edgeResize(
       moved: false,
       lastSize: null,
     };
-    handle.setPointerCapture?.(event.pointerId);
+    try {
+      handle.setPointerCapture?.(event.pointerId);
+    } catch {
+      /* synthetic or already-released pointer — capture is best-effort */
+    }
     event.preventDefault?.();
     if (resizingClass) documentObj?.body?.classList?.add(resizingClass);
   };
