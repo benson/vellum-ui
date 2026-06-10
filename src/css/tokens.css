@@ -46,6 +46,9 @@
   --vui-color-text-muted: #5b3b25;
   --vui-color-text-strong: #15100d;
   --vui-color-text-inverse: #fff5d2;
+  /* For content sitting on ink-colored surfaces (fab pills, dark bands). */
+  --vui-color-on-dark-line: rgba(255, 255, 255, 0.4);
+  --vui-color-on-dark-text-soft: rgba(255, 255, 255, 0.82);
   --vui-color-line: rgba(21, 16, 13, 0.4);
   --vui-color-line-strong: #15100d;
   --vui-color-line-focus: var(--vui-color-accent);
@@ -357,6 +360,9 @@
   --vui-color-text-muted: #b8a18d;
   --vui-color-text-strong: #f3eefa;
   --vui-color-text-inverse: #1c1722;
+  /* "Ink" surfaces are light in dark mode, so on-dark content flips dark. */
+  --vui-color-on-dark-line: rgba(28, 23, 34, 0.4);
+  --vui-color-on-dark-text-soft: rgba(28, 23, 34, 0.82);
   --vui-color-line: rgba(233, 226, 242, 0.35);
   --vui-color-line-strong: #e9e2f2;
   --vui-color-line-faint: #332c3d;

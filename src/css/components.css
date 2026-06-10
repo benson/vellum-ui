@@ -185,49 +185,9 @@
   margin-left: auto;
 }
 
-.fab-cluster {
-  position: fixed;
-  right: var(--vui-space-4);
-  bottom: var(--vui-space-4);
-  z-index: var(--vui-z-toast);
-  display: flex;
-  flex-direction: column;
-  gap: var(--vui-space-2);
-}
-
-.fab-btn {
-  appearance: none;
-  min-width: 42px;
-  min-height: 42px;
-  border: 2px solid var(--vui-color-line-strong);
-  border-radius: var(--vui-radius-round);
-  background: var(--vui-color-accent);
-  color: var(--vui-color-text-inverse);
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--vui-space-1);
-  box-shadow: var(--vui-shadow-hard);
-  font: inherit;
-  font-weight: var(--vui-font-weight-title);
-  padding: 0 var(--vui-space-3);
-}
-
-.fab-btn:hover {
-  transform: translate(1px, 1px);
-  box-shadow: var(--vui-shadow-hard-sm);
-}
-
-.fab-glyph {
-  font-size: 1rem;
-  line-height: 1;
-}
-
-.fab-label {
-  font-size: var(--vui-font-size-xs);
-  text-transform: lowercase;
-}
+/* The .fab-* family lives in overlays.css (ink pills, upstreamed from
+   biblioplex — BEN-543). An older accent-colored variant that used to live
+   here was never consumed and is gone. */
 
 .toast-stack {
   position: fixed;

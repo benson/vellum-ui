@@ -488,27 +488,63 @@ body.feedback-capture-capturing .feedback-capture-widget {
   right: 0;
   width: 16px;
 }
-/* Floating opener used by mountFeedbackCapture on sites without their own
-   FAB chrome. */
-.feedback-capture-launcher {
-  background: var(--vui-color-surface-raised);
-  border: var(--vui-border-width) solid var(--vui-color-text-strong);
-  border-radius: var(--vui-radius-soft);
-  bottom: var(--vui-edge-margin);
-  box-shadow: var(--vui-shadow-hard-small);
-  color: var(--vui-color-text-strong);
-  cursor: pointer;
-  font-family: var(--vui-font-mono);
-  font-size: var(--vui-font-size-xs);
-  font-weight: var(--vui-font-weight-title);
-  letter-spacing: var(--vui-label-tracking);
-  padding: 6px 10px;
+/* Floating action buttons — solid ink pills, upstreamed from biblioplex.
+   Apps stack several in a fixed .fab-cluster bottom-right; the feedback
+   widget mounts its own single-button cluster. Design pass (BEN-544): the
+   family joins the hard-shadow press language — soft ledger shadow at rest,
+   pressing flat on hover — and the shortcut chip picks up the tight radius. */
+.fab-cluster {
   position: fixed;
   right: var(--vui-edge-margin);
-  text-transform: lowercase;
+  bottom: var(--vui-edge-margin);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
   z-index: 120;
 }
-.feedback-capture-launcher:hover {
-  box-shadow: 2px 2px 0 var(--vui-color-text-strong);
-  transform: translate(1px, 1px);
+.fab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  background: var(--vui-color-text-strong);
+  color: var(--vui-color-text-inverse);
+  border: var(--vui-border-width) solid var(--vui-color-text-strong);
+  border-radius: var(--vui-radius-sharp);
+  font-family: inherit;
+  font-size: var(--vui-font-size-sm);
+  cursor: pointer;
+  box-shadow: var(--vui-shadow-soft);
+  text-transform: lowercase;
+  text-decoration: none;
+  letter-spacing: 0;
+}
+.fab-btn:hover {
+  background: var(--vui-color-btn-primary-hover);
+  box-shadow: var(--vui-shadow-subtle);
+  transform: translate(2px, 2px);
+}
+.fab-btn:focus-visible {
+  outline: 2px solid var(--vui-color-text-strong);
+  outline-offset: 2px;
+}
+.fab-glyph {
+  font-family: var(--vui-font-body);
+  font-size: var(--vui-font-size-base);
+  line-height: 1;
+}
+.fab-label {
+  white-space: nowrap;
+}
+.fab-shortcut {
+  border: 1px solid var(--vui-color-on-dark-line);
+  border-radius: var(--vui-radius-tight);
+  color: var(--vui-color-on-dark-text-soft);
+  font-size: var(--vui-font-size-xs);
+  line-height: 1;
+  margin-left: 2px;
+  min-width: 16px;
+  padding: 1px 4px;
+  text-align: center;
 }
