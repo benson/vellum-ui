@@ -178,6 +178,16 @@
   margin-left: calc(-1 * var(--vui-border-width));
 }
 
+/* Dense variant for chrome (toolbars, page furniture, zoom/state pickers). */
+.segmented-compact .segment-btn {
+  font-size: var(--vui-font-size-xxs);
+  min-height: 0;
+  padding: 4px 8px;
+  box-shadow:
+    var(--vui-shadow-hard-small),
+    0 3px 0 var(--vui-color-shadow);
+}
+
 .segment-btn:not(:first-child) {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;

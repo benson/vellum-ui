@@ -50,26 +50,6 @@ body.vui-design-system-page {
   justify-content: flex-end;
 }
 
-.ds-page-back {
-  font-family: var(--vui-font-mono);
-  font-weight: var(--vui-font-weight-title);
-  font-size: var(--vui-font-size-sm);
-  text-transform: uppercase;
-  letter-spacing: var(--vui-label-tracking);
-  color: var(--vui-color-text-strong);
-  text-decoration: none;
-  border: var(--vui-border-width) solid var(--vui-color-text-strong);
-  border-radius: var(--vui-radius-soft);
-  padding: 6px 10px;
-  background: var(--vui-color-surface-raised);
-  box-shadow: var(--vui-shadow-hard-small);
-}
-
-.ds-page-back:hover {
-  transform: translate(1px, 1px);
-  box-shadow: 2px 2px 0 var(--vui-color-text-strong);
-}
-
 .ds-page-layout {
   display: grid;
   grid-template-columns: 190px minmax(0, 1fr);
@@ -127,33 +107,15 @@ body.vui-design-system-page {
   border-bottom: 1px solid var(--vui-color-line);
 }
 
+/* The force-state picker is a compact segmented control; this just makes the
+   four segments share the narrow toc width evenly. */
 .ds-toc-state-row {
-  display: flex;
-  gap: 4px;
+  width: 100%;
 }
 
-.ds-toc-state-btn {
-  flex: 1;
-  font-family: var(--vui-font-mono);
-  font-size: var(--vui-font-size-xxs);
-  text-transform: lowercase;
-  padding: 4px 0;
-  border: 1px solid var(--vui-color-line-strong);
-  border-radius: var(--vui-radius-sharp);
-  background: var(--vui-color-surface);
-  color: var(--vui-color-text-muted);
-  cursor: pointer;
-}
-
-.ds-toc-state-btn:hover {
-  border-color: var(--vui-color-text-strong);
-  color: var(--vui-color-text-strong);
-}
-
-.ds-toc-state-btn.active {
-  background: var(--vui-color-accent);
-  color: var(--vui-color-text-inverse);
-  border-color: var(--vui-color-accent);
+.ds-toc-state-row .segment-btn {
+  flex: 1 1 0;
+  padding: 4px 2px;
 }
 
 .ds-page-body {
@@ -240,29 +202,9 @@ body.vui-design-system-page {
   overflow: auto;
 }
 
+/* The zoom picker is a compact segmented control pinned to the demo's edge. */
 .ds-zoom-bar {
-  display: flex;
-  gap: 4px;
   align-self: flex-end;
-}
-
-.ds-zoom-btn {
-  appearance: none;
-  border: 1px solid var(--vui-color-line);
-  border-radius: var(--vui-radius-tight);
-  background: var(--vui-color-surface-raised);
-  color: var(--vui-color-text-muted);
-  font-family: var(--vui-font-mono);
-  font-size: var(--vui-font-size-xxs);
-  line-height: 1;
-  padding: 3px 7px;
-  cursor: pointer;
-}
-
-.ds-zoom-btn.active {
-  background: var(--vui-color-text-strong);
-  color: var(--vui-color-text-inverse);
-  border-color: var(--vui-color-text-strong);
 }
 
 .ds-zoom-stage {
