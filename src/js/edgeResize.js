@@ -52,7 +52,9 @@ export function edgeResize(
   };
   handle.setAttribute?.('aria-valuemin', String(min));
   handle.setAttribute?.('aria-valuemax', String(max));
-  if (!isCollapsed()) syncAria(Math.round(getSize() || 0));
+  // A focusable separator must always carry aria-valuenow (axe
+  // aria-required-attr); report min while collapsed.
+  syncAria(isCollapsed() ? min : Math.round(getSize() || min));
 
   const pointerPos = (event) => (axis === 'y' ? event.clientY : event.clientX);
 
@@ -61,6 +63,7 @@ export function edgeResize(
       if (!drag.collapsed) {
         drag.collapsed = true;
         setCollapsed(true);
+        syncAria(min);
       }
       return;
     }
