@@ -133,11 +133,20 @@ try {
       document.querySelector('.ds-edge-resize-demo').classList.contains('ds-edge-resize-collapsed'),
     );
     if (!collapsed) failures.push('edge resize drag past threshold did not collapse');
-    await page.click('.ds-edge-resize-demo .vui-resize-divider');
+    // Reopen via a realistic click: real input fires a ~1px pointermove during
+    // a stationary click, which must not cancel click-to-open.
+    const collapsedHandle = await page.$('.ds-edge-resize-demo .vui-resize-divider');
+    const collapsedBox = await collapsedHandle.boundingBox();
+    const cx = collapsedBox.x + collapsedBox.width / 2;
+    const cy = collapsedBox.y + collapsedBox.height / 2;
+    await page.mouse.move(cx, cy);
+    await page.mouse.down();
+    await page.mouse.move(cx + 1, cy);
+    await page.mouse.up();
     const reopened = await page.evaluate(() =>
       !document.querySelector('.ds-edge-resize-demo').classList.contains('ds-edge-resize-collapsed'),
     );
-    if (!reopened) failures.push('click on collapsed edge did not reopen');
+    if (!reopened) failures.push('wiggle-click on collapsed edge did not reopen');
   }
 
   // Combobox roundtrip: typing opens the option list.

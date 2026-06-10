@@ -100,9 +100,12 @@ export function edgeResize(
 
   const onPointerMove = (event) => {
     if (!drag || event.pointerId !== drag.pointerId) return;
+    const raw = pointerPos(event) - drag.startPos;
+    // Real input fires zero/one-px pointermoves during a stationary click —
+    // noise must not cancel click-to-open. 3px reads as drag intent.
+    if (!drag.moved && Math.abs(raw) < 3) return;
     drag.moved = true;
-    const delta = (pointerPos(event) - drag.startPos) * grow;
-    applyResolved(resolveEdgeDrag({ startSize: drag.startSize, delta, min, max, snapClosedAt }));
+    applyResolved(resolveEdgeDrag({ startSize: drag.startSize, delta: raw * grow, min, max, snapClosedAt }));
   };
 
   const endDrag = (event, commit) => {
