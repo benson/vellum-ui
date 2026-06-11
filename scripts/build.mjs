@@ -38,6 +38,7 @@ await writeFile(
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Vellum UI Design System</title>
+    <link rel="icon" type="image/svg+xml" href="./demo/favicon.svg?v=${buildId}" />
     <link rel="stylesheet" href="./vellum-ui.css?v=${buildId}" />
   </head>
   <body class="vui-app vui-design-system-page design-system-page">
@@ -56,6 +57,7 @@ await writeFile(
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Vellum UI Modal Lab</title>
+    <link rel="icon" type="image/svg+xml" href="../../demo/favicon.svg?v=${buildId}" />
     <link rel="stylesheet" href="../../vellum-ui.css?v=${buildId}" />
   </head>
   <body class="vui-app vui-lab-page modal-lab-page">

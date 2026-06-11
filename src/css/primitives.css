@@ -18,10 +18,10 @@
   letter-spacing: 0.04em;
   cursor: pointer;
   transition:
-    transform var(--vui-motion-fast) steps(2, end),
-    box-shadow var(--vui-motion-fast) steps(2, end),
-    background-color var(--vui-motion-fast),
-    filter var(--vui-motion-fast);
+    transform var(--vui-motion-snap) steps(2, end),
+    box-shadow var(--vui-motion-snap) steps(2, end),
+    background-color var(--vui-motion-snap),
+    filter var(--vui-motion-snap);
   text-transform: lowercase;
   background-color: var(--vui-color-warn);
   background-image:
@@ -60,6 +60,24 @@
   color: var(--vui-color-text-muted);
   cursor: default;
   filter: grayscale(0.25);
+}
+
+/* Optional keyboard-shortcut hint inside any button (BEN-622). One treatment
+   for .btn and the fab pills: currentColor-derived so it reads on gold,
+   secondary paper, and ink surfaces alike. */
+.btn-shortcut,
+.fab-shortcut {
+  border: 1px solid color-mix(in srgb, currentColor 45%, transparent);
+  border-radius: var(--vui-radius-tight);
+  color: color-mix(in srgb, currentColor 85%, transparent);
+  font-size: var(--vui-font-size-xs);
+  font-weight: var(--vui-font-weight-body);
+  letter-spacing: 0;
+  line-height: 1;
+  margin-left: 2px;
+  min-width: 16px;
+  padding: 1px 4px;
+  text-align: center;
 }
 
 .btn-secondary {
@@ -212,6 +230,47 @@
   z-index: 3;
 }
 
+/* Tabs (BEN-557): underline-active row for view switching within a surface.
+   Quiet voice like the segmented control; segmented = exclusive options,
+   tabs = panes. Apps wire the switching; use aria-selected on the buttons. */
+.tab-row {
+  display: flex;
+  gap: 2px;
+  border-bottom: var(--vui-border-width) solid var(--vui-color-line);
+}
+
+.tab-btn {
+  appearance: none;
+  border: none;
+  border-bottom: var(--vui-border-width) solid transparent;
+  margin-bottom: calc(-1 * var(--vui-border-width));
+  background: transparent;
+  color: var(--vui-color-neutral-550);
+  cursor: pointer;
+  font-family: var(--vui-font-mono);
+  font-weight: 400;
+  font-size: var(--vui-font-size-xs);
+  line-height: 1;
+  padding: 7px 10px;
+  text-transform: lowercase;
+  transition: color var(--vui-motion-fast);
+}
+
+.tab-btn:hover {
+  color: var(--vui-color-text-strong);
+}
+
+.tab-btn.active,
+.tab-btn[aria-selected='true'] {
+  border-bottom-color: var(--vui-color-text-strong);
+  color: var(--vui-color-text-strong);
+}
+
+.tab-btn:focus-visible {
+  outline: 2px solid var(--vui-color-text-strong);
+  outline-offset: -2px;
+}
+
 .icon-btn {
   display: inline-flex;
   align-items: center;
@@ -268,6 +327,34 @@ select:focus {
 
 textarea {
   resize: vertical;
+}
+
+/* Field validation (BEN-557): flag the control with aria-invalid="true"
+   (or .field-invalid where aria doesn't fit) and follow it with a
+   .field-error line inside the field row. */
+input[aria-invalid='true'],
+textarea[aria-invalid='true'],
+select[aria-invalid='true'],
+.field-invalid {
+  border-color: var(--vui-color-danger);
+}
+
+input[aria-invalid='true']:focus,
+textarea[aria-invalid='true']:focus,
+select[aria-invalid='true']:focus,
+.field-invalid:focus {
+  border-color: var(--vui-color-danger);
+  outline: none;
+}
+
+.field-error {
+  color: var(--vui-color-danger);
+  font-family: var(--vui-font-mono);
+  font-size: var(--vui-font-size-xs);
+  font-weight: var(--vui-font-weight-body);
+  letter-spacing: 0;
+  line-height: 1.35;
+  text-transform: lowercase;
 }
 
 input[type='checkbox']:not(.switch-input),

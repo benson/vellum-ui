@@ -70,6 +70,13 @@ try {
     expectSelector('.vui-resize-divider', 'resize divider');
     expectSelector('.vui-resize-grip', 'resize grip');
     expectSelector('.ds-type-ramp-row', 'type size ramp');
+    expectSelector('.field-error', 'field validation error');
+    expectSelector('input[aria-invalid=\"true\"]', 'invalid field');
+    expectSelector('.pager .pager-btn[aria-current=\"page\"]', 'pagination current page');
+    expectSelector('.tab-row .tab-btn[aria-selected=\"true\"]', 'tabs active tab');
+    expectSelector('.card-sleeve .card-sleeve-slot', 'card sleeve');
+    expectSelector('.btn .btn-shortcut', 'button shortcut hint');
+    expectSelector('link[rel=\"icon\"]', 'favicon link');
     expectSelector('.status-state-loading .loading-spinner', 'status matrix spinner');
     expectSelector('.btn-link-danger', 'danger inline action');
     expectSelector('[data-ds-open-modal]', 'live modal trigger');

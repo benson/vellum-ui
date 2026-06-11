@@ -62,13 +62,17 @@
   outline: none;
 }
 
+/* Variant geometry matches the production "sticker" chips in biblioplex's
+   table view — sharp corners, hairline border, xxs type (BEN-626). */
 .ui-chip-role,
 .ui-chip-status,
 .ui-chip-filter {
-  border: var(--vui-border-width) solid var(--vui-color-line);
+  border: 1px solid var(--vui-color-line);
+  border-radius: var(--vui-radius-sharp);
   background: var(--vui-color-surface-sunken);
   color: var(--vui-color-text-muted);
-  padding: 1px 8px;
+  font-size: var(--vui-font-size-xxs);
+  padding: 1px 6px;
 }
 
 .status-state {
@@ -379,6 +383,106 @@
   font-size: var(--vui-font-size-jumbo);
   line-height: 1;
   opacity: 0.6;
+}
+
+/* Pagination (BEN-557): quiet page stepper in the segmented voice —
+   transparent buttons, grey labels, ink-filled current page. Mark the
+   current page with aria-current="page"; use paginationRange() from
+   pagination.js to build the number list. */
+.pager {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-family: var(--vui-font-mono);
+  font-size: var(--vui-font-size-xs);
+}
+
+.pager-btn {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  min-height: 24px;
+  padding: 0 5px;
+  border: none;
+  border-radius: var(--vui-radius-tight);
+  background: transparent;
+  color: var(--vui-color-neutral-550);
+  cursor: pointer;
+  font: inherit;
+  line-height: 1;
+  text-transform: lowercase;
+  transition: color var(--vui-motion-fast);
+}
+
+.pager-btn:hover:not(:disabled) {
+  color: var(--vui-color-text-strong);
+}
+
+.pager-btn[aria-current='page'] {
+  background: var(--vui-color-text-strong);
+  color: var(--vui-color-text-inverse);
+}
+
+.pager-btn:disabled {
+  color: var(--vui-color-line);
+  cursor: default;
+}
+
+.pager-btn:focus-visible {
+  outline: 2px solid var(--vui-color-text-strong);
+  outline-offset: 1px;
+}
+
+.pager-gap {
+  color: var(--vui-color-text-muted);
+  padding: 0 2px;
+  user-select: none;
+}
+
+/* Placeholder card in sleeve (BEN-550): a sleeved empty card slot for
+   binder/deck grids. Size via --card-sleeve-width; MTG card aspect. */
+.card-sleeve {
+  --card-sleeve-width: 120px;
+  position: relative;
+  box-sizing: border-box;
+  width: var(--card-sleeve-width);
+  aspect-ratio: 63 / 88;
+  padding: calc(var(--card-sleeve-width) * 0.045);
+  border: 1px solid var(--vui-color-line);
+  border-radius: var(--vui-radius-sharp);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0.06) 38%, rgba(21, 16, 13, 0.05) 100%),
+    var(--vui-color-surface);
+  box-shadow: var(--vui-shadow-lift);
+}
+
+.card-sleeve::after {
+  /* sleeve sheen stripe */
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(115deg, transparent 28%, rgba(255, 255, 255, 0.22) 34%, transparent 42%);
+  pointer-events: none;
+}
+
+.card-sleeve-slot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border: var(--vui-border-width) dashed var(--vui-color-line);
+  border-radius: var(--vui-radius-card);
+  background: var(--vui-color-surface-placeholder);
+  background-image: radial-gradient(rgba(21, 16, 13, 0.08) 1px, transparent 1px);
+  background-size: 6px 6px;
+  color: var(--vui-color-text-muted);
+  font-family: var(--vui-font-mono);
+  font-size: var(--vui-font-size-xxs);
+  text-transform: lowercase;
 }
 
 .card-preview-anchor {
