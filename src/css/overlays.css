@@ -40,17 +40,13 @@
 }
 
 .ui-modal-card[data-vui-modal-interactive='true'] .ui-modal-head {
-  cursor: grab;
+  cursor: move;
   touch-action: none;
 }
 
 .ui-modal-card.is-vui-modal-dragging,
 .ui-modal-card.is-vui-modal-resizing {
   user-select: none;
-}
-
-.ui-modal-card.is-vui-modal-dragging .ui-modal-head {
-  cursor: grabbing;
 }
 
 .ui-modal-body {
@@ -60,17 +56,28 @@
   padding: var(--vui-modal-body-padding);
 }
 
+/* ONE modal head fleet-wide: the ink band. The BEN-605 two-role split
+   (parchment for centered, band for draggable) is retired — every panel
+   wears the band whether it drags or not, so the two looks can't drift. */
 .ui-modal-head {
-  background-color: var(--vui-modal-head-bg);
-  background-image: var(--vui-modal-head-texture);
-  background-size: var(--vui-modal-head-texture-size);
-  border-bottom: var(--vui-border-width) solid var(--vui-color-line);
+  align-items: center;
+  background: var(--vui-color-text);
+  border-bottom: none;
+  color: var(--vui-color-text-inverse);
+  display: flex;
   flex: 0 0 auto;
+  gap: 12px;
+  justify-content: space-between;
   padding: var(--vui-modal-head-padding);
+  user-select: none;
 }
 
 .ui-modal-title {
-  font-size: var(--vui-font-size-lg);
+  font-family: var(--vui-font-body);
+  font-size: var(--vui-font-size-sm-plus);
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1.2;
   margin: 0;
 }
 
@@ -185,10 +192,9 @@
   outline-offset: var(--vui-focus-ring-offset);
 }
 
-/* Drag band — canonical head for draggable floating panels (BEN-605):
-   ink band, inverse title, move cursor. Centered (non-draggable) modals
-   keep the textured parchment .ui-modal-head. Upstreamed from biblioplex;
-   .feedback-capture-head wears it natively. */
+/* .ui-modal-head-drag is a compat alias from the retired two-head era — the
+   band IS the head now. .feedback-capture-head wears it natively; both are
+   actually draggable, so they keep the move cursor unconditionally. */
 .ui-modal-head-drag,
 .feedback-capture-head {
   align-items: center;
@@ -201,7 +207,6 @@
   user-select: none;
 }
 
-.ui-modal-head-drag .ui-modal-title,
 .feedback-capture-title {
   font-family: var(--vui-font-body);
   font-size: var(--vui-font-size-sm-plus);
@@ -212,13 +217,13 @@
 }
 
 /* On the ink band the quiet × sits in-flow and flips to on-dark colors. */
-.ui-modal-head-drag .rune-close,
+.ui-modal-head .rune-close,
 .feedback-capture-head .rune-close {
   position: static;
   color: var(--vui-color-on-dark-text-soft);
 }
 
-.ui-modal-head-drag .rune-close:hover,
+.ui-modal-head .rune-close:hover,
 .feedback-capture-head .rune-close:hover {
   color: var(--vui-color-text-inverse);
 }
@@ -383,7 +388,7 @@ body.feedback-capture-capturing .feedback-capture-widget {
     calc(var(--vui-modal-card-radius) - var(--vui-border-width)) 0 0;
   gap: 12px;
   min-height: 40px;
-  padding: 8px 10px 8px 12px;
+  padding: var(--vui-modal-head-padding);
   touch-action: none;
 }
 .feedback-capture-body {

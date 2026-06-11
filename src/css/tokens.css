@@ -85,14 +85,9 @@
   --vui-modal-card-max-height: calc(100vh - 32px);
   --vui-modal-card-min-width: 220px;
   --vui-modal-card-min-height: 140px;
-  --vui-modal-head-bg: var(--vui-color-surface-raised);
-  --vui-modal-head-texture:
-    radial-gradient(rgba(21, 16, 13, 0.07) 1px, transparent 1px),
-    linear-gradient(rgba(255, 245, 210, 0.08), rgba(0, 0, 0, 0.04));
-  --vui-modal-head-texture-size:
-    6px 6px,
-    auto;
-  --vui-modal-head-padding: 14px 16px;
+  /* The head is the ink band (one head fleet-wide); the parchment texture
+     tokens retired with the two-head split. */
+  --vui-modal-head-padding: 9px 14px;
   --vui-modal-body-padding: 14px 16px;
   --vui-modal-actions-padding: 12px 16px;
   --vui-modal-actions-gap: 8px;
