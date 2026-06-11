@@ -56,7 +56,6 @@
   --vui-color-accent: #6c3aa4;
   --vui-color-accent-soft: #e7d8f5;
   --vui-color-accent-strong: #202842;
-  --vui-color-rune-close-bg: #374269;
   --vui-color-success: #7f9461;
   --vui-color-warn: #f2c452;
   --vui-color-danger: #a73528;
@@ -97,16 +96,9 @@
   --vui-modal-body-padding: 14px 16px;
   --vui-modal-actions-padding: 12px 16px;
   --vui-modal-actions-gap: 8px;
+  /* Close geometry only — the quiet × carries no decoration (BEN-604). */
   --vui-modal-close-size: 28px;
   --vui-modal-close-offset: 11px;
-  --vui-modal-close-radius: 0px;
-  --vui-modal-close-border: 3px solid var(--vui-color-line);
-  --vui-modal-close-bg: var(--vui-color-surface-raised);
-  --vui-modal-close-color: var(--vui-color-text-muted);
-  --vui-modal-close-hover-bg: #ac4133;
-  --vui-modal-close-hover-color: var(--vui-color-neutral-white);
-  --vui-modal-close-shadow: none;
-  --vui-modal-close-hover-shadow: none;
   --vui-modal-resize-edge-size: 8px;
   --vui-modal-resize-corner-size: 28px;
   --vui-color-success-bg: #effaef;

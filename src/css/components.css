@@ -253,6 +253,7 @@
 }
 
 /* CSS-first tooltip: put .tooltip-host + data-tooltip on any element.
+   Night-blue hard-shadow bubble, upstreamed from biblioplex (BEN-606).
    .tooltip-term adds the dotted-underline inline-glossary treatment. */
 .tooltip-host {
   position: relative;
@@ -266,15 +267,17 @@
   transform: translateX(-50%);
   width: max-content;
   max-width: 240px;
-  background: var(--vui-color-text-strong);
+  background: var(--vui-color-accent-strong);
   color: var(--vui-color-text-inverse);
+  border: var(--vui-border-width) solid var(--vui-color-text-strong);
+  box-shadow: var(--vui-shadow-hard-small);
   font-family: var(--vui-font-mono);
   font-size: var(--vui-font-size-xs);
   font-weight: var(--vui-font-weight-body);
   line-height: 1.35;
   text-transform: lowercase;
-  padding: 4px 8px;
-  border-radius: var(--vui-radius-tight);
+  padding: 6px 9px;
+  border-radius: var(--vui-radius-sharp);
   white-space: normal;
   z-index: var(--vui-z-flyout);
   opacity: 0;

@@ -321,9 +321,11 @@ body.vui-lab-page {
   height: 30px;
   border: var(--vui-border-width) solid var(--vui-color-text-strong);
   border-radius: 50%;
+  /* indigo hardcoded: the rune treatment is retired (BEN-604); the lab keeps
+     it for comparison only, so it no longer earns a token. */
   background:
     radial-gradient(rgba(242, 196, 82, 0.18) 0 22%, transparent 23%),
-    var(--vui-color-rune-close-bg);
+    #374269;
   box-shadow: var(--vui-shadow-hard-small);
   color: var(--vui-color-warn);
 }

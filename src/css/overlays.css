@@ -148,6 +148,9 @@
   opacity: 0.8;
 }
 
+/* The one dismiss affordance (BEN-604): a quiet grey × — transparent, no
+   border, no shadow. The class name predates the redesign and stays so
+   consumer markup doesn't churn. */
 .rune-close {
   appearance: none;
   position: absolute;
@@ -161,38 +164,63 @@
   flex: 0 0 auto;
   width: var(--vui-modal-close-size);
   height: var(--vui-modal-close-size);
-  padding: 1px 0 0;
-  border: var(--vui-modal-close-border);
-  border-radius: var(--vui-modal-close-radius);
-  background: var(--vui-modal-close-bg);
-  color: var(--vui-modal-close-color);
-  box-shadow: var(--vui-modal-close-shadow);
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--vui-color-neutral-350);
   font-family: var(--vui-font-mono);
   font-size: var(--vui-font-size-lg);
   font-weight: var(--vui-font-weight-title);
   line-height: 1;
   cursor: pointer;
-  transition:
-    transform var(--vui-motion-fast) steps(2, end),
-    box-shadow var(--vui-motion-fast) steps(2, end),
-    background-color var(--vui-motion-fast),
-    color var(--vui-motion-fast);
+  transition: color var(--vui-motion-fast);
 }
 
 .rune-close:hover {
-  transform: none;
-  box-shadow: var(--vui-modal-close-hover-shadow);
-  background: var(--vui-modal-close-hover-bg);
-  color: var(--vui-modal-close-hover-color);
-}
-
-.rune-close:active {
-  filter: brightness(0.96);
+  color: var(--vui-color-neutral-black);
 }
 
 .rune-close:focus-visible {
   outline: var(--vui-focus-ring);
   outline-offset: var(--vui-focus-ring-offset);
+}
+
+/* Drag band — canonical head for draggable floating panels (BEN-605):
+   ink band, inverse title, move cursor. Centered (non-draggable) modals
+   keep the textured parchment .ui-modal-head. Upstreamed from biblioplex;
+   .feedback-capture-head wears it natively. */
+.ui-modal-head-drag,
+.feedback-capture-head {
+  align-items: center;
+  background: var(--vui-color-text);
+  border-bottom: none;
+  color: var(--vui-color-text-inverse);
+  cursor: move;
+  display: flex;
+  justify-content: space-between;
+  user-select: none;
+}
+
+.ui-modal-head-drag .ui-modal-title,
+.feedback-capture-title {
+  font-family: var(--vui-font-body);
+  font-size: var(--vui-font-size-sm-plus);
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1.2;
+  margin: 0;
+}
+
+/* On the ink band the quiet × sits in-flow and flips to on-dark colors. */
+.ui-modal-head-drag .rune-close,
+.feedback-capture-head .rune-close {
+  position: static;
+  color: var(--vui-color-on-dark-text-soft);
+}
+
+.ui-modal-head-drag .rune-close:hover,
+.feedback-capture-head .rune-close:hover {
+  color: var(--vui-color-text-inverse);
 }
 
 .ui-popover {
@@ -324,8 +352,7 @@ body.feedback-capture-open.feedback-capture-draw-mode .feedback-annotation-canva
   max-width: calc(100vw - 24px);
   min-height: min(280px, calc(100dvh - 24px));
   min-width: min(320px, calc(100vw - 24px));
-  /* visible so the corner-overlapping .rune-close isn't clipped; the rounded
-     clip lives on the inner head (top) and body (bottom) instead. */
+  /* the rounded clip lives on the inner head (top) and body (bottom). */
   overflow: visible;
   position: fixed;
   right: 16px;
@@ -347,27 +374,13 @@ body.feedback-capture-open.feedback-capture-draw-mode .feedback-annotation-canva
 body.feedback-capture-capturing .feedback-capture-widget {
   display: none;
 }
+/* Band colors/cursor come from the shared drag-band rules above. */
 .feedback-capture-head {
-  align-items: center;
-  background: none;
-  background-image: linear-gradient(var(--vui-color-surface-sunken), var(--vui-color-surface-sunken));
-  color: var(--vui-color-text-strong);
-  border-bottom: var(--vui-border-width) solid var(--vui-color-text-strong);
   border-radius: var(--vui-radius-soft) var(--vui-radius-soft) 0 0;
-  cursor: move;
-  display: flex;
   gap: 12px;
-  justify-content: space-between;
   min-height: 40px;
   padding: 8px 10px 8px 12px;
   touch-action: none;
-}
-.feedback-capture-title {
-  font-family: var(--vui-font-display);
-  font-size: var(--vui-font-size-xl);
-  font-weight: var(--vui-font-weight-title);
-  line-height: 1.2;
-  margin: 0;
 }
 .feedback-capture-body {
   display: flex;

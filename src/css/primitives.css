@@ -145,32 +145,30 @@
   width: fit-content;
 }
 
+/* Quiet segmented control (BEN-607): transparent segments, grey labels,
+   ink-filled active — no shadows, no press transforms. One size scale
+   plus .segmented-compact for dense chrome. */
 .segment-btn {
   appearance: none;
   position: relative;
-  z-index: 2;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   border: var(--vui-border-width) solid var(--vui-color-line-strong);
   border-radius: var(--vui-radius-sharp);
-  background: var(--vui-color-surface-raised);
-  color: var(--vui-color-text-strong);
+  background: transparent;
+  color: var(--vui-color-neutral-550);
   cursor: pointer;
   font-family: var(--vui-font-mono);
-  font-weight: var(--vui-font-weight-title);
-  font-size: var(--vui-font-size-sm);
+  font-weight: 400;
+  font-size: var(--vui-font-size-xs);
   line-height: 1;
-  min-height: 30px;
-  padding: 7px 12px;
+  min-height: var(--vui-control-height-compact);
+  padding: 6px 10px;
   text-decoration: none;
   text-transform: lowercase;
-  box-shadow:
-    var(--vui-shadow-firm),
-    0 4px 0 var(--vui-color-shadow);
   transition:
-    transform var(--vui-motion-fast) steps(2, end),
-    box-shadow var(--vui-motion-fast) steps(2, end),
+    color var(--vui-motion-fast),
     background-color var(--vui-motion-fast);
 }
 
@@ -183,9 +181,6 @@
   font-size: var(--vui-font-size-xxs);
   min-height: 0;
   padding: 4px 8px;
-  box-shadow:
-    var(--vui-shadow-hard-small),
-    0 3px 0 var(--vui-color-shadow);
 }
 
 .segment-btn:not(:first-child) {
@@ -200,34 +195,15 @@
 
 .segment-btn:hover:not(.active),
 .ds-force-hover .ds-zoom-stage .segment-btn:not(.active) {
-  transform: translate(2px, 2px);
-  background: var(--vui-color-accent-soft);
-  box-shadow:
-    2px 2px 0 var(--vui-color-shadow),
-    0 2px 0 var(--vui-color-shadow);
-}
-
-.segment-btn:active:not(.active) {
-  transform: translate(4px, 4px);
-  box-shadow: 0 0 0 var(--vui-color-shadow);
-  filter: brightness(0.94);
+  color: var(--vui-color-text-strong);
 }
 
 .segment-btn.active,
 .segment-btn[aria-pressed='true'] {
-  background: var(--vui-color-accent);
+  background: var(--vui-color-text-strong);
+  border-color: var(--vui-color-text-strong);
   color: var(--vui-color-text-inverse);
-  transform: translate(4px, 4px);
-  box-shadow: 0 0 0 var(--vui-color-shadow);
-  filter: brightness(0.94);
   z-index: 1;
-}
-
-.segment-btn.active:hover,
-.segment-btn[aria-pressed='true']:hover,
-.ds-force-hover .ds-zoom-stage .segment-btn.active {
-  background: var(--vui-color-accent);
-  filter: brightness(0.92);
 }
 
 .segment-btn:focus-visible {

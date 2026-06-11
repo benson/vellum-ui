@@ -6,6 +6,16 @@ const runtimeTokens = new Set([
   '--lab-swatch-color',
   '--vui-modal-x',
   '--vui-modal-y',
+  // Modal-lab close knobs: set inline by the lab JS, no :root defaults since
+  // the quiet × stopped carrying decoration tokens (BEN-604).
+  '--vui-modal-close-border',
+  '--vui-modal-close-radius',
+  '--vui-modal-close-bg',
+  '--vui-modal-close-color',
+  '--vui-modal-close-shadow',
+  '--vui-modal-close-hover-bg',
+  '--vui-modal-close-hover-color',
+  '--vui-modal-close-hover-shadow',
 ]);
 
 const files = (await readdir(cssRoot))
