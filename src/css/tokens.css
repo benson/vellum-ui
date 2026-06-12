@@ -9,8 +9,9 @@
   --vui-focus-ring: 2px solid var(--vui-color-text-strong);
   --vui-focus-ring-offset: 2px;
   --vui-font-body: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  --vui-font-heading: 'Cormorant Unicase', Georgia, 'Times New Roman', serif;
-  --vui-font-display: 'Cormorant Unicase', Georgia, 'Times New Roman', serif;
+  /* BEN-623: quieter bookish serif — no unicase theatrics, no webfont. */
+  --vui-font-heading: 'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, serif;
+  --vui-font-display: 'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, serif;
   --vui-font-mono: 'Courier New', Courier, monospace;
   --vui-font-size-xxxs: 0.55rem;
   --vui-font-size-xxs: 0.68rem;
