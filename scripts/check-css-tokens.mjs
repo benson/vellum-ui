@@ -16,6 +16,11 @@ const runtimeTokens = new Set([
   '--vui-modal-close-hover-bg',
   '--vui-modal-close-hover-color',
   '--vui-modal-close-hover-shadow',
+  // Per-chip tint hooks: set inline by apps (tag colors, location types), no
+  // :root defaults — the .ui-chip rule carries the neutral fallbacks.
+  '--ui-chip-bg',
+  '--ui-chip-border',
+  '--ui-chip-ink',
 ]);
 
 const files = (await readdir(cssRoot))
