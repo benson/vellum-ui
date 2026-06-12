@@ -35,8 +35,8 @@
 
 .btn:hover:not(:disabled),
 .ds-force-hover .ds-zoom-stage .btn:not(:disabled) {
-  transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0 var(--vui-color-shadow);
+  transform: translate(var(--vui-press-shift), var(--vui-press-shift));
+  box-shadow: var(--vui-press-shadow);
   filter: brightness(1.05);
 }
 
@@ -182,7 +182,7 @@
   font-size: var(--vui-font-size-xs);
   line-height: 1;
   min-height: var(--vui-control-height-compact);
-  padding: 6px 10px;
+  padding: var(--vui-control-pad-y) var(--vui-control-pad-x);
   text-decoration: none;
   text-transform: lowercase;
   transition:
@@ -224,9 +224,9 @@
   z-index: 1;
 }
 
+/* The ring itself comes from the global :focus-visible rule (base.css);
+   segments only need to climb above their overlapped neighbors. */
 .segment-btn:focus-visible {
-  outline: 2px solid var(--vui-color-text-strong);
-  outline-offset: 2px;
   z-index: 3;
 }
 
@@ -266,8 +266,8 @@
   color: var(--vui-color-text-strong);
 }
 
+/* Global ring, pulled inside the row so it isn't clipped by the underline. */
 .tab-btn:focus-visible {
-  outline: 2px solid var(--vui-color-text-strong);
   outline-offset: -2px;
 }
 
@@ -306,9 +306,7 @@ select {
   color: var(--vui-color-text-strong);
   padding: 8px 14px 8px 10px;
   font-family: var(--vui-font-mono);
-  box-shadow:
-    inset 3px 3px 0 rgba(0, 0, 0, 0.18),
-    inset -2px -2px 0 rgba(255, 255, 255, 0.32);
+  box-shadow: var(--vui-input-bevel);
 }
 
 input[type='text']:focus,
@@ -464,7 +462,7 @@ input[type='range']::-webkit-slider-thumb {
   border: var(--vui-border-width) solid var(--vui-color-line-strong);
   border-radius: var(--vui-radius-tight);
   background: var(--vui-color-accent);
-  box-shadow: var(--vui-shadow-hard-small);
+  box-shadow: var(--vui-shadow-hard-sm);
 }
 
 input[type='range']::-moz-range-thumb {
@@ -473,7 +471,7 @@ input[type='range']::-moz-range-thumb {
   border: var(--vui-border-width) solid var(--vui-color-line-strong);
   border-radius: var(--vui-radius-tight);
   background: var(--vui-color-accent);
-  box-shadow: var(--vui-shadow-hard-small);
+  box-shadow: var(--vui-shadow-hard-sm);
 }
 
 input[type='range']:focus-visible {

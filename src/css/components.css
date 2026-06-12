@@ -279,7 +279,7 @@
   background: var(--vui-color-accent-strong);
   color: var(--vui-color-text-inverse);
   border: var(--vui-border-width) solid var(--vui-color-text-strong);
-  box-shadow: var(--vui-shadow-hard-small);
+  box-shadow: var(--vui-shadow-hard-sm);
   font-family: var(--vui-font-mono);
   font-size: var(--vui-font-size-xs);
   font-weight: var(--vui-font-weight-body);
@@ -435,8 +435,8 @@
   cursor: default;
 }
 
+/* Global ring, tighter offset for the dense row. */
 .pager-btn:focus-visible {
-  outline: 2px solid var(--vui-color-text-strong);
   outline-offset: 1px;
 }
 
@@ -596,4 +596,161 @@
 .card-preview img {
   display: block;
   max-width: 260px;
+}
+
+/* Badge — tiny numeric counter pinned to tabs, buttons, and nav items.
+   Distinct from .ui-chip: a chip names a thing, a badge counts things.
+   Default ink fill; .badge-quiet for resting counts, .badge-accent when the
+   count is the point. */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border: 1px solid var(--vui-color-line-strong);
+  border-radius: var(--vui-radius-pill);
+  background: var(--vui-color-text-strong);
+  color: var(--vui-color-text-inverse);
+  font-family: var(--vui-font-mono);
+  font-size: var(--vui-font-size-xxs);
+  font-weight: var(--vui-font-weight-title);
+  line-height: 1;
+  vertical-align: middle;
+}
+
+.badge-quiet {
+  background: var(--vui-color-surface-sunken);
+  color: var(--vui-color-text-strong);
+}
+
+.badge-accent {
+  background: var(--vui-color-accent);
+  color: var(--vui-color-text-inverse);
+}
+
+/* Progress — a thin inked bar. Drive it with --progress (a percentage) on
+   the root; the fill carries a faint diagonal hatch so partial fills read
+   at a glance. Markup: <div class="progress" role="progressbar"
+   aria-valuenow="62" aria-valuemin="0" aria-valuemax="100"
+   style="--progress: 62%"><span class="progress-fill"></span></div> */
+.progress {
+  display: block;
+  width: 100%;
+  height: 12px;
+  border: var(--vui-border-width) solid var(--vui-color-line-strong);
+  border-radius: var(--vui-radius-tight);
+  background: var(--vui-color-surface-sunken);
+  overflow: hidden;
+}
+
+.progress-fill {
+  display: block;
+  height: 100%;
+  width: var(--progress, 0%);
+  background-color: var(--vui-color-accent);
+  background-image: repeating-linear-gradient(
+    -45deg,
+    rgba(255, 255, 255, 0.16) 0 4px,
+    transparent 4px 8px
+  );
+  transition: width var(--vui-motion-base);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .progress-fill {
+    transition: none;
+  }
+}
+
+/* Breadcrumb — the navigation trail (binder > page > slot). Current leaf
+   carries aria-current="page" and the strong ink; separators are inert. */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--vui-space-1);
+  font-family: var(--vui-font-mono);
+  font-size: var(--vui-font-size-xs);
+  text-transform: lowercase;
+}
+
+.breadcrumb a {
+  color: var(--vui-color-text-muted);
+  text-decoration: none;
+}
+
+.breadcrumb a:hover,
+.breadcrumb a:focus-visible {
+  color: var(--vui-color-text-strong);
+  text-decoration: underline;
+}
+
+.breadcrumb-sep {
+  color: var(--vui-color-line);
+  user-select: none;
+}
+
+.breadcrumb [aria-current='page'] {
+  color: var(--vui-color-text-strong);
+  font-weight: var(--vui-font-weight-title);
+}
+
+/* Accordion — styled <details> stack for filter panels and card detail
+   sections. Items share borders like the segmented control; the marker is a
+   mono +/− instead of the UA triangle. */
+.accordion {
+  display: flex;
+  flex-direction: column;
+}
+
+.accordion-item {
+  border: var(--vui-border-width) solid var(--vui-color-line-strong);
+  background: var(--vui-color-surface-raised);
+}
+
+.accordion-item + .accordion-item {
+  border-top: 0;
+}
+
+.accordion-item > summary {
+  display: flex;
+  align-items: center;
+  gap: var(--vui-space-2);
+  padding: var(--vui-space-2) var(--vui-space-3);
+  cursor: pointer;
+  list-style: none;
+  font-family: var(--vui-font-mono);
+  font-size: var(--vui-font-size-sm);
+  font-weight: var(--vui-font-weight-title);
+  text-transform: lowercase;
+  color: var(--vui-color-text-strong);
+  user-select: none;
+}
+
+.accordion-item > summary::-webkit-details-marker {
+  display: none;
+}
+
+.accordion-item > summary::before {
+  content: '+';
+  flex: none;
+  width: 1em;
+  text-align: center;
+  color: var(--vui-color-text-muted);
+}
+
+.accordion-item[open] > summary::before {
+  content: '−';
+}
+
+.accordion-item > summary:hover {
+  background: var(--vui-color-surface-hover);
+}
+
+.accordion-body {
+  padding: 0 var(--vui-space-3) var(--vui-space-3) calc(var(--vui-space-3) + 1em + var(--vui-space-2));
+  font-size: var(--vui-font-size-sm);
+  color: var(--vui-color-text);
 }

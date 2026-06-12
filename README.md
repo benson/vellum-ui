@@ -31,7 +31,9 @@ Edit source files only. Do not hand-edit `dist/`.
 
 ## Compatibility Debt
 
-The `--bui-*` aliases and the `/benson-ui/` / `@benson/ui` rewrite branches were removed once consumers shipped with no live references to the old names. Vellum's internal CSS migrated off the unprefixed aliases in 2026-06, and the unprefixed compatibility alias block was dropped from tokens.css shortly after. None outstanding.
+The `--bui-*` aliases and the `/benson-ui/` / `@benson/ui` rewrite branches were removed once consumers shipped with no live references to the old names. Vellum's internal CSS migrated off the unprefixed aliases in 2026-06, and the unprefixed compatibility alias block was dropped from tokens.css shortly after.
+
+2026-06 token dedup (consumers migrated in the same pass): the `--vui-color-<tone>-bg/-border/-text` status family collapsed into `--vui-status-*` (now the only spelling), `--vui-shadow-hard-small` collapsed into `--vui-shadow-hard-sm`, and the `--vui-font-size-xs-plus`/`-sm-plus` half-steps were removed from the ramp (biblioplex keeps them as local tokens). None outstanding.
 
 ## Release Model
 

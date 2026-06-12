@@ -292,26 +292,9 @@ body.vui-lab-page {
   gap: 10px;
 }
 
-.modal-lab-page[data-close-style='quiet'] .modal-lab-preview .rune-close,
-.modal-lab-page[data-close-style='quiet'] .modal-lab-live .rune-close {
-  top: var(--vui-modal-close-offset);
-  right: var(--vui-modal-close-offset);
-  width: var(--vui-modal-close-size);
-  height: var(--vui-modal-close-size);
-  border: var(--vui-modal-close-border);
-  border-radius: var(--vui-modal-close-radius);
-  background: var(--vui-modal-close-bg);
-  box-shadow: var(--vui-modal-close-shadow);
-  color: var(--vui-modal-close-color);
-}
-
-.modal-lab-page[data-close-style='quiet'] .modal-lab-preview .rune-close:hover,
-.modal-lab-page[data-close-style='quiet'] .modal-lab-live .rune-close:hover {
-  transform: none;
-  background: var(--vui-modal-close-hover-bg);
-  box-shadow: var(--vui-modal-close-hover-shadow);
-  color: var(--vui-modal-close-hover-color);
-}
+/* data-close-style='quiet' needs no overrides: quiet IS the production
+   .rune-close (BEN-604). The old override block leaned on --vui-modal-close-*
+   decoration tokens that were never defined — silently a no-op, now gone. */
 
 .modal-lab-page[data-close-style='rune'] .modal-lab-preview .rune-close,
 .modal-lab-page[data-close-style='rune'] .modal-lab-live .rune-close {
@@ -326,7 +309,7 @@ body.vui-lab-page {
   background:
     radial-gradient(rgba(242, 196, 82, 0.18) 0 22%, transparent 23%),
     #374269;
-  box-shadow: var(--vui-shadow-hard-small);
+  box-shadow: var(--vui-shadow-hard-sm);
   color: var(--vui-color-warn);
 }
 

@@ -65,3 +65,21 @@ body.vui-app {
   outline: var(--vui-focus-ring);
   outline-offset: var(--vui-focus-ring-offset);
 }
+
+/* Prose links: classless anchors inside a vui app get the canonical inked
+   underline (components that style their own anchors — breadcrumb, btn-link —
+   carry classes and are untouched). .vui-link opts any anchor in explicitly. */
+.vui-app a:not([class]),
+.vui-link {
+  color: var(--vui-color-text-strong);
+  text-decoration: underline;
+  text-decoration-color: var(--vui-color-line);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 2px;
+  transition: text-decoration-color var(--vui-motion-fast);
+}
+
+.vui-app a:not([class]):hover,
+.vui-link:hover {
+  text-decoration-color: var(--vui-color-accent);
+}
