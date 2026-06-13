@@ -128,6 +128,7 @@ async function writeDesignSystemPage(path) {
     <title>Vellum UI Design System</title>
     <meta name="description" content="Shared design system for Benson Perry apps." />
     <link rel="canonical" href="https://bensonperry.com/vellum-ui/design-system/" />
+    <link rel="icon" type="image/svg+xml" href="../demo/favicon.svg?v=${shortSha}" />
     <link rel="stylesheet" href="../vellum-ui.css?v=${shortSha}" />
   </head>
   <body class="vui-app vui-design-system-page design-system-page">
