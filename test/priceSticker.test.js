@@ -50,12 +50,17 @@ test('seeded jitter is stable for a seed and differs across seeds', () => {
   assert.match(a, /--price-jitter-rot:-?\d/);
 });
 
-test('jitterVars stays within the configured range', () => {
+test('jitterVars stays within the default range (±5px / ±5deg, flat-centred)', () => {
   for (const seed of ['a', 'b', 'c', 'd', 'e', 'f']) {
-    const v = jitterVars({ seed, x: 5, y: 5, rot: 3 });
+    const v = jitterVars(seed);
     assert.ok(Math.abs(parseFloat(v['--price-jitter-x'])) <= 5);
     assert.ok(Math.abs(parseFloat(v['--price-jitter-y'])) <= 5);
-    assert.ok(Math.abs(parseFloat(v['--price-jitter-rot'])) <= 3);
+    assert.ok(Math.abs(parseFloat(v['--price-jitter-rot'])) <= 5);
   }
   assert.equal(jitterVars(null), null);
+});
+
+test('jitterVars honours an explicit range override', () => {
+  const v = jitterVars({ seed: 'x', rot: 2 });
+  assert.ok(Math.abs(parseFloat(v['--price-jitter-rot'])) <= 2);
 });
