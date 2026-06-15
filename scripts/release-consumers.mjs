@@ -6,9 +6,7 @@ import { spawnSync } from 'node:child_process';
 
 const owner = 'benson';
 const root = process.cwd();
-const releaseSha = process.env.VELLUM_UI_SHA || git(['rev-parse', 'HEAD']).trim();
-const shortSha = releaseSha.slice(0, 12);
-const packageSpec = `git+https://github.com/benson/vellum-ui.git#${releaseSha}`;
+const triggerSha = process.env.VELLUM_UI_SHA || git(['rev-parse', 'HEAD']).trim();
 // Auto-merge is the default; set VELLUM_RELEASE_MERGE=0 for a review-only run.
 const shouldMerge = process.env.VELLUM_RELEASE_MERGE !== '0';
 
@@ -16,7 +14,21 @@ if (!process.env.GH_TOKEN) {
   throw new Error('GH_TOKEN must be set to BENSON_RELEASE_TOKEN for cross-repo releases.');
 }
 
-git(['rev-parse', '--verify', releaseSha]);
+git(['rev-parse', '--verify', triggerSha]);
+
+// Bump Vellum's own package version before releasing. npm treats a git
+// dependency as already satisfied when the package `version` is unchanged, so a
+// pin bump alone (the commit SHA moves, version stays 0.1.0) silently leaves
+// consumers' local node_modules stale — every `npm install` skips the refetch,
+// and anyone reading that stale copy gets an old API. Committing a patch bump
+// back to main (with [skip ci] so Check -> Release doesn't re-fire) makes each
+// release a distinct version, so consumers' npm actually reinstalls. Falls back
+// to the un-bumped SHA if the self-push can't land, so a token or branch-
+// protection hiccup degrades to today's behavior rather than breaking releases.
+const releaseSha = await resolveReleaseSha(triggerSha);
+const shortSha = releaseSha.slice(0, 12);
+const packageSpec = `git+https://github.com/benson/vellum-ui.git#${releaseSha}`;
+
 run('npm', ['run', 'build']);
 
 const dist = join(root, 'dist');
@@ -224,6 +236,37 @@ function waitForPrChecks(repo, prUrl) {
     sleep(15000);
   }
   throw new Error(`${repo}: timed out waiting for PR checks`);
+}
+
+async function resolveReleaseSha(triggerSha) {
+  try {
+    return await bumpVellumVersion();
+  } catch (error) {
+    console.warn(
+      `Vellum version bump skipped: ${error.message}\n` +
+        `Releasing ${triggerSha.slice(0, 12)} without a version bump — consumers' local ` +
+        `node_modules may stay stale until reinstalled. Check BENSON_RELEASE_TOKEN write ` +
+        `access to vellum-ui and that main allows direct pushes.`,
+    );
+    return triggerSha;
+  }
+}
+
+// Increment Vellum's patch version and commit it back to main so each release is
+// a distinct npm version (see the note at the call site). [skip ci] keeps the
+// bump commit from re-triggering Check -> Release.
+async function bumpVellumVersion() {
+  const packagePath = join(root, 'package.json');
+  const packageJson = JSON.parse(await readFile(packagePath, 'utf8'));
+  const [major, minor, patch] = String(packageJson.version).split('.').map(Number);
+  packageJson.version = `${major}.${minor}.${(patch || 0) + 1}`;
+  await writeFile(packagePath, `${JSON.stringify(packageJson, null, 2)}\n`);
+  configureGit(root, `${owner}/vellum-ui`);
+  run('git', ['add', 'package.json'], { cwd: root });
+  run('git', ['commit', '-m', `Release ${packageJson.version} [skip ci]`], { cwd: root });
+  run('git', ['push', 'origin', 'HEAD:main'], { cwd: root });
+  console.log(`Vellum UI version bumped to ${packageJson.version}`);
+  return git(['rev-parse', 'HEAD']).trim();
 }
 
 function configureGit(cwd, repo) {
