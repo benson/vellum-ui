@@ -261,7 +261,18 @@ async function bumpVellumVersion() {
   const [major, minor, patch] = String(packageJson.version).split('.').map(Number);
   packageJson.version = `${major}.${minor}.${(patch || 0) + 1}`;
   await writeFile(packagePath, `${JSON.stringify(packageJson, null, 2)}\n`);
-  configureGit(root, `${owner}/vellum-ui`);
+  // Commit + push over this checkout's own origin, which actions/checkout already
+  // authenticated with GITHUB_TOKEN — so the push relies on the workflow's
+  // `contents: write` permission, not the cross-repo PAT (whose scope over
+  // vellum-ui itself isn't guaranteed). GITHUB_TOKEN-authored pushes don't
+  // re-trigger workflows, and the [skip ci] tag is a second guard against a
+  // Check -> Release loop.
+  run('git', ['config', 'user.name', 'github-actions[bot]'], { cwd: root });
+  run(
+    'git',
+    ['config', 'user.email', '41898282+github-actions[bot]@users.noreply.github.com'],
+    { cwd: root },
+  );
   run('git', ['add', 'package.json'], { cwd: root });
   run('git', ['commit', '-m', `Release ${packageJson.version} [skip ci]`], { cwd: root });
   run('git', ['push', 'origin', 'HEAD:main'], { cwd: root });

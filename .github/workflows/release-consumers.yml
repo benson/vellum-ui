@@ -12,7 +12,9 @@ on:
         type: string
 
 permissions:
-  contents: read
+  # write so the release can push the version-bump commit back to vellum main
+  # (see bumpVellumVersion in scripts/release-consumers.mjs).
+  contents: write
 
 concurrency:
   group: release-consumers-${{ github.event.workflow_run.head_sha || inputs.vellum_sha || github.sha }}
