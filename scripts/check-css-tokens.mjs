@@ -21,6 +21,11 @@ const runtimeTokens = new Set([
   '--ui-chip-bg',
   '--ui-chip-border',
   '--ui-chip-ink',
+  // App-level override hook: apps set this to reposition .fab-cluster above
+  // local chrome (e.g. biblioplex's footer); the .fab-cluster rule carries
+  // the var()-fallback default (--vui-edge-margin), no :root definition
+  // (BEN-656).
+  '--vui-fab-cluster-bottom',
 ]);
 
 const files = (await readdir(cssRoot))
