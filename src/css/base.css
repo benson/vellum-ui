@@ -34,6 +34,17 @@ body.vui-app {
   display: none !important;
 }
 
+/* One guard for the native hidden attribute/property, not a per-class patch.
+   Author display rules (flex/grid on a component class) otherwise beat the
+   UA's [hidden]{display:none} regardless of specificity, silently breaking
+   the DOM's native hide mechanism for any component that also sets display
+   (biblioplex BEN-703/BEN-684/BEN-687 — a dismissed banner/popover/menu that
+   stayed rendered). This supersedes the per-class [hidden] guards that used
+   to live next to each component below. */
+[hidden] {
+  display: none !important;
+}
+
 .vui-stack {
   display: flex;
   flex-direction: column;
