@@ -80,16 +80,21 @@
    for .btn and the fab pills, derived from the current text color. */
 .btn-shortcut,
 .fab-shortcut {
+  align-items: center;
   border: 1px solid color-mix(in srgb, currentColor 45%, transparent);
   border-radius: var(--vui-radius-tight);
   color: color-mix(in srgb, currentColor 85%, transparent);
-  font-size: var(--vui-font-size-xs);
+  display: inline-grid;
+  font-family: var(--vui-font-mono);
+  font-size: var(--vui-font-size-xxxs);
   font-weight: var(--vui-font-weight-body);
+  height: 16px;
+  justify-items: center;
   letter-spacing: 0;
   line-height: 1;
   margin-left: 2px;
   min-width: 16px;
-  padding: 1px 4px;
+  padding: 0 3px;
   text-align: center;
 }
 
