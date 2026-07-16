@@ -215,7 +215,7 @@ function pageHeader() {
     el('p', {
       className: 'ds-page-sub',
       text:
-        'Shared tokens, hard-shadow primitives, and small browser-native helpers for Biblioplex, PoolBuilder, and future apps.',
+        'Shared tokens, restrained primitives, and small browser-native helpers for Biblioplex, PoolBuilder, and future apps.',
     }),
     el(
       'nav',
@@ -438,7 +438,7 @@ function typeGroup() {
   return group(
     'type',
     'Type',
-    entry('Faces', ['--vui-font-display', '--vui-font-heading', '--vui-font-body', '--vui-font-mono'], 'The four voices: a quiet Palatino-family serif carries display and headings (BEN-623); system body does the reading; mono does the data.', () => {
+    entry('Faces', ['--vui-font-display', '--vui-font-heading', '--vui-font-body', '--vui-font-mono'], 'The four voices: a quiet bookish serif carries display and headings; Inter or the system sans does the reading; mono is reserved for data.', () => {
       const col = el('div', { className: 'ds-type-faces' });
       col.append(
         el('div', { className: 'ds-type-face', style: { fontFamily: 'var(--vui-font-display)', fontSize: 'var(--vui-font-size-display)' }, text: 'arcane ledger — display' }),
@@ -474,7 +474,7 @@ function buttonsGroup() {
   return group(
     'buttons',
     'Buttons',
-    entry('Buttons', ['.btn', '.btn-secondary', '.btn-danger', '.btn-ink', '.btn-link', '.btn-shortcut'], 'Primary gold, secondary blue, danger red, ink, disabled, and bare text actions. Append a .btn-shortcut chip for an optional keyboard hint — same treatment the fab pills use.', () =>
+    entry('Buttons', ['.btn', '.btn-secondary', '.btn-danger', '.btn-ink', '.btn-link', '.btn-shortcut'], 'Accent primary, quiet secondary, soft danger, ink, disabled, and bare text actions. Ordinary labels stay medium-weight; primary actions carry the stronger voice.', () =>
       demoHtml(
         buttonHtml({ label: 'reload' }) +
           buttonHtml({ label: 'save' }) +
@@ -511,13 +511,13 @@ function buttonsGroup() {
     ),
     entry(
       'Floating actions',
-      ['.fab-cluster', '.fab-btn', '.fab-glyph', '.fab-shortcut'],
-      'Solid ink action pills. Apps stack them in a fixed .fab-cluster at the bottom-right (shown inline here); the feedback widget mounts one as its launcher.',
+      ['.fab-cluster', '.fab-btn', '.fab-btn-primary', '.fab-glyph', '.fab-shortcut'],
+      'Quiet utility actions with an optional accent primary. Apps stack them in a fixed .fab-cluster at the bottom-right; the feedback widget mounts one as its launcher.',
       () =>
         el(
           'div',
           { className: 'ds-row' },
-          fabDemo('+', 'add', 'a'),
+          fabDemo('+', 'add', 'a', true),
           fabDemo('?', 'help', 'h'),
           fabDemo('!', 'feedback', 'f'),
         ),
@@ -525,10 +525,10 @@ function buttonsGroup() {
   );
 }
 
-function fabDemo(glyph, label, shortcut) {
+function fabDemo(glyph, label, shortcut, primary = false) {
   return el(
     'button',
-    { className: 'fab-btn', type: 'button', ariaLabel: label },
+    { className: `fab-btn${primary ? ' fab-btn-primary' : ''}`, type: 'button', ariaLabel: label },
     el('span', { className: 'fab-glyph', text: glyph }),
     el('span', { className: 'fab-label', text: label }),
     el('span', { className: 'fab-shortcut', ariaHidden: 'true', text: shortcut }),
@@ -739,7 +739,7 @@ function statusGroup() {
       );
       return banner;
     }),
-    entry('Chips', ['.ui-chip', '.ui-chip-remove', '.ui-chip-emoji'], 'One chip family — tags, statuses, filters, and location pills all wear the same sticker. Apps tint per-domain through the --ui-chip-bg/--ui-chip-border/--ui-chip-ink hooks instead of forking variants.', () => {
+    entry('Chips', ['.ui-chip', '.ui-chip-remove', '.ui-chip-emoji'], 'One quiet metadata family for tags, statuses, filters, and locations. Apps tint it per domain through the --ui-chip-bg/--ui-chip-border/--ui-chip-ink hooks.', () => {
       const row = el('div', { className: 'ds-row' });
       const emoji = el('span', { className: 'ui-chip-emoji', text: '✨' });
       const colored = chipNode({ text: 'tinted' });
@@ -1028,7 +1028,7 @@ function overlaysGroup() {
   return group(
     'overlays',
     'Overlays',
-    entry('Modal frame', ['.ui-modal-card', '.ui-modal-head', '.ui-modal-body', '.rune-close'], 'Canonical modal card: ONE head fleet-wide — the ink band with inverse title and the quiet × — whether the panel is centered or floating.', () =>
+    entry('Modal frame', ['.ui-modal-card', '.ui-modal-head', '.ui-modal-body', '.rune-close'], 'Canonical modal card: one calm surface and one quiet header treatment, whether the panel is centered or floating.', () =>
       el(
         'section',
         { className: 'ui-modal-card', style: { width: 'min(520px, 100%)' } },

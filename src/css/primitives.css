@@ -1,8 +1,8 @@
 .btn {
   align-items: center;
-  border: var(--vui-border-width) solid var(--vui-color-text-strong);
+  border: var(--vui-border-width) solid var(--vui-color-line);
   border-radius: var(--vui-radius-sharp);
-  box-shadow: var(--vui-shadow-firm);
+  box-shadow: var(--vui-shadow-soft);
   display: inline-flex;
   flex-wrap: wrap;
   gap: 2px 6px;
@@ -11,40 +11,53 @@
   text-align: center;
   text-wrap: balance;
   min-height: var(--vui-control-height-compact);
-  padding: var(--vui-control-pad-y) var(--vui-control-pad-x);
+  padding: calc(var(--vui-control-pad-y) - 1px) var(--vui-control-pad-x)
+    calc(var(--vui-control-pad-y) + 1px);
   font-size: var(--vui-font-size-sm);
-  font-family: var(--vui-font-mono);
-  font-weight: var(--vui-font-weight-title);
-  letter-spacing: 0.04em;
+  font-family: var(--vui-font-body);
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1.2;
   cursor: pointer;
   transition:
-    transform var(--vui-motion-snap) steps(2, end),
-    box-shadow var(--vui-motion-snap) steps(2, end),
-    background-color var(--vui-motion-snap),
-    filter var(--vui-motion-snap);
-  text-transform: lowercase;
-  background-color: var(--vui-color-warn);
-  background-image:
-    radial-gradient(rgba(21, 16, 13, 0.1) 1px, transparent 1px),
-    linear-gradient(rgba(255, 245, 210, 0.08), rgba(0, 0, 0, 0.05));
-  background-size:
-    6px 6px,
-    auto;
-  color: var(--vui-color-on-warn);
+    transform var(--vui-motion-fast) var(--vui-ease-out),
+    border-color var(--vui-motion-fast) ease,
+    background-color var(--vui-motion-fast) ease,
+    box-shadow var(--vui-motion-fast) ease;
+  text-transform: none;
+  background: var(--vui-color-accent);
+  color: var(--vui-color-text-inverse);
 }
 
-.btn:hover:not(:disabled),
-.ds-force-hover .ds-zoom-stage .btn:not(:disabled) {
-  transform: translate(var(--vui-press-shift), var(--vui-press-shift));
-  box-shadow: var(--vui-press-shadow);
-  filter: brightness(1.05);
+@media (hover: hover) and (pointer: fine) {
+  .btn:hover:not(:disabled),
+  .ds-force-hover .ds-zoom-stage .btn:not(:disabled) {
+    background-color: var(--vui-color-btn-primary-hover);
+    border-color: var(--vui-color-btn-primary-hover);
+    box-shadow: var(--vui-shadow-soft);
+    color: var(--vui-color-text-inverse);
+    filter: none;
+    transform: none;
+  }
+
+  .btn-secondary:hover:not(:disabled),
+  .ds-force-hover .ds-zoom-stage .btn-secondary:not(:disabled),
+  .btn-danger:hover:not(:disabled),
+  .ds-force-hover .ds-zoom-stage .btn-danger:not(:disabled),
+  .btn-ink:hover:not(:disabled),
+  .ds-force-hover .ds-zoom-stage .btn-ink:not(:disabled) {
+    background-color: var(--vui-color-surface-hover);
+    border-color: var(--vui-color-line-strong);
+    color: var(--vui-color-text-strong);
+    filter: none;
+  }
 }
 
 .btn:active:not(:disabled),
 .ds-force-active .ds-zoom-stage .btn:not(:disabled) {
-  transform: translate(4px, 4px);
-  box-shadow: 0 0 0 var(--vui-color-shadow);
-  filter: brightness(0.94);
+  transform: scale(0.98);
+  box-shadow: var(--vui-shadow-subtle);
+  filter: none;
 }
 
 .btn:focus-visible,
@@ -54,17 +67,17 @@
 }
 
 .btn:disabled {
-  background-color: var(--vui-color-line);
-  border-color: var(--vui-color-line-strong);
+  background: var(--vui-color-surface-sunken);
+  border-color: var(--vui-color-line);
   box-shadow: none;
   color: var(--vui-color-text-muted);
   cursor: default;
-  filter: grayscale(0.25);
+  filter: none;
+  opacity: 0.62;
 }
 
 /* Optional keyboard-shortcut hint inside any button (BEN-622). One treatment
-   for .btn and the fab pills: currentColor-derived so it reads on gold,
-   secondary paper, and ink surfaces alike. */
+   for .btn and the fab pills, derived from the current text color. */
 .btn-shortcut,
 .fab-shortcut {
   border: 1px solid color-mix(in srgb, currentColor 45%, transparent);
@@ -80,36 +93,26 @@
   text-align: center;
 }
 
-.btn-secondary {
-  background-color: var(--vui-color-info);
-  color: var(--vui-color-text-strong);
-  border-color: var(--vui-color-text-strong);
+.btn:not(.btn-secondary):not(.btn-danger):not(.btn-ink) {
+  font-weight: 600;
 }
 
-.btn-secondary:hover:not(:disabled),
-.ds-force-hover .ds-zoom-stage .btn-secondary:not(:disabled) {
-  filter: brightness(1.05);
+.btn-secondary {
+  background: var(--vui-color-surface-raised);
+  color: var(--vui-color-text-strong);
+  border-color: var(--vui-color-line);
 }
 
 .btn-danger {
-  background-color: var(--vui-color-danger);
-  color: var(--vui-color-text-inverse);
-  border-color: var(--vui-color-text-strong);
-}
-
-.btn-danger:hover:not(:disabled),
-.ds-force-hover .ds-zoom-stage .btn-danger:not(:disabled) {
-  color: var(--vui-color-text-inverse);
+  background: var(--vui-color-danger-soft);
+  color: var(--vui-color-danger);
+  border-color: var(--vui-color-danger-line);
 }
 
 .btn-ink {
   background-color: var(--vui-color-text-strong);
   color: var(--vui-color-text-inverse);
-}
-
-.btn-ink:hover:not(:disabled),
-.ds-force-hover .ds-zoom-stage .btn-ink:not(:disabled) {
-  filter: brightness(1.25);
+  border-color: var(--vui-color-text-strong);
 }
 
 .btn-danger:disabled,
@@ -120,9 +123,11 @@
 .btn-ink:disabled:hover {
   background-color: var(--vui-color-line);
   color: var(--vui-color-text-muted);
-  border-color: var(--vui-color-line-strong);
+  border-color: var(--vui-color-line);
   box-shadow: none;
   cursor: default;
+  filter: none;
+  opacity: 0.62;
 }
 
 .btn-link,
@@ -172,19 +177,19 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: var(--vui-border-width) solid var(--vui-color-line-strong);
+  border: var(--vui-border-width) solid var(--vui-color-line);
   border-radius: var(--vui-radius-sharp);
   background: transparent;
   color: var(--vui-color-neutral-550);
   cursor: pointer;
-  font-family: var(--vui-font-mono);
-  font-weight: 400;
+  font-family: var(--vui-font-body);
+  font-weight: 500;
   font-size: var(--vui-font-size-xs);
   line-height: 1;
   min-height: var(--vui-control-height-compact);
   padding: var(--vui-control-pad-y) var(--vui-control-pad-x);
   text-decoration: none;
-  text-transform: lowercase;
+  text-transform: none;
   transition:
     color var(--vui-motion-fast),
     background-color var(--vui-motion-fast);
@@ -217,7 +222,7 @@
 }
 
 .segment-btn.active,
-.segment-btn[aria-pressed='true'] {
+.segment-btn[aria-pressed="true"] {
   background: var(--vui-color-text-strong);
   border-color: var(--vui-color-text-strong);
   color: var(--vui-color-text-inverse);
@@ -247,12 +252,12 @@
   background: transparent;
   color: var(--vui-color-neutral-550);
   cursor: pointer;
-  font-family: var(--vui-font-mono);
+  font-family: var(--vui-font-body);
   font-weight: 400;
   font-size: var(--vui-font-size-xs);
   line-height: 1;
   padding: 7px 10px;
-  text-transform: lowercase;
+  text-transform: none;
   transition: color var(--vui-motion-fast);
 }
 
@@ -261,7 +266,7 @@
 }
 
 .tab-btn.active,
-.tab-btn[aria-selected='true'] {
+.tab-btn[aria-selected="true"] {
   border-bottom-color: var(--vui-color-text-strong);
   color: var(--vui-color-text-strong);
 }
@@ -293,33 +298,39 @@
 /* .field-chrome (BEN-692): the field visual for elements that are not real form
    controls — e.g. a <button> popover trigger that should read as a field.
    Carries chrome only; consumers own layout, cursor, and arrow affordances. */
-input[type='text'],
-input[type='search'],
-input[type='number'],
-input[type='email'],
-input[type='url'],
-input[type='tel'],
-input[type='password'],
+input[type="text"],
+input[type="search"],
+input[type="number"],
+input[type="email"],
+input[type="url"],
+input[type="tel"],
+input[type="password"],
 input:not([type]),
 textarea,
 select,
 .field-chrome {
-  border: var(--vui-border-width) solid var(--vui-color-line-strong);
+  border: var(--vui-border-width) solid var(--vui-color-line);
   border-radius: var(--vui-radius-sharp);
   background: var(--vui-color-surface-raised);
   color: var(--vui-color-text-strong);
   padding: 8px 14px 8px 10px;
-  font-family: var(--vui-font-mono);
+  font-family: var(--vui-font-body);
+  font-size: var(--vui-font-size-sm);
+  font-weight: 400;
   box-shadow: var(--vui-input-bevel);
+  transition:
+    border-color var(--vui-motion-fast) ease,
+    box-shadow var(--vui-motion-fast) ease,
+    background-color var(--vui-motion-fast) ease;
 }
 
-input[type='text']:focus,
-input[type='search']:focus,
-input[type='number']:focus,
-input[type='email']:focus,
-input[type='url']:focus,
-input[type='tel']:focus,
-input[type='password']:focus,
+input[type="text"]:focus,
+input[type="search"]:focus,
+input[type="number"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus,
+input[type="tel"]:focus,
+input[type="password"]:focus,
 input:not([type]):focus,
 textarea:focus,
 select:focus,
@@ -327,6 +338,7 @@ select:focus,
 .field-chrome:hover {
   outline: none;
   border-color: var(--vui-color-line-focus);
+  box-shadow: 0 0 0 3px var(--vui-color-accent-soft);
 }
 
 textarea {
@@ -336,16 +348,16 @@ textarea {
 /* Field validation (BEN-557): flag the control with aria-invalid="true"
    (or .field-invalid where aria doesn't fit) and follow it with a
    .field-error line inside the field row. */
-input[aria-invalid='true'],
-textarea[aria-invalid='true'],
-select[aria-invalid='true'],
+input[aria-invalid="true"],
+textarea[aria-invalid="true"],
+select[aria-invalid="true"],
 .field-invalid {
   border-color: var(--vui-color-danger);
 }
 
-input[aria-invalid='true']:focus,
-textarea[aria-invalid='true']:focus,
-select[aria-invalid='true']:focus,
+input[aria-invalid="true"]:focus,
+textarea[aria-invalid="true"]:focus,
+select[aria-invalid="true"]:focus,
 .field-invalid:focus {
   border-color: var(--vui-color-danger);
   outline: none;
@@ -361,8 +373,8 @@ select[aria-invalid='true']:focus,
   text-transform: lowercase;
 }
 
-input[type='checkbox']:not(.switch-input),
-input[type='radio'] {
+input[type="checkbox"]:not(.switch-input),
+input[type="radio"] {
   appearance: none;
   width: 18px;
   height: 18px;
@@ -375,18 +387,18 @@ input[type='radio'] {
   vertical-align: middle;
 }
 
-input[type='radio'] {
+input[type="radio"] {
   border-radius: var(--vui-radius-pill);
 }
 
-input[type='checkbox']:not(.switch-input):checked,
-input[type='radio']:checked {
+input[type="checkbox"]:not(.switch-input):checked,
+input[type="radio"]:checked {
   background: var(--vui-color-accent);
   box-shadow: inset 0 0 0 3px var(--vui-color-surface-raised);
 }
 
-input[type='checkbox']:not(.switch-input):focus-visible,
-input[type='radio']:focus-visible,
+input[type="checkbox"]:not(.switch-input):focus-visible,
+input[type="radio"]:focus-visible,
 .switch-input:focus-visible + .switch-track {
   outline: var(--vui-focus-ring);
   outline-offset: var(--vui-focus-ring-offset);
@@ -418,7 +430,7 @@ input[type='radio']:focus-visible,
 }
 
 .switch-track::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 50%;
   left: 3px;
@@ -439,7 +451,7 @@ input[type='radio']:focus-visible,
   transform: translate(18px, -50%);
 }
 
-input[type='range'] {
+input[type="range"] {
   appearance: none;
   width: 160px;
   height: 18px;
@@ -448,19 +460,19 @@ input[type='range'] {
   cursor: pointer;
 }
 
-input[type='range']::-webkit-slider-runnable-track {
+input[type="range"]::-webkit-slider-runnable-track {
   height: 4px;
   border-radius: var(--vui-radius-pill);
   background: var(--vui-color-line);
 }
 
-input[type='range']::-moz-range-track {
+input[type="range"]::-moz-range-track {
   height: 4px;
   border-radius: var(--vui-radius-pill);
   background: var(--vui-color-line);
 }
 
-input[type='range']::-webkit-slider-thumb {
+input[type="range"]::-webkit-slider-thumb {
   appearance: none;
   width: 16px;
   height: 16px;
@@ -471,7 +483,7 @@ input[type='range']::-webkit-slider-thumb {
   box-shadow: var(--vui-shadow-hard-sm);
 }
 
-input[type='range']::-moz-range-thumb {
+input[type="range"]::-moz-range-thumb {
   width: 10px;
   height: 10px;
   border: var(--vui-border-width) solid var(--vui-color-line-strong);
@@ -480,7 +492,7 @@ input[type='range']::-moz-range-thumb {
   box-shadow: var(--vui-shadow-hard-sm);
 }
 
-input[type='range']:focus-visible {
+input[type="range"]:focus-visible {
   outline: var(--vui-focus-ring);
   outline-offset: var(--vui-focus-ring-offset);
 }
@@ -492,7 +504,7 @@ input[type='range']:focus-visible {
   color: var(--vui-color-text-muted);
   font-size: var(--vui-font-size-xs);
   letter-spacing: var(--vui-label-tracking);
-  text-transform: uppercase;
+  text-transform: var(--vui-label-transform);
 }
 
 .field-row > input,
@@ -524,7 +536,7 @@ input[type='range']:focus-visible {
   height: 8px;
 }
 .vui-resize-divider::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   margin: auto;
