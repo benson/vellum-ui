@@ -3,6 +3,7 @@ import {
   chipNode,
   clearNode,
   combobox,
+  drawer,
   edgeResize,
   el,
   fieldRowHtml,
@@ -942,6 +943,83 @@ function motionGroup() {
         );
         return lab;
       },
+    ),
+    entry(
+      'Drawer and sheet',
+      ['drawer()', '.ui-drawer-layer', '.ui-drawer', '--vui-ease-drawer'],
+      'One controller serves attached side drawers and mobile bottom sheets. Drag the ink-band handle toward its edge for direct manipulation; Escape and keyboard activation remain immediate.',
+      () => {
+        const actions = el('div', { className: 'ds-motion-actions' });
+        const rightTrigger = el('button', {
+          className: 'btn',
+          type: 'button',
+          text: 'open right drawer',
+          dataset: { dsOpenDrawer: '' },
+        });
+        const sheetTrigger = el('button', {
+          className: 'btn',
+          type: 'button',
+          text: 'open bottom sheet',
+          dataset: { dsOpenSheet: '' },
+        });
+
+        const rightLayer = drawerLayer({
+          side: 'right',
+          title: 'add to shelf',
+          body: 'An attached workspace keeps the collection in view while you add a title.',
+          inputLabel: 'book title',
+          openDataset: { dsDrawerLayer: '' },
+        });
+        const sheetLayer = drawerLayer({
+          side: 'bottom',
+          title: 'quick add',
+          body: 'The same primitive becomes a thumb-reachable sheet without changing its interaction contract.',
+          inputLabel: 'scan or search',
+          openDataset: { dsSheetLayer: '' },
+        });
+        const rightApi = drawer(rightLayer, { side: 'right' });
+        const sheetApi = drawer(sheetLayer, { side: 'bottom' });
+        rightTrigger.addEventListener('click', (event) => rightApi.open({ reason: 'trigger', event, trigger: rightTrigger }));
+        sheetTrigger.addEventListener('click', (event) => sheetApi.open({ reason: 'trigger', event, trigger: sheetTrigger }));
+        actions.append(rightTrigger, sheetTrigger, rightLayer, sheetLayer);
+        return actions;
+      },
+    ),
+  );
+}
+
+function drawerLayer({ side, title, body, inputLabel, openDataset }) {
+  return el(
+    'div',
+    {
+      className: 'ui-drawer-layer',
+      hidden: true,
+      ariaHidden: 'true',
+      dataset: { vuiDrawerSide: side, ...openDataset },
+    },
+    el('button', { className: 'ui-drawer-backdrop', type: 'button', ariaLabel: 'close drawer' }),
+    el(
+      'aside',
+      { className: 'ui-drawer', dataset: { vuiDrawerSide: side } },
+      el(
+        'header',
+        { className: 'ui-drawer-head', dataset: { vuiDrawerHandle: '' } },
+        el('h3', { className: 'ui-drawer-title', text: title }),
+        el('button', { className: 'rune-close', type: 'button', ariaLabel: 'close', text: '×', dataset: { drawerClose: '' } }),
+      ),
+      el(
+        'div',
+        { className: 'ui-drawer-body' },
+        el('p', { text: body }),
+        el('label', { className: 'field-label', text: inputLabel }),
+        el('input', { className: 'input', type: 'text', placeholder: inputLabel }),
+      ),
+      el(
+        'footer',
+        { className: 'ui-drawer-actions' },
+        el('button', { className: 'btn', type: 'button', text: 'cancel', dataset: { drawerClose: '' } }),
+        el('button', { className: 'btn btn-primary', type: 'button', text: 'add' }),
+      ),
     ),
   );
 }
