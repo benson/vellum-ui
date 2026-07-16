@@ -15,7 +15,7 @@
     calc(var(--vui-control-pad-y) + 1px);
   font-size: var(--vui-font-size-sm);
   font-family: var(--vui-font-body);
-  font-weight: 500;
+  font-weight: var(--vui-font-weight-body);
   letter-spacing: 0;
   line-height: 1.2;
   cursor: pointer;
@@ -344,6 +344,107 @@ select:focus,
   outline: none;
   border-color: var(--vui-color-line-focus);
   box-shadow: 0 0 0 3px var(--vui-color-accent-soft);
+}
+
+/* Composite fields let an icon, emoji picker, unit, or other attached control
+   share one input frame. Children opt into .field-group-addon and
+   .field-group-control; the group owns all chrome and the unified focus ring. */
+.field-group {
+  align-items: stretch;
+  background: var(--vui-color-surface-raised);
+  border: var(--vui-border-width) solid var(--vui-color-line);
+  border-radius: var(--vui-radius-sharp);
+  box-shadow: var(--vui-input-bevel);
+  display: flex;
+  min-width: 0;
+  overflow: clip;
+  transition:
+    background-color var(--vui-motion-fast) ease,
+    border-color var(--vui-motion-fast) ease,
+    box-shadow var(--vui-motion-fast) ease;
+}
+
+.field-group:focus-within {
+  background: var(--vui-color-input-bg-focus);
+  border-color: var(--vui-color-line-focus);
+  box-shadow: 0 0 0 3px var(--vui-color-accent-soft);
+}
+
+.field-group-addon {
+  align-items: center;
+  appearance: none;
+  background: var(--vui-color-surface);
+  border: 0;
+  border-right: var(--vui-border-width) solid var(--vui-color-line);
+  border-radius: 0;
+  color: var(--vui-color-text-strong);
+  display: inline-flex;
+  flex: 0 0 auto;
+  font: inherit;
+  justify-content: center;
+  min-width: var(--vui-control-height-compact);
+  padding: 0 var(--vui-space-2);
+  transition:
+    background-color var(--vui-motion-fast) ease,
+    color var(--vui-motion-fast) ease;
+}
+
+button.field-group-addon {
+  cursor: pointer;
+}
+
+button.field-group-addon:hover {
+  background: var(--vui-color-surface-hover);
+}
+
+.field-group-addon:focus-visible {
+  outline: var(--vui-focus-ring);
+  outline-offset: -3px;
+}
+
+.field-group > .field-group-control {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  flex: 1 1 auto;
+  min-width: 0;
+  outline: 0;
+}
+
+.field-group > .field-group-control:focus,
+.field-group > .field-group-control:focus-visible {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  outline: 0;
+}
+
+/* Popover/multiselect triggers get a visible disclosure cue without each app
+   redrawing its own chevron. Toggle aria-expanded to rotate it upward. */
+.field-disclosure {
+  cursor: pointer;
+  padding-right: 32px;
+  position: relative;
+}
+
+.field-disclosure::after {
+  border-bottom: 1.5px solid currentColor;
+  border-right: 1.5px solid currentColor;
+  content: "";
+  height: 6px;
+  opacity: 0.62;
+  pointer-events: none;
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-65%) rotate(45deg);
+  transition: transform var(--vui-motion-fast) var(--vui-ease-out);
+  width: 6px;
+}
+
+.field-disclosure[aria-expanded="true"]::after {
+  transform: translateY(-25%) rotate(225deg);
 }
 
 textarea {

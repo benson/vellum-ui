@@ -357,14 +357,14 @@ body.vui-drawer-open {
 
 .ui-drawer[data-vui-drawer-side="right"],
 .ui-drawer-layer[data-vui-drawer-side="right"] .ui-drawer {
-  border-left: var(--vui-border-width) solid var(--vui-color-text-strong);
+  border-left: var(--vui-border-width) solid var(--vui-color-line);
   justify-self: end;
   transform: translate3d(100%, 0, 0);
 }
 
 .ui-drawer[data-vui-drawer-side="left"],
 .ui-drawer-layer[data-vui-drawer-side="left"] .ui-drawer {
-  border-right: var(--vui-border-width) solid var(--vui-color-text-strong);
+  border-right: var(--vui-border-width) solid var(--vui-color-line);
   justify-self: start;
   transform: translate3d(-100%, 0, 0);
 }
@@ -373,7 +373,7 @@ body.vui-drawer-open {
 .ui-drawer-layer[data-vui-drawer-side="bottom"] .ui-drawer {
   align-self: end;
   border-radius: var(--vui-radius-soft) var(--vui-radius-soft) 0 0;
-  border-top: var(--vui-border-width) solid var(--vui-color-text-strong);
+  border-top: var(--vui-border-width) solid var(--vui-color-line);
   height: min(78dvh, 680px);
   max-width: none;
   transform: translate3d(0, 100%, 0);
@@ -577,7 +577,7 @@ body.vui-drawer-open {
   flex-direction: column;
   gap: var(--vui-space-1);
   padding: var(--vui-space-1);
-  border: var(--vui-border-width) solid var(--vui-color-text-strong);
+  border: var(--vui-border-width) solid var(--vui-color-line);
   border-radius: var(--vui-radius-sharp);
   background: var(--vui-color-surface-raised);
   box-shadow: var(--vui-shadow-popover);
@@ -824,7 +824,7 @@ body.feedback-capture-capturing .feedback-capture-widget {
   border-radius: var(--vui-radius-sharp);
   font-family: var(--vui-font-body);
   font-size: var(--vui-font-size-sm);
-  font-weight: 500;
+  font-weight: var(--vui-font-weight-body);
   cursor: pointer;
   box-shadow: var(--vui-shadow-soft);
   text-transform: none;
