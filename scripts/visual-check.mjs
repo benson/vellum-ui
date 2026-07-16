@@ -125,36 +125,43 @@ try {
   });
   failures.push(...report);
 
-  // The comparison is a real token-level study, not a documentation-only
-  // reskin. It must be reversible and keep its explanatory notes out of the
-  // faithful before state.
-  const beforeStudy = await page.evaluate(() => ({
+  // The approved branded direction ships by default. The comparison remains
+  // reversible and keeps its explanatory notes out of the historical state.
+  const shippedStudy = await page.evaluate(() => ({
     mode: document.documentElement.dataset.vuiBrandStudy,
     bg: getComputedStyle(document.documentElement).getPropertyValue('--vui-color-bg').trim(),
     notesVisible: getComputedStyle(document.querySelector('.ds-brand-study-notes')).display !== 'none',
   }));
-  if (beforeStudy.mode !== 'before' || beforeStudy.notesVisible) {
-    failures.push('brand study did not start in a faithful before state');
+  if (
+    shippedStudy.mode !== 'after' ||
+    !shippedStudy.notesVisible ||
+    shippedStudy.bg !== '#f7f2ea'
+  ) {
+    failures.push('brand study did not start with the shipped branded defaults');
   }
-  await page.click('[data-brand-study-mode="after"]');
-  const afterStudy = await page.evaluate(() => ({
+  await page.click('[data-brand-study-mode="before"]');
+  const beforeStudy = await page.evaluate(() => ({
     mode: document.documentElement.dataset.vuiBrandStudy,
     bg: getComputedStyle(document.documentElement).getPropertyValue('--vui-color-bg').trim(),
     notesVisible: getComputedStyle(document.querySelector('.ds-brand-study-notes')).display !== 'none',
     tokenInput: document.querySelector('[data-token="--vui-color-bg"]')?.value,
   }));
-  if (afterStudy.mode !== 'after' || !afterStudy.notesVisible || afterStudy.bg === beforeStudy.bg) {
-    failures.push('brand study after state did not apply its token-level direction');
+  if (beforeStudy.mode !== 'before' || beforeStudy.notesVisible || beforeStudy.bg === shippedStudy.bg) {
+    failures.push('brand study before state did not restore the historical token direction');
   }
-  if (afterStudy.tokenInput !== afterStudy.bg) failures.push('brand study token input did not follow the after state');
-  await page.click('[data-brand-study-mode="before"]');
+  if (beforeStudy.tokenInput !== beforeStudy.bg) failures.push('brand study token input did not follow the before state');
+  await page.click('[data-brand-study-mode="after"]');
   const restoredStudy = await page.evaluate(() => ({
     mode: document.documentElement.dataset.vuiBrandStudy,
     bg: getComputedStyle(document.documentElement).getPropertyValue('--vui-color-bg').trim(),
     tokenInput: document.querySelector('[data-token="--vui-color-bg"]')?.value,
   }));
-  if (restoredStudy.mode !== 'before' || restoredStudy.bg !== beforeStudy.bg || restoredStudy.tokenInput !== beforeStudy.bg) {
-    failures.push('brand study before state did not restore faithfully');
+  if (
+    restoredStudy.mode !== 'after' ||
+    restoredStudy.bg !== shippedStudy.bg ||
+    restoredStudy.tokenInput !== shippedStudy.bg
+  ) {
+    failures.push('brand study after state did not restore the shipped defaults');
   }
 
   // Live toast roundtrip: the fire button mounts a stack and the toast auto-dismisses.
@@ -348,6 +355,19 @@ try {
   await page.reload({ waitUntil: 'networkidle' });
   const persisted = await page.evaluate(() => document.documentElement.dataset.theme === 'dark');
   if (!persisted) failures.push('dark theme did not persist across reload');
+
+  // The branded catalog furniture must reflow without introducing page-level
+  // horizontal scroll at the compact breakpoint.
+  await page.setViewportSize({ width: 760, height: 900 });
+  const compactLayout = await page.evaluate(() => {
+    const head = document.querySelector('.ds-page-head')?.getBoundingClientRect();
+    return {
+      horizontalOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth,
+      headerWithinViewport: Boolean(head && head.left >= 0 && head.right <= document.documentElement.clientWidth),
+    };
+  });
+  if (compactLayout.horizontalOverflow) failures.push('compact branded catalog introduced horizontal page overflow');
+  if (!compactLayout.headerWithinViewport) failures.push('compact branded catalog header escaped the viewport');
   await page.evaluate(() => localStorage.clear());
 } finally {
   await browser.close();

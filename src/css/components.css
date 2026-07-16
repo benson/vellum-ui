@@ -332,15 +332,15 @@
 }
 
 .vui-table th {
-  background: var(--vui-color-surface);
-  box-shadow: inset 0 -1px 0 var(--vui-color-line);
+  background: var(--vui-color-surface-sunken);
+  box-shadow: inset 0 -1px 0 var(--vui-color-line-strong);
   font-family: var(--vui-font-body);
   font-size: var(--vui-font-size-xs);
   font-weight: 500;
   letter-spacing: 0;
   text-transform: none;
   text-align: left;
-  color: var(--vui-color-text-muted);
+  color: var(--vui-color-text-strong);
   border-bottom: 0;
   padding: 6px var(--vui-space-2);
 }
