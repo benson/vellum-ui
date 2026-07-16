@@ -228,8 +228,8 @@
 
 .segment-btn.active,
 .segment-btn[aria-pressed="true"] {
-  background: var(--vui-color-text-strong);
-  border-color: var(--vui-color-text-strong);
+  background: var(--vui-color-accent);
+  border-color: var(--vui-color-accent);
   color: var(--vui-color-text-inverse);
   z-index: 1;
 }
@@ -272,8 +272,8 @@
 
 .tab-btn.active,
 .tab-btn[aria-selected="true"] {
-  border-bottom-color: var(--vui-color-text-strong);
-  color: var(--vui-color-text-strong);
+  border-bottom-color: var(--vui-color-accent);
+  color: var(--vui-color-accent-strong);
 }
 
 /* Global ring, pulled inside the row so it isn't clipped by the underline. */
@@ -316,7 +316,7 @@ select,
 .field-chrome {
   border: var(--vui-border-width) solid var(--vui-color-line);
   border-radius: var(--vui-radius-sharp);
-  background: var(--vui-color-surface-raised);
+  background: var(--vui-color-input-bg);
   color: var(--vui-color-text-strong);
   padding: 8px 14px 8px 10px;
   font-family: var(--vui-font-body);
@@ -343,7 +343,7 @@ select:focus,
 .field-chrome:hover {
   outline: none;
   border-color: var(--vui-color-line-focus);
-  box-shadow: 0 0 0 3px var(--vui-color-accent-soft);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--vui-color-accent) 16%, transparent);
 }
 
 /* Composite fields let an icon, emoji picker, unit, or other attached control
@@ -351,7 +351,7 @@ select:focus,
    .field-group-control; the group owns all chrome and the unified focus ring. */
 .field-group {
   align-items: stretch;
-  background: var(--vui-color-surface-raised);
+  background: var(--vui-color-input-bg);
   border: var(--vui-border-width) solid var(--vui-color-line);
   border-radius: var(--vui-radius-sharp);
   box-shadow: var(--vui-input-bevel);
@@ -367,7 +367,7 @@ select:focus,
 .field-group:focus-within {
   background: var(--vui-color-input-bg-focus);
   border-color: var(--vui-color-line-focus);
-  box-shadow: 0 0 0 3px var(--vui-color-accent-soft);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--vui-color-accent) 16%, transparent);
 }
 
 .field-group-addon {
