@@ -127,6 +127,7 @@ async function updateHomepage(path) {
   await stampModuleImports(join(path, 'vellum-ui'), shortSha);
   await rm(join(path, 'vellum-ui', 'design-system.html'), { force: true });
   await writeDesignSystemPage(path);
+  await writeVellumEntryPage(path);
 }
 
 async function writeDesignSystemPage(path) {
@@ -148,6 +149,30 @@ async function writeDesignSystemPage(path) {
   <body class="vui-app vui-design-system-page design-system-page">
     <main id="designSystemMount" class="vui-design-system ds-page-wrap"></main>
     <script type="module" src="../demo/designSystem.js?v=${shortSha}"></script>
+  </body>
+</html>
+`,
+  );
+}
+
+async function writeVellumEntryPage(path) {
+  const pagePath = join(path, 'vellum-ui', 'index.html');
+  const catalogUrl = `./design-system/?v=${shortSha}`;
+  await writeFile(
+    pagePath,
+    `<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Vellum UI</title>
+    <meta name="description" content="Shared design system for Benson Perry apps." />
+    <link rel="canonical" href="https://bensonperry.com/vellum-ui/design-system/" />
+    <meta http-equiv="refresh" content="0; url=${catalogUrl}" />
+  </head>
+  <body>
+    <p><a href="${catalogUrl}">open the Vellum UI design system</a></p>
+    <script>window.location.replace('${catalogUrl}' + window.location.hash);</script>
   </body>
 </html>
 `,
