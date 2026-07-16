@@ -223,14 +223,28 @@
   font-family: var(--vui-font-mono);
   font-size: var(--vui-font-size-sm);
   padding: var(--vui-space-2) var(--vui-space-3);
+  opacity: 1;
+  translate: 0 0;
   transition:
-    opacity var(--vui-motion-base),
-    transform var(--vui-motion-base);
+    opacity var(--vui-motion-enter) var(--vui-ease-out),
+    translate var(--vui-motion-enter) var(--vui-ease-out);
 }
 
 .toast.is-leaving {
   opacity: 0;
-  transform: translateY(4px);
+  translate: 0 4px;
+  transition-duration: var(--vui-motion-exit), var(--vui-motion-exit);
+}
+
+@starting-style {
+  .toast {
+    opacity: 0;
+    translate: 0 4px;
+  }
+}
+
+.toast[data-vui-motion='none'] {
+  transition: none;
 }
 
 .toast-success {
@@ -255,7 +269,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   .toast {
-    transition: none;
+    translate: 0;
+    transition: opacity var(--vui-motion-fast) var(--vui-ease-out);
   }
 }
 

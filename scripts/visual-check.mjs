@@ -80,10 +80,17 @@ try {
     expectSelector('.status-state-loading .loading-spinner', 'status matrix spinner');
     expectSelector('.btn-link-danger', 'danger inline action');
     expectSelector('[data-ds-open-modal]', 'live modal trigger');
+    expectSelector('[data-ds-motion-lab]', 'motion workbench');
+    expectSelector('[data-ds-motion-popover]', 'motion popover trigger');
+    expectSelector('[data-ds-motion-modal]', 'motion modal trigger');
+    expectSelector('[data-ds-motion-toast]', 'motion toast trigger');
 
     // Tokens must actually reach components.
     const rootStyle = getComputedStyle(document.documentElement);
     if (!rootStyle.getPropertyValue('--vui-color-accent').trim()) issues.push('--vui-color-accent is undefined');
+    for (const token of ['--vui-motion-enter', '--vui-motion-exit', '--vui-ease-out']) {
+      if (!rootStyle.getPropertyValue(token).trim()) issues.push(`${token} is undefined`);
+    }
     const btn = document.querySelector('.btn');
     if (btn) {
       const borderWidth = parseFloat(getComputedStyle(btn).borderTopWidth);
@@ -116,6 +123,41 @@ try {
   await page.click('[data-ds-fire-toast]');
   const fired = await page.waitForSelector('.toast-stack .toast', { timeout: 3000 }).catch(() => null);
   if (!fired) failures.push('firing a toast did not mount .toast-stack .toast');
+  if (fired) {
+    const state = await fired.getAttribute('data-vui-state');
+    const mode = await fired.getAttribute('data-vui-motion');
+    if (state !== 'open') failures.push(`live toast state expected open, got ${state}`);
+    if (mode !== 'auto') failures.push(`pointer-fired toast motion expected auto, got ${mode}`);
+  }
+
+  // Motion workbench: pointer-opened popovers animate from the trigger; Escape
+  // closes immediately and leaves a stable state for consumers and tests.
+  await page.click('[data-ds-motion-popover]');
+  const motionPopover = await page.waitForSelector('.ds-motion-menu-wrap .ui-popover:not([hidden])', { timeout: 3000 }).catch(() => null);
+  if (!motionPopover) {
+    failures.push('motion workbench popover did not open');
+  } else {
+    const detail = await motionPopover.evaluate((node) => ({
+      state: node.dataset.vuiState,
+      mode: node.dataset.vuiMotion,
+      originX: node.style.getPropertyValue('--vui-popover-origin-x'),
+      originY: node.style.getPropertyValue('--vui-popover-origin-y'),
+    }));
+    if (detail.state !== 'open') failures.push(`motion popover state expected open, got ${detail.state}`);
+    if (detail.mode !== 'auto') failures.push(`motion popover pointer mode expected auto, got ${detail.mode}`);
+    if (!detail.originX || !detail.originY) failures.push('motion popover did not calculate a trigger-relative origin');
+  }
+  await page.keyboard.press('Escape');
+  const closedPopover = await page.$('.ds-motion-menu-wrap .ui-popover');
+  if (closedPopover) {
+    const detail = await closedPopover.evaluate((node) => ({
+      hidden: node.hidden,
+      state: node.dataset.vuiState,
+      mode: node.dataset.vuiMotion,
+    }));
+    if (!detail.hidden || detail.state !== 'closed') failures.push('Escape did not close the motion popover');
+    if (detail.mode !== 'none') failures.push(`keyboard popover dismissal expected no motion, got ${detail.mode}`);
+  }
 
   // Edge-resize roundtrip: drag resizes the demo pane, dragging past the snap
   // threshold collapses it, and a click on the collapsed edge reopens it.
@@ -164,9 +206,28 @@ try {
   await page.click('[data-ds-open-modal]');
   const modalOpen = await page.waitForSelector('.ui-modal.open .ui-modal-card', { timeout: 3000 }).catch(() => null);
   if (!modalOpen) failures.push('live modal trigger did not open the modal');
+  if (modalOpen) {
+    const hostState = await modalOpen.evaluate((card) => ({
+      state: card.parentElement.dataset.vuiState,
+      mode: card.parentElement.dataset.vuiMotion,
+    }));
+    if (hostState.state !== 'open' || hostState.mode !== 'auto') {
+      failures.push(`pointer-opened modal expected open/auto, got ${hostState.state}/${hostState.mode}`);
+    }
+  }
   await page.keyboard.press('Escape');
   const modalClosed = await page.waitForFunction(() => !document.querySelector('.ui-modal.open'), null, { timeout: 3000 }).catch(() => null);
   if (!modalClosed) failures.push('escape did not close the live modal');
+  const modalMotionAfterEscape = await page.getAttribute('[data-ds-open-modal] + .ui-modal', 'data-vui-motion');
+  if (modalMotionAfterEscape !== 'none') failures.push(`keyboard modal dismissal expected no motion, got ${modalMotionAfterEscape}`);
+
+  // Reduced motion retains the state change but removes spatial scaling.
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.click('[data-ds-motion-popover]');
+  const reducedScale = await page.$eval('.ds-motion-menu-wrap .ui-popover:not([hidden])', (node) => getComputedStyle(node).scale);
+  if (reducedScale !== '1' && reducedScale !== 'none') failures.push(`reduced-motion popover scale expected 1, got ${reducedScale}`);
+  await page.keyboard.press('Escape');
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
 
   // Combobox roundtrip: typing opens the option list.
   await page.fill('.combobox input', 'e');

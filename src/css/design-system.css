@@ -412,3 +412,65 @@ body.vui-design-system-page {
 .ds-type-ramp-sample {
   white-space: nowrap;
 }
+
+/* Motion workbench: contract first, replay controls second. */
+.ds-motion-lab {
+  display: grid;
+  gap: var(--vui-space-4);
+}
+
+.ds-motion-toolbar {
+  align-items: center;
+  display: flex;
+  font-family: var(--vui-font-mono);
+  font-size: var(--vui-font-size-xs);
+  gap: var(--vui-space-3);
+  justify-content: space-between;
+}
+
+.ds-motion-tiers {
+  display: grid;
+  gap: var(--vui-space-2);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.ds-motion-tier {
+  background: var(--vui-color-surface-raised);
+  border: 1px solid var(--vui-color-line);
+  display: grid;
+  gap: var(--vui-space-1);
+  padding: var(--vui-space-3);
+}
+
+.ds-motion-tier strong,
+.ds-motion-tier code {
+  font-family: var(--vui-font-mono);
+  font-size: var(--vui-font-size-xs);
+}
+
+.ds-motion-tier span {
+  color: var(--vui-color-text-muted);
+  font-size: var(--vui-font-size-xs);
+  line-height: 1.35;
+}
+
+.ds-motion-actions {
+  align-items: flex-start;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--vui-space-2);
+}
+
+.ds-motion-menu-wrap {
+  position: relative;
+}
+
+.ds-motion-modal {
+  width: min(420px, calc(100vw - 32px));
+}
+
+@media (max-width: 680px) {
+  .ds-motion-tiers {
+    grid-template-columns: 1fr;
+  }
+}
