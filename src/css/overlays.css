@@ -13,6 +13,46 @@
   display: flex;
 }
 
+/* Controlled modals animate the surface, not the layout around it. Individual
+   scale composes with the card's translate transform used by drag/resize. */
+.ui-modal[data-vui-state] {
+  opacity: 0;
+  transition:
+    opacity var(--vui-motion-exit) var(--vui-ease-out),
+    display var(--vui-motion-exit) allow-discrete;
+}
+
+.ui-modal[data-vui-state='open'] {
+  opacity: 1;
+  transition-duration: var(--vui-motion-overlay), var(--vui-motion-overlay);
+}
+
+.ui-modal[data-vui-state] .ui-modal-card {
+  opacity: 0;
+  scale: 0.97;
+  transform-origin: center;
+  transition:
+    opacity var(--vui-motion-exit) var(--vui-ease-out),
+    scale var(--vui-motion-exit) var(--vui-ease-out);
+}
+
+.ui-modal[data-vui-state='open'] .ui-modal-card {
+  opacity: 1;
+  scale: 1;
+  transition-duration: var(--vui-motion-overlay), var(--vui-motion-overlay);
+}
+
+@starting-style {
+  .ui-modal[data-vui-state='open'] {
+    opacity: 0;
+  }
+
+  .ui-modal[data-vui-state='open'] .ui-modal-card {
+    opacity: 0;
+    scale: 0.97;
+  }
+}
+
 .ui-modal-backdrop {
   align-items: center;
   background: var(--vui-modal-backdrop);
@@ -244,6 +284,54 @@
   color: var(--vui-color-text);
   box-shadow: var(--vui-shadow-popover);
   padding: var(--vui-space-2);
+}
+
+.ui-popover[data-vui-state] {
+  opacity: 0;
+  scale: 0.97;
+  transform-origin: var(--vui-popover-origin-x) var(--vui-popover-origin-y);
+  transition:
+    opacity var(--vui-motion-exit) var(--vui-ease-out),
+    scale var(--vui-motion-exit) var(--vui-ease-out),
+    display var(--vui-motion-exit) allow-discrete;
+}
+
+.ui-popover[data-vui-state='open'] {
+  opacity: 1;
+  scale: 1;
+  transition-duration:
+    var(--vui-motion-enter),
+    var(--vui-motion-enter),
+    var(--vui-motion-enter);
+}
+
+@starting-style {
+  .ui-popover[data-vui-state='open'] {
+    opacity: 0;
+    scale: 0.97;
+  }
+}
+
+.ui-modal[data-vui-motion='none'],
+.ui-modal[data-vui-motion='none'] .ui-modal-card,
+.ui-popover[data-vui-motion='none'] {
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-modal[data-vui-state],
+  .ui-popover[data-vui-state] {
+    transition-duration: var(--vui-motion-fast);
+  }
+
+  .ui-modal[data-vui-state] .ui-modal-card,
+  .ui-popover[data-vui-state] {
+    scale: 1;
+  }
+
+  .ui-modal[data-vui-state] .ui-modal-card {
+    transition: opacity var(--vui-motion-fast) var(--vui-ease-out);
+  }
 }
 
 /* [hidden] handled globally in base.css. */

@@ -20,6 +20,8 @@ test('modal open and close are idempotent and toggle body state', () => {
   assert.equal(modalEl.hidden, false);
   assert.equal(modalEl.classList.contains('open'), true);
   assert.equal(modalEl.getAttribute('aria-hidden'), 'false');
+  assert.equal(modalEl.getAttribute('data-vui-state'), 'open');
+  assert.equal(modalEl.getAttribute('data-vui-motion'), 'auto');
   assert.equal(doc.body.classList.contains('modal-open'), true);
   assert.equal(focusTarget.focused, true);
   assert.deepEqual(opens.map((detail) => detail.reason), ['test-open']);
@@ -30,6 +32,7 @@ test('modal open and close are idempotent and toggle body state', () => {
   assert.equal(modalEl.hidden, true);
   assert.equal(modalEl.classList.contains('open'), false);
   assert.equal(modalEl.getAttribute('aria-hidden'), 'true');
+  assert.equal(modalEl.getAttribute('data-vui-state'), 'closed');
   assert.equal(doc.body.classList.contains('modal-open'), false);
   assert.deepEqual(closes.map((detail) => detail.reason), ['test-close']);
 });
@@ -66,6 +69,18 @@ test('modal escape close can be disabled', () => {
   doc.dispatch('keydown', keyEvent('Escape'));
 
   assert.equal(controller.isOpen(), true);
+});
+
+test('modal escape dismissal opts out of motion', () => {
+  const doc = fakeDocument();
+  const modalEl = fakeElement(doc);
+  const controller = modal(modalEl);
+
+  controller.open({ reason: 'trigger', event: { type: 'click' } });
+  doc.dispatch('keydown', keyEvent('Escape'));
+
+  assert.equal(controller.isOpen(), false);
+  assert.equal(modalEl.getAttribute('data-vui-motion'), 'none');
 });
 
 function fakeDocument() {
