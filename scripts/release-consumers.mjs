@@ -3,6 +3,7 @@ import { existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, relative } from 'node:path';
 import { spawnSync } from 'node:child_process';
+import { stampModuleImports } from './stamp-module-imports.mjs';
 
 const owner = 'benson';
 const root = process.cwd();
@@ -123,6 +124,7 @@ async function updateHomepage(path) {
   await rm(join(path, 'vellum-ui'), { recursive: true, force: true });
   await mkdir(join(path, 'vellum-ui'), { recursive: true });
   await cp(dist, join(path, 'vellum-ui'), { recursive: true, force: true });
+  await stampModuleImports(join(path, 'vellum-ui'), shortSha);
   await rm(join(path, 'vellum-ui', 'design-system.html'), { force: true });
   await writeDesignSystemPage(path);
 }
