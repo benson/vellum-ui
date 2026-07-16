@@ -474,7 +474,7 @@ function buttonsGroup() {
   return group(
     'buttons',
     'Buttons',
-    entry('Buttons', ['.btn', '.btn-secondary', '.btn-danger', '.btn-ink', '.btn-link', '.btn-shortcut'], 'Accent primary, quiet secondary, soft danger, ink, disabled, and bare text actions. Ordinary labels stay medium-weight; primary actions carry the stronger voice.', () =>
+    entry('Buttons', ['.btn', '.btn-secondary', '.btn-danger', '.btn-ink', '.btn-link', '.btn-shortcut'], 'Accent primary, quiet secondary, soft danger, ink, disabled, and bare text actions. Ordinary labels stay regular-weight; primary actions carry the stronger voice.', () =>
       demoHtml(
         buttonHtml({ label: 'reload' }) +
           buttonHtml({ label: 'save' }) +
@@ -631,7 +631,7 @@ function formsGroup() {
   return group(
     'forms',
     'Forms',
-    entry('Fields', ['input', 'select', 'textarea', '.field-row'], 'Carved vellum fields with mono type and inset shadow.', () =>
+    entry('Fields', ['input', 'select', 'textarea', '.field-row'], 'Quiet raised fields with body type, a hairline border, subtle depth, and one accent focus ring.', () =>
       demoHtml(
         fieldRowHtml({
           label: 'card name',
@@ -662,12 +662,24 @@ function formsGroup() {
         ),
     ),
     entry(
-      'Field chrome on non-fields',
-      ['.field-chrome'],
-      'The field visual (border, bevel, mono, raised surface, focus/hover border) for elements that are not real form controls - e.g. a button that opens a picker and should read as a field. Chrome only; the consumer owns layout, cursor, and any arrow affordance.',
+      'Field triggers',
+      ['.field-chrome', '.field-disclosure'],
+      'Give non-fields the shared input frame. Add .field-disclosure to popover and multiselect triggers for a visible chevron that follows aria-expanded.',
       () =>
         demoHtml(
-          '<button type="button" class="field-chrome" style="cursor: pointer; text-align: left; min-width: 220px;">any color identity</button>',
+          '<button type="button" class="field-chrome field-disclosure" aria-expanded="false" style="text-align: left; min-width: 220px;">any color identity</button>',
+        ),
+    ),
+    entry(
+      'Field groups',
+      ['.field-group', '.field-group-addon', '.field-group-control'],
+      'Attach an icon, emoji picker, or unit to a control while keeping one frame and one focus ring.',
+      () =>
+        demoHtml(
+          '<span class="field-group" style="width: 280px;">' +
+            '<button type="button" class="field-group-addon" aria-label="choose emoji">📦</button>' +
+            '<input class="field-group-control" type="text" value="trade binder" aria-label="container name" />' +
+            '</span>',
         ),
     ),
     entry('Selection controls', ['input[type=checkbox]', 'input[type=radio]', '.switch', 'input[type=range]'], 'Checkbox, radio, switch, and range share the accent-fill checked treatment.', () =>
@@ -788,7 +800,7 @@ function dataGroup() {
   return group(
     'data',
     'Data',
-    entry('Table', ['.vui-table', '.vui-table-compact'], 'Mono lowercase headers over a strong rule; rows divide with hairlines and highlight on hover.', () =>
+    entry('Table', ['.vui-table', '.vui-table-compact'], 'Quiet body-type headers on a subtle surface; rows divide with hairlines and highlight on hover.', () =>
       demoHtml(
         '<table class="vui-table"><thead><tr><th>card</th><th>set</th><th>qty</th></tr></thead><tbody>' +
           '<tr><td>lightning bolt</td><td>2x2</td><td>4</td></tr>' +

@@ -59,17 +59,19 @@ body.vui-app {
 }
 
 .vui-card {
-  border: 2px solid var(--vui-color-line-strong);
-  border-radius: var(--vui-radius-soft);
+  border: var(--vui-border-width) solid var(--vui-color-line);
+  border-radius: var(--vui-radius-round);
   background: var(--vui-color-surface-raised);
-  box-shadow: var(--vui-shadow-hard);
+  box-shadow: var(--vui-shadow-soft);
 }
 
 .vui-label {
   color: var(--vui-color-text-muted);
+  font-family: var(--vui-font-body);
   font-size: var(--vui-font-size-xs);
+  font-weight: var(--vui-font-weight-title);
   letter-spacing: var(--vui-label-tracking);
-  text-transform: uppercase;
+  text-transform: var(--vui-label-transform);
 }
 
 :focus-visible {
