@@ -84,6 +84,12 @@ try {
     expectSelector('[data-ds-motion-popover]', 'motion popover trigger');
     expectSelector('[data-ds-motion-modal]', 'motion modal trigger');
     expectSelector('[data-ds-motion-toast]', 'motion toast trigger');
+    expectSelector('[data-brand-study-mode="before"]', 'brand study before toggle');
+    expectSelector('[data-brand-study-mode="after"]', 'brand study after toggle');
+    expectSelector('.ds-brand-study-notes', 'brand study notes');
+    if (document.querySelectorAll('.ds-brand-study-grid li').length !== 20) {
+      issues.push('brand study should document exactly 20 decisions');
+    }
 
     // Tokens must actually reach components.
     const rootStyle = getComputedStyle(document.documentElement);
@@ -118,6 +124,38 @@ try {
     return issues;
   });
   failures.push(...report);
+
+  // The comparison is a real token-level study, not a documentation-only
+  // reskin. It must be reversible and keep its explanatory notes out of the
+  // faithful before state.
+  const beforeStudy = await page.evaluate(() => ({
+    mode: document.documentElement.dataset.vuiBrandStudy,
+    bg: getComputedStyle(document.documentElement).getPropertyValue('--vui-color-bg').trim(),
+    notesVisible: getComputedStyle(document.querySelector('.ds-brand-study-notes')).display !== 'none',
+  }));
+  if (beforeStudy.mode !== 'before' || beforeStudy.notesVisible) {
+    failures.push('brand study did not start in a faithful before state');
+  }
+  await page.click('[data-brand-study-mode="after"]');
+  const afterStudy = await page.evaluate(() => ({
+    mode: document.documentElement.dataset.vuiBrandStudy,
+    bg: getComputedStyle(document.documentElement).getPropertyValue('--vui-color-bg').trim(),
+    notesVisible: getComputedStyle(document.querySelector('.ds-brand-study-notes')).display !== 'none',
+    tokenInput: document.querySelector('[data-token="--vui-color-bg"]')?.value,
+  }));
+  if (afterStudy.mode !== 'after' || !afterStudy.notesVisible || afterStudy.bg === beforeStudy.bg) {
+    failures.push('brand study after state did not apply its token-level direction');
+  }
+  if (afterStudy.tokenInput !== afterStudy.bg) failures.push('brand study token input did not follow the after state');
+  await page.click('[data-brand-study-mode="before"]');
+  const restoredStudy = await page.evaluate(() => ({
+    mode: document.documentElement.dataset.vuiBrandStudy,
+    bg: getComputedStyle(document.documentElement).getPropertyValue('--vui-color-bg').trim(),
+    tokenInput: document.querySelector('[data-token="--vui-color-bg"]')?.value,
+  }));
+  if (restoredStudy.mode !== 'before' || restoredStudy.bg !== beforeStudy.bg || restoredStudy.tokenInput !== beforeStudy.bg) {
+    failures.push('brand study before state did not restore faithfully');
+  }
 
   // Live toast roundtrip: the fire button mounts a stack and the toast auto-dismisses.
   await page.click('[data-ds-fire-toast]');
