@@ -169,6 +169,7 @@
   --vui-motion-enter: calc(var(--vui-motion-base) * var(--vui-motion-scale));
   --vui-motion-exit: calc(var(--vui-motion-fast) * var(--vui-motion-scale));
   --vui-motion-overlay: calc(var(--vui-motion-base) * var(--vui-motion-scale));
+  --vui-motion-drawer: calc(var(--vui-motion-slow) * var(--vui-motion-scale));
   --vui-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --vui-ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
   --vui-ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);

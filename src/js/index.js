@@ -21,6 +21,13 @@ export { makeModalInteractive, modal } from './modal.js';
 export { makeDraggable } from './makeDraggable.js';
 export { chipHtml, chipNode } from './chip.js';
 export { toast } from './toast.js';
+export {
+  drawer,
+  drawerOffsetFromTransform,
+  projectDrawerOffset,
+  resolveDrawerGesture,
+  rubberbandDrawerOffset,
+} from './drawer.js';
 export { combobox } from './combobox.js';
 export { renderStatusState, statusStateHtml } from './statusState.js';
 export {

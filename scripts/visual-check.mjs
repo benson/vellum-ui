@@ -221,11 +221,68 @@ try {
   const modalMotionAfterEscape = await page.getAttribute('[data-ds-open-modal] + .ui-modal', 'data-vui-motion');
   if (modalMotionAfterEscape !== 'none') failures.push(`keyboard modal dismissal expected no motion, got ${modalMotionAfterEscape}`);
 
+  // Drawers preserve their physical edge, return focus, and accept direct
+  // handle dismissal with a distance/velocity settle.
+  await page.click('[data-ds-open-drawer]');
+  const drawerOpen = await page.waitForSelector('[data-ds-drawer-layer][data-vui-state="open"] .ui-drawer', { timeout: 3000 }).catch(() => null);
+  if (!drawerOpen) failures.push('right drawer trigger did not open the drawer');
+  if (drawerOpen) {
+    const drawerState = await drawerOpen.evaluate((panel) => ({
+      side: panel.dataset.vuiDrawerSide,
+      mode: panel.parentElement.dataset.vuiMotion,
+      role: panel.getAttribute('role'),
+    }));
+    if (drawerState.side !== 'right' || drawerState.mode !== 'auto' || drawerState.role !== 'dialog') {
+      failures.push(`right drawer expected right/auto/dialog, got ${drawerState.side}/${drawerState.mode}/${drawerState.role}`);
+    }
+  }
+  await page.keyboard.press('Escape');
+  const drawerClosed = await page.waitForFunction(() => document.querySelector('[data-ds-drawer-layer]').hidden, null, { timeout: 3000 }).catch(() => null);
+  if (!drawerClosed) failures.push('escape did not immediately hide the right drawer');
+  const drawerMotionAfterEscape = await page.getAttribute('[data-ds-drawer-layer]', 'data-vui-motion');
+  if (drawerMotionAfterEscape !== 'none') failures.push(`keyboard drawer dismissal expected no motion, got ${drawerMotionAfterEscape}`);
+
+  await page.click('[data-ds-open-drawer]');
+  await page.waitForFunction(() => {
+    const panel = document.querySelector('[data-ds-drawer-layer] .ui-drawer');
+    if (!panel) return false;
+    const matrix = new DOMMatrix(getComputedStyle(panel).transform);
+    return Math.abs(matrix.m41) < 1;
+  }, null, { timeout: 3000 });
+  const drawerHandle = await page.$('[data-ds-drawer-layer] [data-vui-drawer-handle]');
+  const drawerHandleBox = await drawerHandle?.boundingBox();
+  if (!drawerHandleBox) {
+    failures.push('right drawer gesture handle is missing');
+  } else {
+    const x = drawerHandleBox.x + drawerHandleBox.width / 2;
+    const y = drawerHandleBox.y + drawerHandleBox.height / 2;
+    await page.mouse.move(x, y);
+    await page.mouse.down();
+    await page.mouse.move(x + 240, y, { steps: 6 });
+    await page.mouse.up();
+    const gestureClosed = await page.waitForFunction(
+      () => document.querySelector('[data-ds-drawer-layer]').dataset.vuiState === 'closed',
+      null,
+      { timeout: 3000 },
+    ).catch(() => null);
+    if (!gestureClosed) failures.push('right drawer did not settle closed after a committed drag');
+    const gestureHidden = await page.waitForFunction(
+      () => document.querySelector('[data-ds-drawer-layer]').hidden,
+      null,
+      { timeout: 3000 },
+    ).catch(() => null);
+    if (!gestureHidden) failures.push('right drawer did not release its layer after the exit settled');
+  }
+
   // Reduced motion retains the state change but removes spatial scaling.
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.click('[data-ds-motion-popover]');
   const reducedScale = await page.$eval('.ds-motion-menu-wrap .ui-popover:not([hidden])', (node) => getComputedStyle(node).scale);
   if (reducedScale !== '1' && reducedScale !== 'none') failures.push(`reduced-motion popover scale expected 1, got ${reducedScale}`);
+  await page.keyboard.press('Escape');
+  await page.click('[data-ds-open-sheet]');
+  const reducedSheetTransform = await page.$eval('[data-ds-sheet-layer] .ui-drawer', (node) => getComputedStyle(node).transform);
+  if (reducedSheetTransform !== 'none') failures.push(`reduced-motion sheet transform expected none, got ${reducedSheetTransform}`);
   await page.keyboard.press('Escape');
   await page.emulateMedia({ reducedMotion: 'no-preference' });
 
