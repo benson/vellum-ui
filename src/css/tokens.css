@@ -10,6 +10,8 @@
   --vui-z-feedback-canvas: 125;
   --vui-z-feedback: 130;
   --vui-control-height-compact: 32px;
+  --vui-touch-target: 44px;
+  --vui-mobile-nav-height: 64px;
   --vui-control-pad-y: 6px;
   --vui-control-pad-x: 10px;
   --vui-focus-ring: 2px solid var(--vui-color-accent);
