@@ -31,8 +31,10 @@ const shortSha = releaseSha.slice(0, 12);
 const packageSpec = `git+https://github.com/benson/vellum-ui.git#${releaseSha}`;
 
 run('npm', ['run', 'build']);
+run('npm', ['run', 'build-storybook']);
 
 const dist = join(root, 'dist');
+const storybookStatic = join(root, 'storybook-static');
 const workspace = await mkdtemp(join(tmpdir(), `vellum-release-${shortSha}-`));
 
 const consumers = [
@@ -126,33 +128,8 @@ async function updateHomepage(path) {
   await cp(dist, join(path, 'vellum-ui'), { recursive: true, force: true });
   await stampModuleImports(join(path, 'vellum-ui'), shortSha);
   await rm(join(path, 'vellum-ui', 'design-system.html'), { force: true });
-  await writeDesignSystemPage(path);
+  await cp(storybookStatic, join(path, 'vellum-ui', 'design-system'), { recursive: true, force: true });
   await writeVellumEntryPage(path);
-}
-
-async function writeDesignSystemPage(path) {
-  const pagePath = join(path, 'vellum-ui', 'design-system', 'index.html');
-  await mkdir(dirname(pagePath), { recursive: true });
-  await writeFile(
-    pagePath,
-    `<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Vellum UI Design System</title>
-    <meta name="description" content="Shared design system for Benson Perry apps." />
-    <link rel="canonical" href="https://bensonperry.com/vellum-ui/design-system/" />
-    <link rel="icon" type="image/svg+xml" href="../demo/favicon.svg?v=${shortSha}" />
-    <link rel="stylesheet" href="../vellum-ui.css?v=${shortSha}" />
-  </head>
-  <body class="vui-app vui-design-system-page design-system-page">
-    <main id="designSystemMount" class="vui-design-system ds-page-wrap"></main>
-    <script type="module" src="../demo/designSystem.js?v=${shortSha}"></script>
-  </body>
-</html>
-`,
-  );
 }
 
 async function writeVellumEntryPage(path) {

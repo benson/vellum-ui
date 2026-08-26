@@ -27,9 +27,20 @@
     "test:package": "node scripts/package-smoke.mjs",
     "test": "node --test test/*.test.js",
     "test:visual": "node scripts/visual-check.mjs",
-    "check": "npm run build && npm run lint:css-tokens && npm run test:package && npm test && npm run test:visual"
+    "test:storybook": "vitest run --project storybook",
+    "check": "npm run build && npm run lint:css-tokens && npm run test:package && npm test && npm run test:visual && npm run build-storybook && npm run test:storybook",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "devDependencies": {
-    "playwright": "^1.49.0"
+    "@storybook/addon-a11y": "^10.5.10",
+    "@storybook/addon-docs": "^10.5.10",
+    "@storybook/addon-vitest": "^10.5.10",
+    "@storybook/html-vite": "^10.5.10",
+    "@vitest/browser-playwright": "^4.1.10",
+    "@vitest/coverage-v8": "^4.1.10",
+    "playwright": "^1.49.0",
+    "storybook": "^10.5.10",
+    "vitest": "^4.1.10"
   }
 }

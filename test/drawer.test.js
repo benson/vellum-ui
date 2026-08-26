@@ -43,6 +43,7 @@ test('drawer owns open state, body state, focus entry, and keyboard dismissal', 
   assert.equal(layer.hidden, false);
   assert.equal(layer.getAttribute('data-vui-state'), 'open');
   assert.equal(layer.getAttribute('data-vui-motion'), 'auto');
+  assert.equal(layer.inert, false);
   assert.equal(doc.body.classList.contains('vui-drawer-open'), true);
   assert.equal(firstFocus.focused, true);
   assert.equal(panel.getAttribute('role'), 'dialog');
@@ -53,6 +54,7 @@ test('drawer owns open state, body state, focus entry, and keyboard dismissal', 
   assert.equal(layer.hidden, true);
   assert.equal(layer.getAttribute('data-vui-state'), 'closed');
   assert.equal(layer.getAttribute('data-vui-motion'), 'none');
+  assert.equal(layer.inert, true);
   assert.equal(doc.body.classList.contains('vui-drawer-open'), false);
   assert.equal(trigger.focused, true);
 });
