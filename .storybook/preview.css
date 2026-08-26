@@ -1,0 +1,94 @@
+.sb-show-main.sb-main-padded,
+.sb-show-main.sb-main-fullscreen {
+  background: var(--vui-color-bg);
+  color: var(--vui-color-text);
+  font-family: var(--vui-font-body);
+}
+
+.sb-main-padded {
+  padding: clamp(20px, 4vw, 56px);
+}
+
+.vui-story-stack {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: var(--vui-space-4);
+}
+
+.vui-story-field {
+  display: grid;
+  gap: var(--vui-space-2);
+  width: min(360px, 100%);
+}
+
+.vui-story-label {
+  color: var(--vui-color-text-muted);
+  font-family: var(--vui-font-mono);
+  font-size: var(--vui-font-size-xs);
+}
+
+.vui-story-note {
+  color: var(--vui-color-text-muted);
+  font-size: var(--vui-font-size-sm);
+  margin: 0;
+}
+
+.vui-story-row {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--vui-space-3);
+}
+
+.vui-story-grid {
+  display: grid;
+  gap: var(--vui-space-4);
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  width: min(920px, 100%);
+}
+
+.vui-story-card {
+  background: var(--vui-color-surface-raised);
+  border: var(--vui-border-width) solid var(--vui-color-line);
+  border-radius: var(--vui-radius-soft);
+  display: grid;
+  gap: var(--vui-space-2);
+  padding: var(--vui-space-4);
+}
+
+.vui-story-token-name,
+.vui-story-token-value {
+  font-family: var(--vui-font-mono);
+  font-size: var(--vui-font-size-xs);
+}
+
+.vui-story-token-value {
+  color: var(--vui-color-text-muted);
+}
+
+.vui-story-swatch {
+  border: var(--vui-border-width) solid var(--vui-color-line);
+  border-radius: var(--vui-radius-soft);
+  height: 72px;
+}
+
+.vui-story-type-row {
+  align-items: baseline;
+  border-bottom: var(--vui-border-width) solid var(--vui-color-line);
+  display: grid;
+  gap: var(--vui-space-4);
+  grid-template-columns: 110px 1fr;
+  padding-block: var(--vui-space-3);
+  width: min(760px, 100%);
+}
+
+.vui-story-demo-frame {
+  background: var(--vui-color-surface-sunken);
+  border: var(--vui-border-width) solid var(--vui-color-line);
+  border-radius: var(--vui-radius-card);
+  min-height: 220px;
+  padding: var(--vui-space-6);
+  position: relative;
+  width: min(720px, 100%);
+}
