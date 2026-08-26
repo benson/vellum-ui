@@ -11,6 +11,7 @@
   "exports": {
     ".": "./dist/index.js",
     "./css": "./dist/vellum-ui.css",
+    "./storybook/theme-presets": "./src/stories/themePresets.js",
     "./package.json": "./package.json"
   },
   "files": [
