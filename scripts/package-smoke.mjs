@@ -21,6 +21,10 @@ try {
     `import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
 import * as vui from '@benson/vellum-ui';
+import {
+  applyThemePreset,
+  themePresets,
+} from '@benson/vellum-ui/storybook/theme-presets';
 
 const require = createRequire(import.meta.url);
 
@@ -28,6 +32,9 @@ assert.equal(typeof vui.buttonHtml, 'function');
 assert.equal(typeof vui.modal, 'function');
 assert.equal(typeof vui.makeModalInteractive, 'function');
 assert.equal(typeof vui.statusStateHtml, 'function');
+assert.equal(typeof applyThemePreset, 'function');
+assert.ok(themePresets.vellum);
+assert.ok(themePresets.moss);
 
 const cssPath = require.resolve('@benson/vellum-ui/css');
 assert.ok(cssPath.endsWith('vellum-ui.css'), cssPath);
