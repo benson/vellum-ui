@@ -1,7 +1,7 @@
 import { expect } from 'storybook/test';
 
 import { fieldRowHtml } from '../js/controlPrimitives.js';
-import { nodeFromHtml, stack } from './storyHelpers.js';
+import { nodeFromHtml, stack, text } from './storyHelpers.js';
 
 function renderFields() {
   return nodeFromHtml(`<form class="vui-story-stack" style="width: min(420px, 100%)">
@@ -51,6 +51,43 @@ function renderSelectionControls() {
   </fieldset>`);
 }
 
+function renderControlMatrix() {
+  const section = document.createElement('section');
+  section.className = 'vui-component-lab-section';
+  section.append(text('h3', 'Control × state matrix'), text('p', 'Judge vertical rhythm, label weight, field geometry, and state contrast together.', 'vui-story-note'));
+  const table = document.createElement('table');
+  table.className = 'vui-component-matrix';
+  table.innerHTML = `<thead><tr><th scope="col">state</th><th scope="col">text</th><th scope="col">select</th><th scope="col">textarea</th></tr></thead><tbody>
+    <tr><th scope="row">default</th><td><label class="field-row">title<input class="input" value="Piranesi"></label></td><td><label class="field-row">format<select><option>hardcover</option></select></label></td><td><label class="field-row">notes<textarea rows="2">signed copy</textarea></label></td></tr>
+    <tr><th scope="row">empty</th><td><label class="field-row">title<input class="input" placeholder="book title"></label></td><td><label class="field-row">format<select><option value="">choose…</option></select></label></td><td><label class="field-row">notes<textarea rows="2" placeholder="optional"></textarea></label></td></tr>
+    <tr><th scope="row">invalid</th><td><label class="field-row">title<input class="input" aria-invalid="true" aria-describedby="matrix-error"><span class="field-error" id="matrix-error">title is required</span></label></td><td><label class="field-row">format<select aria-invalid="true"><option>unknown</option></select></label></td><td><label class="field-row">notes<textarea rows="2" aria-invalid="true">too long</textarea></label></td></tr>
+    <tr><th scope="row">disabled</th><td><label class="field-row">title<input class="input" value="Piranesi" disabled></label></td><td><label class="field-row">format<select disabled><option>hardcover</option></select></label></td><td><label class="field-row">notes<textarea rows="2" disabled>signed copy</textarea></label></td></tr>
+  </tbody>`;
+  section.append(table);
+  const lab = document.createElement('div');
+  lab.className = 'vui-component-lab';
+  lab.append(section);
+  return lab;
+}
+
+function renderResponsiveStress() {
+  const lab = document.createElement('div');
+  lab.className = 'vui-component-lab';
+  for (const width of [280, 520]) {
+    const section = document.createElement('section');
+    section.className = 'vui-component-lab-section';
+    section.style.width = `min(${width}px, 100%)`;
+    section.append(
+      text('h3', `${width}px surface`),
+      nodeFromHtml('<label class="field-row">a deliberately long field label that still needs to read clearly<input class="input" value="The Left Hand of Darkness — signed anniversary edition"></label>'),
+      nodeFromHtml('<label class="field-row">notes<textarea rows="3">Purchased from a small shop while traveling; dust jacket has a tiny crease along the upper edge.</textarea></label>'),
+      nodeFromHtml('<div class="vui-story-row"><button class="btn" type="button">save changes</button><button class="btn btn-secondary" type="button">cancel</button></div>'),
+    );
+    lab.append(section);
+  }
+  return lab;
+}
+
 export default { title: 'Components/Forms', tags: ['autodocs'] };
 
 export const Fields = {
@@ -76,3 +113,7 @@ export const FieldChrome = {
 };
 
 export const SelectionControls = { render: renderSelectionControls };
+
+export const ControlMatrix = { name: 'Deep dive: control matrix', render: renderControlMatrix };
+
+export const ResponsiveStress = { name: 'Deep dive: responsive stress', render: renderResponsiveStress };
