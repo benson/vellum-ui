@@ -28,8 +28,8 @@
     "test:package": "node scripts/package-smoke.mjs",
     "test": "node --test test/*.test.js",
     "test:visual": "node scripts/visual-check.mjs",
-    "test:storybook": "vitest run --project storybook",
-    "check": "npm run build && npm run lint:css-tokens && npm run test:package && npm test && npm run test:visual && npm run build-storybook && npm run test:storybook",
+    "test:storybook": "npm run build-storybook && vitest run --project storybook && node scripts/storybook-docs-smoke.mjs",
+    "check": "npm run build && npm run lint:css-tokens && npm run test:package && npm test && npm run test:visual && npm run test:storybook",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
