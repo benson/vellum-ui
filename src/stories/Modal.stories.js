@@ -15,7 +15,7 @@ function modalMarkup({ open = false, title }) {
       </div>
       <footer class="ui-modal-actions">
         <button class="btn btn-secondary" type="button" data-modal-close>cancel</button>
-        <button class="btn" type="button">save note</button>
+        <button class="btn" type="button" data-story-save>save note</button>
       </footer>
     </section>
   </div>`);
@@ -30,6 +30,10 @@ function renderModal({ onClose, onOpen, openOnLoad, title }) {
   trigger.textContent = "open dialog";
   const overlay = modalMarkup({ open: openOnLoad, title });
   overlay.querySelector(".ui-modal-title").textContent = title;
+  const status = document.createElement("p");
+  status.className = "vui-story-note";
+  status.setAttribute("role", "status");
+  status.textContent = "No note saved.";
   const controller = modal(overlay, {
     focusTarget: () => overlay.querySelector("input"),
     onClose,
@@ -38,7 +42,13 @@ function renderModal({ onClose, onOpen, openOnLoad, title }) {
   trigger.addEventListener("click", (event) =>
     controller.open({ reason: "trigger", event }),
   );
-  wrap.append(trigger, overlay);
+  overlay
+    .querySelector("[data-story-save]")
+    .addEventListener("click", (event) => {
+      status.textContent = `Saved note: ${overlay.querySelector("input").value}.`;
+      controller.close({ reason: "save", event });
+    });
+  wrap.append(trigger, overlay, status);
   return withStoryCleanup(wrap, () => controller.destroy());
 }
 
@@ -76,7 +86,7 @@ export default {
 };
 
 export const Interactive = {
-  play: async ({ args, canvas, userEvent }) => {
+  play: async ({ args, canvas, canvasElement, userEvent }) => {
     await userEvent.click(canvas.getByRole("button", { name: "open dialog" }));
     const dialog = canvas.getByRole("dialog", { name: "reading note" });
     await waitFor(() => expect(dialog).toBeVisible());
@@ -85,6 +95,10 @@ export const Interactive = {
     await userEvent.click(canvas.getByRole("button", { name: "close dialog" }));
     await expect(dialog).not.toBeVisible();
     await expect(args.onClose).toHaveBeenCalledOnce();
+    await userEvent.click(canvas.getByRole("button", { name: "open dialog" }));
+    await userEvent.click(canvas.getByRole("button", { name: "save note" }));
+    await expect(canvas.getByRole("status")).toHaveTextContent("Saved note");
+    canvasElement.replaceChildren(renderModal(args));
   },
 };
 
@@ -92,5 +106,8 @@ export const Open = { args: { openOnLoad: true } };
 
 export const Frame = {
   render: renderFrame,
-  parameters: { layout: "padded" },
+  parameters: { layout: "padded", controls: { include: ["title"] } },
+  play: async ({ parameters }) => {
+    await expect(parameters.controls.include).toEqual(["title"]);
+  },
 };

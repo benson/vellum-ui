@@ -78,7 +78,7 @@ export default {
 export const Menu = {
   args: { onPick: fn() },
   render: renderMenu,
-  play: async ({ args, canvas, userEvent }) => {
+  play: async ({ args, canvas, canvasElement, userEvent }) => {
     const trigger = canvas.getByRole("button", { name: "book actions" });
     await userEvent.click(trigger);
     await expect(trigger).toHaveAttribute("aria-expanded", "true");
@@ -88,6 +88,7 @@ export const Menu = {
     await userEvent.keyboard("{ArrowDown}{Enter}");
     await expect(args.onPick).toHaveBeenCalledWith("move to shelf");
     await expect(trigger).toHaveAttribute("aria-expanded", "false");
+    canvasElement.replaceChildren(renderMenu(args));
   },
 };
 
@@ -104,5 +105,6 @@ export const Disclosure = {
       new KeyboardEvent("keydown", { key: "Escape", bubbles: true }),
     );
     await expect(trigger).toHaveAttribute("aria-expanded", "false");
+    canvasElement.replaceChildren(renderDisclosure());
   },
 };

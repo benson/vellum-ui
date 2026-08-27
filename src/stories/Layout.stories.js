@@ -1,16 +1,25 @@
 import { expect } from "storybook/test";
 
 import { edgeResize } from "../js/edgeResize.js";
-import { nodeFromHtml, text, withStoryCleanup } from "./storyHelpers.js";
+import { nodeFromHtml, stack, text, withStoryCleanup } from "./storyHelpers.js";
 
 function renderBreadcrumb() {
-  return nodeFromHtml(`<nav class="breadcrumb" aria-label="breadcrumb">
+  const nav = nodeFromHtml(`<nav class="breadcrumb" aria-label="breadcrumb">
     <a href="#collection">collection</a>
     <span class="breadcrumb-sep" aria-hidden="true">›</span>
     <a href="#fiction">fiction</a>
     <span class="breadcrumb-sep" aria-hidden="true">›</span>
     <span aria-current="page">Earthsea</span>
   </nav>`);
+  const status = text("p", "Current page: Earthsea.", "vui-story-note");
+  status.setAttribute("role", "status");
+  nav.addEventListener("click", (event) => {
+    const link = event.target.closest("a");
+    if (!link) return;
+    event.preventDefault();
+    status.textContent = `Would navigate to ${link.textContent}.`;
+  });
+  return stack(nav, status);
 }
 
 function renderAccordion() {
@@ -65,17 +74,27 @@ export default {
   tags: ["autodocs"],
 };
 
-export const Breadcrumb = { render: renderBreadcrumb };
+export const Breadcrumb = {
+  render: renderBreadcrumb,
+  play: async ({ canvas, canvasElement, userEvent }) => {
+    await userEvent.click(canvas.getByRole("link", { name: "fiction" }));
+    await expect(canvas.getByRole("status")).toHaveTextContent(
+      "Would navigate to fiction",
+    );
+    canvasElement.replaceChildren(renderBreadcrumb());
+  },
+};
 export const Accordion = { render: renderAccordion };
 export const EdgeResize = {
   name: "Edge resize",
   render: renderEdgeResize,
-  play: async ({ canvas, userEvent }) => {
+  play: async ({ canvas, canvasElement, userEvent }) => {
     const separator = canvas.getByRole("separator", { name: "resize filters" });
     separator.focus();
     await userEvent.keyboard("{ArrowRight}");
     await expect(separator).toHaveAttribute("aria-valuenow", "196");
     await userEvent.keyboard("{End}");
     await expect(separator).toHaveAttribute("aria-valuenow", "320");
+    canvasElement.replaceChildren(renderEdgeResize());
   },
 };

@@ -1,8 +1,8 @@
-import { expect } from 'storybook/test';
+import { expect } from "storybook/test";
 
-import { paginationRange } from '../js/pagination.js';
-import { priceStickerNode } from '../js/priceSticker.js';
-import { nodeFromHtml, row, stack, text } from './storyHelpers.js';
+import { paginationRange } from "../js/pagination.js";
+import { priceStickerNode } from "../js/priceSticker.js";
+import { nodeFromHtml, row, stack, text } from "./storyHelpers.js";
 
 function renderTable() {
   return nodeFromHtml(`<table class="vui-table">
@@ -18,36 +18,45 @@ function renderTable() {
 
 function renderPagination() {
   const state = { page: 7, pageCount: 20 };
-  const pager = document.createElement('nav');
-  pager.className = 'pager';
-  pager.setAttribute('aria-label', 'pagination');
+  const pager = document.createElement("nav");
+  pager.className = "pager";
+  pager.setAttribute("aria-label", "pagination");
   const render = () => {
     pager.replaceChildren();
-    const previous = text('button', '‹', 'pager-btn');
-    previous.type = 'button';
-    previous.setAttribute('aria-label', 'previous page');
+    const previous = text("button", "‹", "pager-btn");
+    previous.type = "button";
+    previous.setAttribute("aria-label", "previous page");
     previous.disabled = state.page <= 1;
-    previous.addEventListener('click', () => { state.page -= 1; render(); });
+    previous.addEventListener("click", () => {
+      state.page -= 1;
+      render();
+    });
     pager.append(previous);
     for (const item of paginationRange(state)) {
-      if (item === 'gap') {
-        const gap = text('span', '…', 'pager-gap');
-        gap.setAttribute('aria-hidden', 'true');
+      if (item === "gap") {
+        const gap = text("span", "…", "pager-gap");
+        gap.setAttribute("aria-hidden", "true");
         pager.append(gap);
         continue;
       }
-      const button = text('button', String(item), 'pager-btn');
-      button.type = 'button';
-      button.setAttribute('aria-label', `page ${item}`);
-      if (item === state.page) button.setAttribute('aria-current', 'page');
-      button.addEventListener('click', () => { state.page = item; render(); });
+      const button = text("button", String(item), "pager-btn");
+      button.type = "button";
+      button.setAttribute("aria-label", `page ${item}`);
+      if (item === state.page) button.setAttribute("aria-current", "page");
+      button.addEventListener("click", () => {
+        state.page = item;
+        render();
+      });
       pager.append(button);
     }
-    const next = text('button', '›', 'pager-btn');
-    next.type = 'button';
-    next.setAttribute('aria-label', 'next page');
+    const next = text("button", "›", "pager-btn");
+    next.type = "button";
+    next.setAttribute("aria-label", "next page");
     next.disabled = state.page >= state.pageCount;
-    next.addEventListener('click', () => { state.page += 1; render(); });
+    next.addEventListener("click", () => {
+      state.page += 1;
+      render();
+    });
     pager.append(next);
   };
   render();
@@ -55,19 +64,19 @@ function renderPagination() {
 }
 
 function sleeve(label, amount, seed) {
-  const slot = text('div', label, 'card-sleeve-slot');
-  const root = document.createElement('div');
-  root.className = 'card-sleeve';
-  root.style.setProperty('--card-sleeve-width', 'clamp(128px, 32vw, 180px)');
+  const slot = text("div", label, "card-sleeve-slot");
+  const root = document.createElement("div");
+  root.className = "card-sleeve";
+  root.style.setProperty("--card-sleeve-width", "clamp(128px, 32vw, 180px)");
   root.append(slot, priceStickerNode({ amount, jitter: seed }));
   return root;
 }
 
 function renderCardSleeves() {
   return row(
-    sleeve('Earthsea', 4.2, 'earthsea'),
-    sleeve('Piranesi', 12, 'piranesi'),
-    sleeve('Kindred', 8.5, 'kindred'),
+    sleeve("Earthsea", 4.2, "earthsea"),
+    sleeve("Piranesi", 12, "piranesi"),
+    sleeve("Kindred", 8.5, "kindred"),
   );
 }
 
@@ -80,7 +89,9 @@ function renderLoadingAndEmpty() {
       <div class="skeleton skeleton-line" style="width: 82%"></div>
     </div>
   </div>`);
-  const empty = nodeFromHtml(`<div class="empty-state"><span class="empty-state-glyph" aria-hidden="true">📚</span><span>no books match these filters</span></div>`);
+  const empty = nodeFromHtml(
+    `<div class="empty-state"><span class="empty-state-glyph" aria-hidden="true">📚</span><span>no books match these filters</span></div>`,
+  );
   return row(skeleton, empty);
 }
 
@@ -96,18 +107,27 @@ function renderProgress() {
   return root;
 }
 
-export default { title: 'Components/Data display', tags: ['autodocs'] };
+export default { title: "Components/Data display", tags: ["autodocs"] };
 
 export const Table = { render: renderTable };
 
 export const Pagination = {
   render: renderPagination,
-  play: async ({ canvas, userEvent }) => {
-    await userEvent.click(canvas.getByRole('button', { name: 'next page' }));
-    await expect(canvas.getByRole('button', { name: 'page 8' })).toHaveAttribute('aria-current', 'page');
+  play: async ({ canvas, canvasElement, userEvent }) => {
+    await userEvent.click(canvas.getByRole("button", { name: "next page" }));
+    await expect(
+      canvas.getByRole("button", { name: "page 8" }),
+    ).toHaveAttribute("aria-current", "page");
+    canvasElement.replaceChildren(renderPagination());
   },
 };
 
-export const CardSleeves = { name: 'Card sleeves & price stickers', render: renderCardSleeves };
-export const LoadingAndEmpty = { name: 'Loading & empty', render: renderLoadingAndEmpty };
+export const CardSleeves = {
+  name: "Card sleeves & price stickers",
+  render: renderCardSleeves,
+};
+export const LoadingAndEmpty = {
+  name: "Loading & empty",
+  render: renderLoadingAndEmpty,
+};
 export const Progress = { render: renderProgress };
