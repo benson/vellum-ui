@@ -53,7 +53,9 @@ function renderFrame({ title }) {
   frame.querySelectorAll("[data-modal-close]").forEach((button) => {
     button.disabled = true;
   });
-  return frame.firstElementChild;
+  const card = frame.firstElementChild;
+  card.classList.add("vui-story-modal-frame");
+  return card;
 }
 
 export default {

@@ -39,6 +39,9 @@ assert.ok(themePresets.moss);
 const cssPath = require.resolve('@benson/vellum-ui/css');
 assert.ok(cssPath.endsWith('vellum-ui.css'), cssPath);
 
+const storybookCssPath = require.resolve('@benson/vellum-ui/storybook/css');
+assert.ok(storybookCssPath.endsWith('storybook.css'), storybookCssPath);
+
 const packagePath = require.resolve('@benson/vellum-ui/package.json');
 const packageJson = JSON.parse(await import('node:fs/promises').then(({ readFile }) => readFile(packagePath, 'utf8')));
 assert.equal(packageJson.name, '@benson/vellum-ui');

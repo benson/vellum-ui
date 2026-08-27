@@ -58,7 +58,7 @@ function sleeve(label, amount, seed) {
   const slot = text('div', label, 'card-sleeve-slot');
   const root = document.createElement('div');
   root.className = 'card-sleeve';
-  root.style.setProperty('--card-sleeve-width', '104px');
+  root.style.setProperty('--card-sleeve-width', 'clamp(128px, 32vw, 180px)');
   root.append(slot, priceStickerNode({ amount, jitter: seed }));
   return root;
 }
