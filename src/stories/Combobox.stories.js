@@ -68,7 +68,7 @@ export default {
 };
 
 export const SearchAndSelect = {
-  play: async ({ args, canvas, userEvent }) => {
+  play: async ({ args, canvas, canvasElement, userEvent }) => {
     const input = canvas.getByRole("combobox");
     await userEvent.click(input);
     await userEvent.type(input, "left");
@@ -76,6 +76,7 @@ export const SearchAndSelect = {
     await userEvent.keyboard("{ArrowDown}{Enter}");
     await expect(input).toHaveValue("The Left Hand of Darkness");
     await expect(args.onSelect).toHaveBeenCalledOnce();
+    canvasElement.replaceChildren(renderCombobox(args));
   },
 };
 

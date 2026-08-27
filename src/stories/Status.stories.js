@@ -42,7 +42,10 @@ function renderStates() {
   const states = [
     ["loading", { kind: "loading", message: "syncing your library…" }],
     ["empty", { kind: "empty", message: "nothing on this shelf yet" }],
-    ["inline error", { kind: "inline-error", message: "that ISBN does not look right" }],
+    [
+      "inline error",
+      { kind: "inline-error", message: "that ISBN does not look right" },
+    ],
     [
       "retryable",
       {
@@ -108,6 +111,14 @@ function renderBanner() {
   banner
     .querySelector(".banner-dismiss")
     .addEventListener("click", () => banner.remove());
+  banner
+    .querySelector(".banner-actions .btn")
+    .addEventListener("click", (event) => {
+      banner.querySelector(".banner-message").textContent =
+        "the catalog is current";
+      event.currentTarget.textContent = "reloaded";
+      event.currentTarget.disabled = true;
+    });
   return banner;
 }
 
@@ -138,12 +149,19 @@ function renderToast() {
 }
 
 function renderBadges() {
-  return nodeFromHtml(`<div class="vui-story-row">
+  const root = nodeFromHtml(`<div class="vui-story-row">
     <span class="badge">3</span>
     <span class="badge badge-quiet">12</span>
     <span class="badge badge-accent">99+</span>
-    <button class="btn btn-secondary" type="button">loans <span class="badge badge-quiet">4</span></button>
+    <button class="btn btn-secondary" type="button" aria-pressed="false">loans <span class="badge badge-quiet">4</span></button>
   </div>`);
+  const loans = root.querySelector("button");
+  loans.addEventListener("click", () => {
+    const pressed = loans.getAttribute("aria-pressed") !== "true";
+    loans.setAttribute("aria-pressed", String(pressed));
+    loans.querySelector(".badge").textContent = pressed ? "3" : "4";
+  });
+  return root;
 }
 
 export default {
@@ -155,31 +173,36 @@ export const Tones = { render: renderTones };
 
 export const ApplicationStates = {
   render: renderStates,
-  play: async ({ canvas, userEvent }) => {
+  play: async ({ canvas, canvasElement, userEvent }) => {
     await userEvent.click(canvas.getByRole("button", { name: "retry" }));
     await expect(canvas.getByText("trying again…")).toBeVisible();
+    canvasElement.replaceChildren(renderStates());
   },
 };
 
 export const Chips = {
   render: renderChips,
-  play: async ({ canvas, userEvent }) => {
+  play: async ({ canvas, canvasElement, userEvent }) => {
     await userEvent.click(
       canvas.getByRole("button", { name: "remove hardcover filter" }),
     );
     await expect(canvas.queryByText("hardcover")).not.toBeInTheDocument();
+    canvasElement.replaceChildren(renderChips());
   },
 };
 
 export const Banner = {
   render: renderBanner,
-  play: async ({ canvas, userEvent }) => {
+  play: async ({ canvas, canvasElement, userEvent }) => {
+    await userEvent.click(canvas.getByRole("button", { name: "reload" }));
+    await expect(canvas.getByText("the catalog is current")).toBeVisible();
     await userEvent.click(
       canvas.getByRole("button", { name: "dismiss update" }),
     );
     await expect(
       canvas.queryByLabelText("site update"),
     ).not.toBeInTheDocument();
+    canvasElement.replaceChildren(renderBanner());
   },
 };
 
@@ -191,7 +214,17 @@ export const Toast = {
       '[role="status"].toast',
     );
     await expect(notification).toHaveTextContent("book saved to your library");
+    canvasElement.replaceChildren(renderToast());
   },
 };
 
-export const Badges = { render: renderBadges };
+export const Badges = {
+  render: renderBadges,
+  play: async ({ canvas, canvasElement, userEvent }) => {
+    const loans = canvas.getByRole("button", { name: /loans/ });
+    await userEvent.click(loans);
+    await expect(loans).toHaveAttribute("aria-pressed", "true");
+    await expect(loans).toHaveTextContent("3");
+    canvasElement.replaceChildren(renderBadges());
+  },
+};
