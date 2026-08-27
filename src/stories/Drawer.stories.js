@@ -1,12 +1,11 @@
-import { expect, fn } from 'storybook/test';
+import { expect, fn } from "storybook/test";
 
-import { drawer } from '../js/drawer.js';
-
-let activeController = null;
+import { drawer } from "../js/drawer.js";
+import { withStoryCleanup } from "./storyHelpers.js";
 
 function renderDrawer({ onClose, onOpen, openOnLoad, side, title }) {
-  const wrap = document.createElement('div');
-  wrap.className = 'vui-story-stack';
+  const wrap = document.createElement("div");
+  wrap.className = "vui-story-stack";
   wrap.innerHTML = `
     <button class="btn" type="button" data-open-drawer>open ${side} drawer</button>
     <p class="vui-story-note">The drawer uses the real Vellum controller. Escape, backdrop click, focus return, and direct dragging are active.</p>
@@ -27,53 +26,50 @@ function renderDrawer({ onClose, onOpen, openOnLoad, side, title }) {
       </div>
     </div>
   `;
-  const trigger = wrap.querySelector('[data-open-drawer]');
-  const layer = wrap.querySelector('.ui-drawer-layer');
-  activeController = drawer(layer, { side, onClose, onOpen });
-  trigger.addEventListener('click', (event) =>
-    activeController.open({ reason: 'trigger', event, trigger }),
+  const trigger = wrap.querySelector("[data-open-drawer]");
+  const layer = wrap.querySelector(".ui-drawer-layer");
+  const controller = drawer(layer, { side, onClose, onOpen });
+  trigger.addEventListener("click", (event) =>
+    controller.open({ reason: "trigger", event, trigger }),
   );
-  if (openOnLoad) queueMicrotask(() => activeController?.open({ motion: 'none', trigger }));
-  return wrap;
+  if (openOnLoad)
+    queueMicrotask(() => controller.open({ motion: "none", trigger }));
+  return withStoryCleanup(wrap, () => controller.destroy());
 }
 
 export default {
-  title: 'Patterns/Drawer',
-  tags: ['autodocs'],
+  title: "Patterns/Drawer",
+  tags: ["autodocs"],
   render: renderDrawer,
-  parameters: { layout: 'fullscreen' },
-  async beforeEach() {
-    return () => {
-      activeController?.destroy();
-      activeController = null;
-    };
-  },
+  parameters: { layout: "fullscreen" },
   argTypes: {
-    side: { control: 'inline-radio', options: ['left', 'right', 'bottom'] },
-    title: { control: 'text' },
-    openOnLoad: { control: 'boolean' },
+    side: { control: "inline-radio", options: ["left", "right", "bottom"] },
+    title: { control: "text" },
+    openOnLoad: { control: "boolean" },
   },
   args: {
     onClose: fn(),
     onOpen: fn(),
     openOnLoad: false,
-    side: 'right',
-    title: 'add to shelf',
+    side: "right",
+    title: "add to shelf",
   },
 };
 
 export const Right = {
   play: async ({ args, canvas, userEvent }) => {
-    await userEvent.click(canvas.getByRole('button', { name: 'open right drawer' }));
-    const dialog = canvas.getByRole('dialog');
+    await userEvent.click(
+      canvas.getByRole("button", { name: "open right drawer" }),
+    );
+    const dialog = canvas.getByRole("dialog");
     await expect(dialog).toBeVisible();
     await expect(args.onOpen).toHaveBeenCalledOnce();
-    await userEvent.click(canvas.getByRole('button', { name: 'close' }));
-    await expect(dialog).toHaveAttribute('aria-hidden', 'true');
+    await userEvent.click(canvas.getByRole("button", { name: "close" }));
+    await expect(dialog).toHaveAttribute("aria-hidden", "true");
     await expect(args.onClose).toHaveBeenCalledOnce();
   },
 };
 
-export const BottomSheet = { args: { side: 'bottom', title: 'quick add' } };
+export const BottomSheet = { args: { side: "bottom", title: "quick add" } };
 
 export const Open = { args: { openOnLoad: true } };
