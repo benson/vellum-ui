@@ -27,34 +27,55 @@ function renderTones() {
 }
 
 function renderStates() {
-  const root = stack();
+  const lab = document.createElement("div");
+  lab.className = "vui-component-lab";
+  const section = document.createElement("section");
+  section.className = "vui-component-lab-section";
+  section.append(
+    text("h3", "Application states"),
+    text(
+      "p",
+      "Compare hierarchy, recovery language, and action treatment across the complete state family.",
+      "vui-story-note",
+    ),
+  );
   const states = [
-    { kind: "loading", message: "syncing your library…" },
-    { kind: "empty", message: "nothing on this shelf yet" },
-    { kind: "inline-error", message: "that ISBN does not look right" },
-    {
-      kind: "retryable-error",
-      message: "sync failed",
-      detail: "the server did not respond",
-      retryAction: "sync",
-    },
-    {
-      kind: "blocking-error",
-      message: "library unavailable",
-      detail: "try again after reconnecting",
-    },
+    ["loading", { kind: "loading", message: "syncing your library…" }],
+    ["empty", { kind: "empty", message: "nothing on this shelf yet" }],
+    ["inline error", { kind: "inline-error", message: "that ISBN does not look right" }],
+    [
+      "retryable",
+      {
+        kind: "retryable-error",
+        message: "sync failed",
+        detail: "the server did not respond",
+        retryAction: "sync",
+      },
+    ],
+    [
+      "blocking",
+      {
+        kind: "blocking-error",
+        message: "library unavailable",
+        detail: "try again after reconnecting",
+      },
+    ],
   ];
-  for (const state of states) {
+  for (const [label, state] of states) {
+    const line = document.createElement("div");
+    line.className = "vui-component-stress-row";
     const mount = document.createElement("div");
     renderStatusState(mount, state);
-    root.append(mount);
+    line.append(text("code", label), mount);
+    section.append(line);
   }
-  const retry = root.querySelector('[data-status-action="sync"]');
+  const retry = section.querySelector('[data-status-action="sync"]');
   retry?.addEventListener("click", () => {
     const mount = retry.parentElement.parentElement;
     renderStatusState(mount, { kind: "loading", message: "trying again…" });
   });
-  return root;
+  lab.append(section);
+  return lab;
 }
 
 function renderChips() {

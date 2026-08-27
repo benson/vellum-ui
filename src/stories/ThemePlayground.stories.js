@@ -22,13 +22,20 @@ const editableTokens = {
 
 function cssBlock(args) {
   const declarations = Object.entries(editableTokens)
-    .map(([arg, token]) => `  ${token}: ${args[arg]};`)
+    .map(([arg, token]) => {
+      const override = typeof args[arg] === 'string' ? args[arg].trim() : '';
+      const inherited = getComputedStyle(document.documentElement).getPropertyValue(token).trim();
+      return `  ${token}: ${override || inherited};`;
+    })
     .join('\n');
   return `:root {\n${declarations}\n}`;
 }
 
 function applyOverrides(root, args) {
-  for (const [arg, token] of Object.entries(editableTokens)) root.style.setProperty(token, args[arg]);
+  for (const [arg, token] of Object.entries(editableTokens)) {
+    const value = typeof args[arg] === 'string' ? args[arg].trim() : '';
+    if (value) root.style.setProperty(token, value);
+  }
 }
 
 function metric(label, value, detail) {
@@ -39,7 +46,7 @@ function metric(label, value, detail) {
 }
 
 function renderWorkbench(args) {
-  const root = document.createElement('div');
+  const root = document.createElement('main');
   root.className = 'vui-theme-workbench';
   applyOverrides(root, args);
 
@@ -118,7 +125,10 @@ function renderWorkbench(args) {
   return root;
 }
 
-const colorControl = { control: 'color' };
+const colorControl = {
+  control: 'color',
+  description: 'Optional override. Reset the control to follow the theme toolbar.',
+};
 
 export default {
   title: 'Foundations/Theme playground',
@@ -140,23 +150,26 @@ export default {
     radius: { control: 'text' },
   },
   args: {
-    background: '#f7f2ea',
-    surface: '#f1eae0',
-    sunken: '#e8ddcf',
-    raised: '#fffdf8',
-    text: '#2d2520',
-    muted: '#685d55',
-    strong: '#211a17',
-    accent: '#653d78',
-    accentSoft: '#eee3f2',
-    accentStrong: '#452451',
-    line: 'rgba(67, 50, 41, 0.17)',
-    radius: '12px',
+    background: '',
+    surface: '',
+    sunken: '',
+    raised: '',
+    text: '',
+    muted: '',
+    strong: '',
+    accent: '',
+    accentSoft: '',
+    accentStrong: '',
+    line: '',
+    radius: '',
   },
 };
 
 export const Studio = {
-  play: async ({ canvas, userEvent }) => {
+  play: async ({ canvas, canvasElement, userEvent }) => {
+    const workbench = canvasElement.querySelector('.vui-theme-workbench');
+    const inheritedBackground = getComputedStyle(document.documentElement).getPropertyValue('--vui-color-bg').trim();
+    await expect(getComputedStyle(workbench).getPropertyValue('--vui-color-bg').trim()).toBe(inheritedBackground);
     const remove = canvas.getByRole('button', { name: 'remove fiction filter' });
     await userEvent.click(remove);
     await expect(canvas.queryByText('fiction')).not.toBeInTheDocument();
