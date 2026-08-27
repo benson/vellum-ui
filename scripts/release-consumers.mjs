@@ -3,6 +3,10 @@ import { existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, relative } from 'node:path';
 import { spawnSync } from 'node:child_process';
+import {
+  writeUnifiedDesignStudioRedirect,
+  writeVellumEntryPage,
+} from './homepage-design-studio.mjs';
 import { stampModuleImports } from './stamp-module-imports.mjs';
 
 const owner = 'benson';
@@ -34,7 +38,6 @@ run('npm', ['run', 'build']);
 run('npm', ['run', 'build-storybook']);
 
 const dist = join(root, 'dist');
-const storybookStatic = join(root, 'storybook-static');
 const workspace = await mkdtemp(join(tmpdir(), `vellum-release-${shortSha}-`));
 
 const consumers = [
@@ -128,32 +131,8 @@ async function updateHomepage(path) {
   await cp(dist, join(path, 'vellum-ui'), { recursive: true, force: true });
   await stampModuleImports(join(path, 'vellum-ui'), shortSha);
   await rm(join(path, 'vellum-ui', 'design-system.html'), { force: true });
-  await cp(storybookStatic, join(path, 'vellum-ui', 'design-system'), { recursive: true, force: true });
+  await writeUnifiedDesignStudioRedirect(path);
   await writeVellumEntryPage(path);
-}
-
-async function writeVellumEntryPage(path) {
-  const pagePath = join(path, 'vellum-ui', 'index.html');
-  const catalogUrl = `./design-system/?v=${shortSha}`;
-  await writeFile(
-    pagePath,
-    `<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Vellum UI</title>
-    <meta name="description" content="Shared design system for Benson Perry apps." />
-    <link rel="canonical" href="https://bensonperry.com/vellum-ui/design-system/" />
-    <meta http-equiv="refresh" content="0; url=${catalogUrl}" />
-  </head>
-  <body>
-    <p><a href="${catalogUrl}">open the Vellum UI design system</a></p>
-    <script>window.location.replace('${catalogUrl}' + window.location.hash);</script>
-  </body>
-</html>
-`,
-  );
 }
 
 // poolbuilder and packcracker both vendor dist via their sync:ui script.
