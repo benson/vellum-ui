@@ -8,6 +8,7 @@ import {
   writeVellumEntryPage,
 } from './homepage-design-studio.mjs';
 import { stampModuleImports } from './stamp-module-imports.mjs';
+import { prepareConsumerPackage } from './prepare-consumer-package.mjs';
 
 const owner = 'benson';
 const root = process.cwd();
@@ -140,6 +141,7 @@ async function updateVendoredConsumer(path) {
   await setPackageDependency(path);
   run('npm', ['install'], { cwd: path });
   await sanitizePackageLock(path);
+  await prepareConsumerPackage(path);
   run('npm', ['run', 'sync:ui'], { cwd: path });
   await bumpVendoredCacheBust(path);
 }
@@ -159,6 +161,7 @@ async function updateBiblioplex(path) {
   await setPackageDependency(path);
   run('npm', ['install'], { cwd: path });
   await sanitizePackageLock(path);
+  await prepareConsumerPackage(path);
 }
 
 async function setPackageDependency(path) {
