@@ -153,12 +153,19 @@
   border: 2px solid currentColor;
   border-right-color: transparent;
   border-radius: var(--vui-radius-pill);
-  animation: vui-spin var(--vui-motion-slow) linear infinite;
+  animation: vui-spin var(--vui-spin-duration) linear infinite;
 }
 
 @keyframes vui-spin {
   to {
     transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loading-spinner {
+    /* Preserve the busy signal and respect slower consumer overrides. */
+    animation-duration: max(1600ms, var(--vui-spin-duration));
   }
 }
 

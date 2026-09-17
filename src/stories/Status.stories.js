@@ -171,6 +171,27 @@ export default {
 
 export const Tones = { render: renderTones };
 
+export const LoadingSpinner = {
+  parameters: {
+    docs: {
+      description: {
+        story: "Loading indicators use --vui-spin-duration (800ms per rotation), independently of transition timing. Reduced motion keeps them moving with a 1600ms minimum period; slower token overrides are preserved.",
+      },
+    },
+  },
+  render: () => {
+    const status = document.createElement("span");
+    renderStatusState(status, { kind: "loading", message: "syncing your library…" });
+    return row(
+      status,
+      nodeFromHtml(`<div class="toast" role="status">
+        <span class="loading-spinner" aria-hidden="true"></span>
+        <span class="toast-message">syncing your library…</span>
+      </div>`),
+    );
+  },
+};
+
 export const ApplicationStates = {
   render: renderStates,
   play: async ({ canvas, canvasElement, userEvent }) => {

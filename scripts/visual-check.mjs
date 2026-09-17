@@ -31,9 +31,9 @@ await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
 const origin = `http://127.0.0.1:${server.address().port}`;
 
 const failures = [];
-const browser = await chromium.launch();
+const browser = await chromium.launch({ headless: true });
 try {
-  const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+  const page = await browser.newPage({ viewport: { width: 1280, height: 900 }, reducedMotion: 'no-preference' });
   page.on('console', (message) => {
     if (message.type() === 'error') failures.push(`console error: ${message.text()}`);
   });
@@ -124,6 +124,12 @@ try {
     return issues;
   });
   failures.push(...report);
+
+  // Exercise the shipped CSS cascade in status lines, toasts, and size samples.
+  await checkSpinners(page, 800);
+  await page.evaluate(() => document.documentElement.style.setProperty('--vui-spin-duration', '1200ms'));
+  await checkSpinners(page, 1200);
+  await page.evaluate(() => document.documentElement.style.removeProperty('--vui-spin-duration'));
 
   // The approved branded direction ships by default. The comparison remains
   // reversible and keeps its explanatory notes out of the historical state.
@@ -321,6 +327,10 @@ try {
 
   // Reduced motion retains the state change but removes spatial scaling.
   await page.emulateMedia({ reducedMotion: 'reduce' });
+  await checkSpinners(page, 1600);
+  await page.evaluate(() => document.documentElement.style.setProperty('--vui-spin-duration', '2400ms'));
+  await checkSpinners(page, 2400);
+  await page.evaluate(() => document.documentElement.style.removeProperty('--vui-spin-duration'));
   await page.click('[data-ds-motion-popover]');
   const reducedScale = await page.$eval('.ds-motion-menu-wrap .ui-popover:not([hidden])', (node) => getComputedStyle(node).scale);
   if (reducedScale !== '1' && reducedScale !== 'none') failures.push(`reduced-motion popover scale expected 1, got ${reducedScale}`);
@@ -379,3 +389,31 @@ if (failures.length) {
   process.exit(1);
 }
 console.log('visual check passed');
+
+async function checkSpinners(page, expectedDuration) {
+  const issues = await page.$$eval('.loading-spinner', async (spinners, duration) => {
+    if (!spinners.length) return ['missing loading spinners'];
+    const snapshots = spinners.map((spinner) => {
+      const style = getComputedStyle(spinner);
+      return {
+        duration: parseFloat(style.animationDuration) * 1000,
+        name: style.animationName,
+        easing: style.animationTimingFunction,
+        iterations: style.animationIterationCount,
+        playState: style.animationPlayState,
+        transform: style.transform,
+      };
+    });
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    return snapshots.flatMap((snapshot, index) => {
+      const problems = [];
+      if (snapshot.duration !== duration) problems.push(`period expected ${duration}ms, got ${snapshot.duration}ms`);
+      if (snapshot.name !== 'vui-spin' || snapshot.easing !== 'linear' || snapshot.iterations !== 'infinite' || snapshot.playState !== 'running') {
+        problems.push('expected continuous linear rotation');
+      }
+      if (getComputedStyle(spinners[index]).transform === snapshot.transform) problems.push('rotation is frozen');
+      return problems.map((problem) => `spinner ${index + 1}: ${problem}`);
+    });
+  }, expectedDuration);
+  failures.push(...issues);
+}

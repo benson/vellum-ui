@@ -173,6 +173,9 @@
   --vui-motion-fast: 120ms;
   --vui-motion-base: 180ms;
   --vui-motion-slow: 240ms;
+  /* Busy indicator rotation period, independent of UI transition timing.
+     Reduced motion keeps it moving at a minimum of 1600ms per rotation. */
+  --vui-spin-duration: 800ms;
   /* Semantic motion: quick feedback stays on snap; transient surfaces enter
      with a little more time than they take to leave. Consumers can slow the
      whole surface system in a motion lab without changing interaction snap. */

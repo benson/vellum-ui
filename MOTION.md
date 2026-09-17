@@ -16,6 +16,11 @@ turn the interface into a game.
 Entrances may take slightly longer than exits. Spatial movement stays short:
 surface scale settles from `0.97`, while reduced-motion keeps only a quiet fade.
 
+Loading spinners use `--vui-spin-duration` (800ms per rotation), independently of
+the transition tokens and `--vui-motion-scale`. Under `prefers-reduced-motion:
+reduce`, they keep rotating with a 1600ms minimum period so loading remains
+visible. Slower consumer overrides of `--vui-spin-duration` are preserved.
+
 ## Interaction policy
 
 - Pointer-triggered surfaces animate.
