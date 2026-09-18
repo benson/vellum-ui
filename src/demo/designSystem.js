@@ -139,7 +139,7 @@ renderDesignSystem(mount);
 mountFeedbackCapture({
   requireOwnerKey: true,
   project: 'vellum-ui',
-  apiUrl: 'https://biblioplex-api.bensonperry.com',
+  apiUrl: 'https://api.tomebound.app',
 });
 
 function readTokenDefaults() {
@@ -242,7 +242,7 @@ function pageHeader() {
     el('p', {
       className: 'ds-page-sub',
       text:
-        'Shared tokens, restrained primitives, and small browser-native helpers for Biblioplex, PoolBuilder, and future apps.',
+        'Shared tokens, restrained primitives, and small browser-native helpers for Tomebound, PoolBuilder, and future apps.',
     }),
     el(
       'nav',

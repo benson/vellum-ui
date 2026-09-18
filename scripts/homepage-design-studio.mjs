@@ -1,7 +1,7 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
-export const UNIFIED_DESIGN_STUDIO_URL = 'https://biblioplex.bensonperry.com/design-system/';
+export const UNIFIED_DESIGN_STUDIO_URL = 'https://tomebound.app/design-system/';
 
 export async function writeUnifiedDesignStudioRedirect(path) {
   const directory = join(path, 'vellum-ui', 'design-system');
@@ -13,8 +13,8 @@ export async function writeUnifiedDesignStudioRedirect(path) {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Biblioplex · Design Studio</title>
-    <meta name="description" content="Unified design studio for Biblioplex and Vellum UI." />
+    <title>Tomebound · Design Studio</title>
+    <meta name="description" content="Unified design studio for Tomebound and Vellum UI." />
     <link rel="canonical" href="${UNIFIED_DESIGN_STUDIO_URL}" />
     <meta http-equiv="refresh" content="0; url=${UNIFIED_DESIGN_STUDIO_URL}" />
   </head>

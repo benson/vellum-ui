@@ -65,13 +65,13 @@ const consumers = [
     update: updateVendoredConsumer,
   },
   {
-    repo: `${owner}/biblioplex`,
+    repo: `${owner}/tomebound`,
     base: 'master',
-    name: 'biblioplex',
+    name: 'tomebound',
     checkCommand: ['npm', ['run', 'check']],
     waitForChecks: false,
-    update: updateBiblioplex,
-    afterMerge: () => gh(['workflow', 'run', 'Deploy Cloudflare', '--repo', `${owner}/biblioplex`, '--ref', 'master']),
+    update: updateTomebound,
+    afterMerge: () => gh(['workflow', 'run', 'Deploy Cloudflare', '--repo', `${owner}/tomebound`, '--ref', 'master']),
   },
 ];
 
@@ -157,7 +157,7 @@ async function bumpVendoredCacheBust(path) {
   if (next !== source) await writeFile(indexPath, next);
 }
 
-async function updateBiblioplex(path) {
+async function updateTomebound(path) {
   await setPackageDependency(path);
   run('npm', ['install'], { cwd: path });
   await sanitizePackageLock(path);

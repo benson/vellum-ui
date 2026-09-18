@@ -56,6 +56,6 @@ Reduced-motion replaces edge travel with a short opacity fade.
 Spatial drag dismissal is disabled under reduced motion by default; consumers
 may opt in only when direct manipulation is essential to the task.
 
-Biblioplex's add-card panel is the first consumer candidate. App code should keep
+Tomebound's add-card panel is the first consumer candidate. App code should keep
 its add-card state and markup content while delegating the surface lifecycle to
 this primitive.

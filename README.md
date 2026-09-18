@@ -37,7 +37,7 @@ Edit source files only. Do not hand-edit `dist/`.
 ## Token Names
 
 - Canonical package tokens use `--vui-*`. Vellum's own CSS and JS reference only these, and tokens.css exports nothing else.
-- Consumers either use `--vui-*` directly or maintain their own alias layer (biblioplex's styles.css defines `--color-*: var(--vui-color-*, fallback)` on its :root as its retuning point).
+- Consumers either use `--vui-*` directly or maintain their own alias layer (tomebound's styles.css defines `--color-*: var(--vui-color-*, fallback)` on its :root as its retuning point).
 
 ## Compatibility Debt
 
@@ -51,7 +51,7 @@ Merging to `main` runs the release workflow. It opens consumer PRs for:
 
 - `benson/benson.github.io`: publishes the static Storybook build at the existing Vellum UI design-system URL.
 - `benson/poolbuilder`: vendors Vellum UI into the static app.
-- `benson/biblioplex`: updates the Cloudflare app package pin and build wiring.
+- `benson/tomebound`: updates the Cloudflare app package pin and build wiring.
 
 By default the release workflow opens consumer PRs and auto-merges them once each consumer's own checks pass. Set `VELLUM_RELEASE_MERGE=0` for a review-only run that leaves the PRs open. Biblioplex production deploys through its existing Cloudflare deploy workflow after the merge. The safety gate is `npm run check`, which includes a headless-browser check of the design-system page (`npm run test:visual`).
 
