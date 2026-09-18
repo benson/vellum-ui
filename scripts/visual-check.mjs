@@ -271,6 +271,7 @@ try {
   if (!modalClosed) failures.push('escape did not close the live modal');
   const modalMotionAfterEscape = await page.getAttribute('[data-ds-open-modal] + .ui-modal', 'data-vui-motion');
   if (modalMotionAfterEscape !== 'none') failures.push(`keyboard modal dismissal expected no motion, got ${modalMotionAfterEscape}`);
+  await checkModalResizeHandles(page);
 
   // Drawers preserve their physical edge, return focus, and accept direct
   // handle dismissal with a distance/velocity settle.
@@ -389,6 +390,86 @@ if (failures.length) {
   process.exit(1);
 }
 console.log('visual check passed');
+
+async function checkModalResizeHandles(page) {
+  // List corners first to verify their hit priority is independent of DOM order.
+  const edges = ['bottom-left', 'bottom-right', 'top-left', 'top-right', 'left', 'right', 'top', 'bottom'];
+  for (const centered of [true, false]) {
+    await page.evaluate(async ({ edges, centered }) => {
+      const { makeModalInteractive } = await import('/modal.js');
+      const host = document.createElement('div');
+      host.dataset.resizeCheck = '';
+      host.style.cssText = 'position: fixed; inset: 0; z-index: 10000; display: flex; align-items: center; justify-content: center;';
+      const card = document.createElement('section');
+      card.className = 'ui-modal-card';
+      if (!centered) card.style.cssText = 'position: absolute; left: 200px; top: 180px;';
+      host.append(card);
+      document.body.append(host);
+      host.resizeController = makeModalInteractive(card, { resizeEdges: edges, centeredX: centered, centeredY: centered });
+    }, { edges, centered });
+
+    try {
+      for (const edge of edges) {
+        const start = await page.evaluate((edge) => {
+          const card = document.querySelector('[data-resize-check] .ui-modal-card');
+          card.style.width = '400px';
+          card.style.height = '260px';
+          card.style.setProperty('--vui-modal-x', '20px');
+          card.style.setProperty('--vui-modal-y', '-10px');
+          const rect = card.getBoundingClientRect();
+          const handle = card.querySelector(`[data-vui-modal-resize-edge="${edge}"]`);
+          const box = handle.getBoundingClientRect();
+          const x = box.left + box.width / 2;
+          const y = box.top + box.height / 2;
+          const corner = edge.includes('-');
+          const hitX = corner ? (edge.includes('left') ? rect.left : rect.right) : x;
+          const hitY = corner ? (edge.includes('top') ? rect.top : rect.bottom) : y;
+          return {
+            rect: rect.toJSON(), x, y,
+            cursor: getComputedStyle(handle).cursor,
+            handleEdge: handle.dataset.vuiModalResizeHandle,
+            hitEdge: document.elementFromPoint(hitX, hitY)?.dataset.vuiModalResizeEdge,
+            zIndex: Number(getComputedStyle(handle).zIndex),
+            atEdge: (!edge.includes('left') || Math.abs(box.left - rect.left) <= 5)
+              && (!edge.includes('right') || Math.abs(box.right - rect.right) <= 5)
+              && (!edge.includes('top') || Math.abs(box.top - rect.top) <= 5)
+              && (!edge.includes('bottom') || Math.abs(box.bottom - rect.bottom) <= 5),
+          };
+        }, edge);
+        const label = `${centered ? 'centered' : 'anchored'} modal ${edge}`;
+        const cursor = edge.includes('-')
+          ? (edge === 'top-left' || edge === 'bottom-right' ? 'nwse-resize' : 'nesw-resize')
+          : (edge === 'left' || edge === 'right' ? 'ew-resize' : 'ns-resize');
+        if (start.cursor !== cursor) failures.push(`${label}: expected ${cursor}, got ${start.cursor}`);
+        if (start.handleEdge !== edge || start.hitEdge !== edge || !start.atEdge) {
+          failures.push(`${label}: misplaced handle or incorrect hit priority`);
+        }
+        if (start.zIndex !== (edge.includes('-') ? 5 : 4)) failures.push(`${label}: incorrect handle stacking`);
+
+        const dx = edge.includes('left') ? -80 : edge.includes('right') ? 80 : 0;
+        const dy = edge.includes('top') ? -60 : edge.includes('bottom') ? 60 : 0;
+        await page.mouse.move(start.x, start.y);
+        await page.mouse.down();
+        await page.mouse.move(start.x + dx, start.y + dy, { steps: 3 });
+        await page.mouse.up();
+        const end = await page.$eval('[data-resize-check] .ui-modal-card', (card) => card.getBoundingClientRect().toJSON());
+        const expected = {
+          width: 400 + Math.abs(dx), height: 260 + Math.abs(dy),
+          left: start.rect.left + Math.min(dx, 0), top: start.rect.top + Math.min(dy, 0),
+        };
+        for (const [key, value] of Object.entries(expected)) {
+          if (Math.abs(end[key] - value) > 1) failures.push(`${label}: expected ${key}=${value}, got ${end[key]}`);
+        }
+      }
+    } finally {
+      await page.evaluate(() => {
+        const host = document.querySelector('[data-resize-check]');
+        host.resizeController.destroy();
+        host.remove();
+      });
+    }
+  }
+}
 
 async function checkSpinners(page, expectedDuration) {
   const issues = await page.$$eval('.loading-spinner', async (spinners, duration) => {

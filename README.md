@@ -34,6 +34,32 @@ The package source lives in `src/`. Browser-consumable artifacts are generated i
 
 Edit source files only. Do not hand-edit `dist/`.
 
+## Modal resizing
+
+`makeModalInteractive(target, options)` and `modal(target, options)` accept
+`resizeEdges`: an array containing any of `left`, `right`, `top`, `bottom`,
+`bottom-left`, `bottom-right`, `top-left`, and `top-right`.
+The default is `['right', 'bottom', 'bottom-right']`. To retain the previous
+left-side handles, pass `resizeEdges: ['bottom', 'left', 'bottom-left']`.
+
+```js
+makeModalInteractive(card, {
+  resizeEdges: ['right', 'bottom', 'bottom-right'],
+  minWidth: 220,
+  minHeight: 140,
+  margin: 24,
+});
+```
+
+Right resizing keeps the left edge fixed; top resizing keeps the bottom edge
+fixed. Both support centered and anchored cards, minimum sizes, and viewport
+margins. The existing left, bottom, and bottom-left resize behavior is unchanged.
+
+Every handle retains `data-vui-modal-resize-handle="<edge>"` and also exposes
+`data-vui-modal-resize-edge="<edge>"`. Consumers can draw a corner grip with a
+selector such as `[data-vui-modal-resize-edge="bottom-right"]::after`.
+Handles use directional resize cursors, and corner handles sit above edge handles.
+
 ## Token Names
 
 - Canonical package tokens use `--vui-*`. Vellum's own CSS and JS reference only these, and tokens.css exports nothing else.

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { modal } from '../src/js/modal.js';
+import { makeModalInteractive, modal } from '../src/js/modal.js';
 
 test('modal open and close are idempotent and toggle body state', () => {
   const doc = fakeDocument();
@@ -195,7 +195,128 @@ test('modal is interactive by default when a card exists', () => {
   modal(modalEl);
   assert.equal(card.dataset.vuiModalInteractive, 'true');
   assert.ok(card.children.some((c) => 'vuiModalResizeHandle' in c.dataset));
+  assert.deepEqual(
+    card.querySelectorAll('[data-vui-modal-resize-handle]').map((handle) => handle.dataset.vuiModalResizeEdge),
+    ['right', 'bottom', 'bottom-right'],
+  );
 });
+
+const resizeCases = [
+  { edge: 'left', dx: -80, dy: 0, width: 480, height: 260, x: -80, y: 0 },
+  { edge: 'right', dx: 80, dy: 0, width: 480, height: 260, x: 0, y: 0 },
+  { edge: 'top', dx: 0, dy: -60, width: 400, height: 320, x: 0, y: -60 },
+  { edge: 'bottom', dx: 0, dy: 60, width: 400, height: 320, x: 0, y: 0 },
+  { edge: 'bottom-left', dx: -80, dy: 60, width: 480, height: 320, x: -80, y: 0 },
+  { edge: 'bottom-right', dx: 80, dy: 60, width: 480, height: 320, x: 0, y: 0 },
+  { edge: 'top-left', dx: -80, dy: -60, width: 480, height: 320, x: -80, y: -60 },
+  { edge: 'top-right', dx: 80, dy: -60, width: 480, height: 320, x: 0, y: -60 },
+];
+
+for (const centeredX of [false, true]) {
+  for (const centeredY of [false, true]) {
+    for (const spec of resizeCases) {
+      test(`${spec.edge} pointer resize (centeredX=${centeredX}, centeredY=${centeredY}) grows and clamps`, () => {
+        const grow = resizeFixture(spec.edge, centeredX, centeredY);
+        dragResize(grow, spec.dx, spec.dy);
+        assert.deepEqual(readSize(grow.card), {
+          width: spec.width,
+          height: spec.height,
+          x: 20 + spec.x + (centeredX ? (spec.width - 400) / 2 : 0),
+          y: -10 + spec.y + (centeredY ? (spec.height - 260) / 2 : 0),
+        });
+
+        const shrink = resizeFixture(spec.edge, centeredX, centeredY);
+        dragResize(shrink, -Math.sign(spec.dx) * 2000, -Math.sign(spec.dy) * 2000);
+        assert.deepEqual(readSize(shrink.card), {
+          width: spec.dx ? 240 : 400,
+          height: spec.dy ? 180 : 260,
+          x: 20 + (spec.dx < 0 ? 160 : 0) - (centeredX && spec.dx ? 80 : 0),
+          y: -10 + (spec.dy < 0 ? 80 : 0) - (centeredY && spec.dy ? 40 : 0),
+        });
+
+        const limit = resizeFixture(spec.edge, centeredX, centeredY);
+        dragResize(limit, Math.sign(spec.dx) * 2000, Math.sign(spec.dy) * 2000);
+        // The original left/bottom edges retain their viewport-wide clamping.
+        // New right/top edges stop at the margin without moving the opposite edge.
+        assert.deepEqual(readSize(limit.card), {
+          width: spec.dx < 0 ? 1232 : spec.dx > 0 ? (centeredX ? 796 : 1036) : 400,
+          height: spec.dy > 0 ? 752 : spec.dy < 0 ? (centeredY ? 496 : 406) : 260,
+          x: spec.dx < 0 ? (centeredX ? 0 : -176) : spec.dx > 0 && centeredX ? 218 : 20,
+          y: spec.dy > 0 ? (centeredY ? 0 : -156) : spec.dy < 0 ? (centeredY ? -128 : -156) : -10,
+        });
+        const rect = limit.card.getBoundingClientRect();
+        assert.ok(rect.left >= 24 && rect.left + rect.width <= 1256);
+        assert.ok(rect.top >= 24 && rect.top + rect.height <= 776);
+      });
+    }
+  }
+}
+
+test('resize handles expose their edge, reuse existing handles, and remove generated handles on destroy', () => {
+  const { doc, card } = domModal();
+  const existing = domNode(doc);
+  existing.dataset.vuiModalResizeHandle = 'top-right';
+  card.append(existing);
+  const controller = makeModalInteractive(card, { resizeEdges: resizeCases.map(({ edge }) => edge) });
+  const handles = card.querySelectorAll('[data-vui-modal-resize-handle]');
+  assert.equal(handles.length, 8);
+  for (const handle of handles) {
+    assert.equal(handle.dataset.vuiModalResizeEdge, handle.dataset.vuiModalResizeHandle);
+  }
+  assert.equal(existing.dataset.vuiModalResizeEdge, 'top-right');
+  controller.destroy();
+  assert.deepEqual(card.querySelectorAll('[data-vui-modal-resize-handle]'), [existing]);
+  assert.equal(existing.listeners.get('pointerdown').size, 0);
+});
+
+test('resizing uses the updated rectangle on subsequent pointer drags', () => {
+  const fixture = resizeFixture('top-right', true, false);
+  dragResize(fixture, 80, -60);
+  dragResize(fixture, 40, -20);
+  assert.deepEqual(readSize(fixture.card), { width: 520, height: 340, x: 80, y: -90 });
+});
+
+function resizeFixture(edge, centeredX, centeredY) {
+  const { doc, card, modalEl } = domModal();
+  card.style.setProperty('--vui-modal-x', '20px');
+  card.style.setProperty('--vui-modal-y', '-10px');
+  card.getBoundingClientRect = () => {
+    const width = Number.parseFloat(card.style.width) || 400;
+    const height = Number.parseFloat(card.style.height) || 260;
+    return {
+      width,
+      height,
+      left: (centeredX ? (1280 - width) / 2 : 200) + Number.parseFloat(card.style.getPropertyValue('--vui-modal-x')),
+      top: (centeredY ? (800 - height) / 2 : 180) + Number.parseFloat(card.style.getPropertyValue('--vui-modal-y')),
+    };
+  };
+  modal(modalEl, { resizeEdges: [edge], centeredX, centeredY, minWidth: 240, minHeight: 180, margin: 24 });
+  return { doc, card, handle: card.querySelector('[data-vui-modal-resize-handle]') };
+}
+
+function readSize(card) {
+  return {
+    width: Number.parseFloat(card.style.width),
+    height: Number.parseFloat(card.style.height),
+    x: Number.parseFloat(card.style.getPropertyValue('--vui-modal-x')),
+    y: Number.parseFloat(card.style.getPropertyValue('--vui-modal-y')),
+  };
+}
+
+function dragResize({ doc, card, handle }, dx, dy) {
+  const event = { button: 0, pointerId: 7, clientX: 500, clientY: 400, preventDefault() {} };
+  handle.dispatch('pointerdown', { ...event, currentTarget: handle });
+  assert.equal(card.classList.contains('is-vui-modal-resizing'), true);
+  const before = readSize(card);
+  dispatch(doc.listeners, 'pointermove', { ...event, pointerId: 8, clientX: 900, clientY: 700 });
+  assert.deepEqual(readSize(card), before, 'unrelated pointers must not resize');
+  dispatch(doc.listeners, 'pointermove', { ...event, clientX: 500 + dx, clientY: 400 + dy });
+  dispatch(doc.listeners, 'pointerup', event);
+  assert.equal(card.classList.contains('is-vui-modal-resizing'), false);
+  assert.equal(doc.listeners.get('pointermove').size, 0);
+  assert.equal(doc.listeners.get('pointerup').size, 0);
+  assert.equal(doc.listeners.get('pointercancel').size, 0);
+}
 
 test('interactive: false opts out of drag/resize', () => {
   const { modalEl, card } = domModal();
@@ -316,6 +437,10 @@ function domNode(ownerDocument, { tag = 'div', classes = [] } = {}) {
     appendChild(child) {
       this.append(child);
       return child;
+    },
+    remove() {
+      this.parentElement.children = this.parentElement.children.filter((child) => child !== this);
+      this.parentElement = null;
     },
     contains(target) {
       for (let current = target; current; current = current.parentElement) {
