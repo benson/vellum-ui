@@ -2,13 +2,11 @@
   /* Vellum canonical tokens */
   --vui-edge-margin: 12px;
   /* The z ladder, lowest to highest: flyout 50 < modal 110 < fab 120 <
-     feedback canvas 125 < feedback widget 130 < toast 160. New overlays
+     toast 160. New overlays
      pick a rung here, never a raw number. */
   --vui-z-flyout: 50;
   --vui-z-modal: 110;
   --vui-z-fab: 120;
-  --vui-z-feedback-canvas: 125;
-  --vui-z-feedback: 130;
   --vui-control-height-compact: 32px;
   --vui-touch-target: 44px;
   --vui-mobile-nav-height: 64px;

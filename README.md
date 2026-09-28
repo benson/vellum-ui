@@ -71,6 +71,13 @@ The `--bui-*` aliases and the `/benson-ui/` / `@benson/ui` rewrite branches were
 
 2026-06 token dedup (consumers migrated in the same pass): the `--vui-color-<tone>-bg/-border/-text` status family collapsed into `--vui-status-*` (now the only spelling), `--vui-shadow-hard-small` collapsed into `--vui-shadow-hard-sm`, and the `--vui-font-size-xs-plus`/`-sm-plus` half-steps were removed from the ramp (biblioplex keeps them as local tokens). None outstanding.
 
+## Breaking changes in 0.2.0
+
+The feedback capture component, its JavaScript exports, and its dedicated CSS
+selectors and z-index tokens have been removed. Consumers must remove widget
+imports and mounts before updating. Toasts, status components, floating action
+buttons, and modal helpers remain available.
+
 ## Release Model
 
 Merging to `main` runs the release workflow. It opens consumer PRs for:
