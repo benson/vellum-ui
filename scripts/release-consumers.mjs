@@ -64,15 +64,6 @@ const consumers = [
     waitForChecks: false,
     update: updateVendoredConsumer,
   },
-  {
-    repo: `${owner}/tomebound`,
-    base: 'master',
-    name: 'tomebound',
-    checkCommand: ['npm', ['run', 'check']],
-    waitForChecks: false,
-    update: updateTomebound,
-    afterMerge: () => gh(['workflow', 'run', 'Deploy Cloudflare', '--repo', `${owner}/tomebound`, '--ref', 'master']),
-  },
 ];
 
 for (const consumer of consumers) {
@@ -155,13 +146,6 @@ async function bumpVendoredCacheBust(path) {
   const source = await readFile(indexPath, 'utf8');
   const next = source.replace(/(vendor\/vellum-ui\/vellum-ui\.css\?v=)[\w-]*/g, `$1${shortSha}`);
   if (next !== source) await writeFile(indexPath, next);
-}
-
-async function updateTomebound(path) {
-  await setPackageDependency(path);
-  run('npm', ['install'], { cwd: path });
-  await sanitizePackageLock(path);
-  await prepareConsumerPackage(path);
 }
 
 async function setPackageDependency(path) {
